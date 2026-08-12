@@ -20,16 +20,20 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
         body { background-color: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; -webkit-tap-highlight-color: transparent; padding-bottom: 20px; }
 
-        /* Header Bar */
+        /* Header Bar & Navigation */
         .header-bar {
-            background: #5c1809; color: #fff; padding: 12px 16px; display: flex;
+            background: #5c1809; color: #fff; padding: 10px 12px; display: flex;
             justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .brand-title { font-size: 18px; font-weight: 800; color: #fef3c7; display: flex; align-items: center; gap: 6px; }
-        .reset-header-btn { background: rgba(220, 38, 38, 0.85); color: #fff; border: none; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .brand-title { font-size: 16px; font-weight: 800; color: #fef3c7; display: flex; align-items: center; gap: 4px; }
+        .nav-buttons { display: flex; gap: 4px; background: rgba(0, 0, 0, 0.25); padding: 3px; border-radius: 20px; }
+        .nav-btn { background: transparent; color: #fef3c7; border: none; padding: 5px 10px; border-radius: 14px; font-weight: bold; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .nav-btn.active { background: #ffffff; color: #5c1809; font-weight: 800; }
 
         .container { padding: 12px; flex-grow: 1; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
 
         .section-title { font-size: 13px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
@@ -37,7 +41,7 @@
         .issue-card { background: var(--card-bg); border-radius: 14px; padding: 12px; box-shadow: 0 2px 6px rgba(120,53,15,0.06); border: 1px solid var(--accent-border); margin-bottom: 14px; }
         .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .btn-issue {
-            border: none; padding: 14px 4px; border-radius: 12px; color: #fff; font-size: 14px; font-weight: bold;
+            border: none; padding: 12px 4px; border-radius: 12px; color: #fff; font-size: 13px; font-weight: bold;
             cursor: pointer; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.12);
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
             transition: transform 0.1s;
@@ -46,12 +50,12 @@
         .btn-a { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         .btn-b { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .btn-c { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-        .badge-wait-count { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 2px 8px; font-size: 10px; font-weight: normal; margin-top: 4px; }
+        .badge-wait-count { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: normal; margin-top: 4px; }
 
         /* Mobile Table Filter Tabs */
         .mobile-tabs { display: flex; background: #ebd9b4; padding: 3px; border-radius: 10px; margin-bottom: 12px; }
         .tab-btn {
-            flex: 1; padding: 10px 4px; border: none; background: transparent; font-size: 13px; font-weight: 800;
+            flex: 1; padding: 8px 4px; border: none; background: transparent; font-size: 12px; font-weight: 800;
             color: #78350f; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;
         }
         .tab-btn.active { background: #ffffff; color: #5c1809; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -63,7 +67,7 @@
         .calling-num { font-size: 20px; font-weight: 900; color: var(--primary); }
 
         /* Queue List & Mobile Queue Card */
-        .queue-list-container { max-height: 55vh; overflow-y: auto; }
+        .queue-list-container { max-height: 50vh; overflow-y: auto; }
         .queue-item { background: #fffdf7; border: 1px solid #fde68a; border-radius: 10px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
         .queue-item.calling-active { border: 2px solid var(--primary); background: #fffbeb; }
         .queue-item.served-item { background: #f8fafc; border-color: #cbd5e1; opacity: 0.65; }
@@ -75,6 +79,27 @@
         .bg-cancelled { background-color: #dc2626; }
 
         .btn-action { padding: 8px 12px; font-size: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
+
+        /* Banner Container for TV Display */
+        .banner-tv-container {
+            margin-top: 16px;
+            width: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--accent-border);
+            background: #fff;
+            max-height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .banner-tv-img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
+        }
 
         /* Modal Nationality Selection */
         .modal-overlay {
@@ -104,7 +129,7 @@
         }
         .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 5px 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        /* Print Thermal Receipt Hidden Area */
+        /* Thermal Print Format */
         @page { size: 58mm auto; margin: 0; }
         @media print {
             body * { visibility: hidden; }
@@ -115,54 +140,98 @@
 </head>
 <body>
 
-    <!-- Top Header -->
+    <!-- Header Bar พร้อมปุ่มเมนูสลับหน้าสำหรับมือถือ -->
     <div class="header-bar">
         <div class="brand-title">🥞 Pancake Café</div>
-        <button class="reset-header-btn" onclick="resetDailyQueue()">🔄 Reset คิว</button>
+        <div class="nav-buttons">
+            <button class="nav-btn" data-target="queue-system" onclick="navigateTo('queue-system')">คิว</button>
+            <button class="nav-btn" data-target="queue-display" onclick="navigateTo('queue-display')">จอ TV</button>
+            <button class="nav-btn" data-target="database" onclick="navigateTo('database')">สถิติ</button>
+            <button class="nav-btn" data-target="settings" onclick="navigateTo('settings')">ตั้งค่า</button>
+        </div>
     </div>
 
     <div class="container">
 
-        <!-- Section: Issue Ticket Buttons -->
-        <div class="issue-card">
-            <div class="section-title">กดออกบัตรคิว</div>
-            <div class="issue-btn-grid">
-                <button class="btn-issue btn-a" onclick="openNationalityModal('A', 'โต๊ะ A (1-2 ท่าน)')">
-                    <span>โต๊ะ A</span>
-                    <small style="font-size: 10px; opacity:0.9;">1-2 คน</small>
-                    <span class="badge-wait-count" id="btn-count-A">รอ 0 คิว</span>
-                </button>
-                <button class="btn-issue btn-b" onclick="openNationalityModal('B', 'โต๊ะ B (3-4 ท่าน)')">
-                    <span>โต๊ะ B</span>
-                    <small style="font-size: 10px; opacity:0.9;">3-4 คน</small>
-                    <span class="badge-wait-count" id="btn-count-B">รอ 0 คิว</span>
-                </button>
-                <button class="btn-issue btn-c" onclick="openNationalityModal('C', 'โต๊ะ C (5-6 ท่าน)')">
-                    <span>โต๊ะ C</span>
-                    <small style="font-size: 10px; opacity:0.9;">5-6 คน</small>
-                    <span class="badge-wait-count" id="btn-count-C">รอ 0 คิว</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Section: Mobile Tabs Switcher -->
-        <div class="mobile-tabs">
-            <button class="tab-btn active" id="tab-btn-A" onclick="switchMobileTab('A')">โต๊ะ A</button>
-            <button class="tab-btn" id="tab-btn-B" onclick="switchMobileTab('B')">โต๊ะ B</button>
-            <button class="tab-btn" id="tab-btn-C" onclick="switchMobileTab('C')">โต๊ะ C</button>
-        </div>
-
-        <!-- Queue Cards List -->
-        <div class="column-card">
-            <div class="col-header-top">
-                <h3 id="current-tab-title" style="color:#d97706; font-size:15px; font-weight:800;">โต๊ะ A (1-2 คน)</h3>
-                <div class="calling-box">
-                    <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
-                    <span class="calling-num" id="calling-display">---</span>
+        <!-- หน้าที่ 1: จัดการคิว (#queue) -->
+        <div id="queue-system" class="page-section">
+            <div class="issue-card">
+                <div class="section-title">กดออกบัตรคิว</div>
+                <div class="issue-btn-grid">
+                    <button class="btn-issue btn-a" onclick="openNationalityModal('A', 'โต๊ะ A (1-2 ท่าน)')">
+                        <span>โต๊ะ A</span>
+                        <small style="font-size: 9px; opacity:0.9;">1-2 คน</small>
+                        <span class="badge-wait-count" id="btn-count-A">รอ 0 คิว</span>
+                    </button>
+                    <button class="btn-issue btn-b" onclick="openNationalityModal('B', 'โต๊ะ B (3-4 ท่าน)')">
+                        <span>โต๊ะ B</span>
+                        <small style="font-size: 9px; opacity:0.9;">3-4 คน</small>
+                        <span class="badge-wait-count" id="btn-count-B">รอ 0 คิว</span>
+                    </button>
+                    <button class="btn-issue btn-c" onclick="openNationalityModal('C', 'โต๊ะ C (5-6 ท่าน)')">
+                        <span>โต๊ะ C</span>
+                        <small style="font-size: 9px; opacity:0.9;">5-6 คน</small>
+                        <span class="badge-wait-count" id="btn-count-C">รอ 0 คิว</span>
+                    </button>
                 </div>
             </div>
-            <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; color:#78350f;" id="waiting-count-display">รอคิวทั้งหมด: 0 คิว</div>
-            <div class="queue-list-container" id="mobile-queue-list"></div>
+
+            <div class="mobile-tabs">
+                <button class="tab-btn active" id="tab-btn-A" onclick="switchMobileTab('A')">โต๊ะ A</button>
+                <button class="tab-btn" id="tab-btn-B" onclick="switchMobileTab('B')">โต๊ะ B</button>
+                <button class="tab-btn" id="tab-btn-C" onclick="switchMobileTab('C')">โต๊ะ C</button>
+            </div>
+
+            <div class="column-card">
+                <div class="col-header-top">
+                    <h3 id="current-tab-title" style="color:#d97706; font-size:14px; font-weight:800;">โต๊ะ A (1-2 คน)</h3>
+                    <div class="calling-box">
+                        <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
+                        <span class="calling-num" id="calling-display">---</span>
+                    </div>
+                </div>
+                <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; color:#78350f;" id="waiting-count-display">รอคิวทั้งหมด: 0 คิว</div>
+                <div class="queue-list-container" id="mobile-queue-list"></div>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 2: จอ TV (#tv) -->
+        <div id="queue-display" class="page-section">
+            <div style="text-align:center; padding: 15px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px;">📺 โหมดแสดงผลจอ TV</h3>
+                <p style="font-size:12px; color:#a16207; margin-top:4px;">หน้าจอแสดงผลสถานะคิวประจำร้าน</p>
+            </div>
+
+            <!-- ส่วนแบนเนอร์ด้านล่างจอ TV -->
+            <div class="banner-tv-container">
+                <img id="tv-bottom-banner" class="banner-tv-img" src="" alt="TV Promotion Banner" style="display:none;">
+                <div id="banner-placeholder" style="color:#a16207; padding:40px; text-align:center; font-size:13px;">
+                    ยังไม่ได้ตั้งค่าภาพแบนเนอร์ส่วนล่าง
+                </div>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 3: สถิติ (#database) -->
+        <div id="database" class="page-section">
+            <div style="text-align:center; padding: 20px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px;">📊 รายงานสถิติ</h3>
+                <p style="font-size:12px; color:#a16207; margin-top:6px;">ดูรายงานสรุปคิวและส่งออกข้อมูล CSV</p>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 4: ตั้งค่า (#settings) -->
+        <div id="settings" class="page-section">
+            <div style="padding: 16px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px; margin-bottom:12px;">⚙️ อัปโหลดภาพแบนเนอร์จอ TV</h3>
+                <p style="font-size:11px; color:#a16207; margin-bottom:12px;">
+                    เลือกรูปภาพโปรโมชันใหม่เพื่อเปลี่ยนภาพด้านล่างจอ TV (ระบบจะลบรูปเก่าและบันทึกทับเฉพาะรูปเวอร์ชันล่าสุด)
+                </p>
+                <input type="file" id="banner-file-input" accept="image/*" style="display:block; margin-bottom:12px; font-size:12px;">
+                <button id="upload-banner-btn" onclick="uploadNewBanner()" style="background:var(--primary); color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; font-size:13px; cursor:pointer;">
+                    📤 อัปโหลดและทับภาพเดิม
+                </button>
+                <div id="upload-status" style="margin-top:10px; font-size:12px; font-weight:bold;"></div>
+            </div>
         </div>
 
     </div>
@@ -213,6 +282,9 @@
         import { 
             getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA22_Pap9C9qhnhU33Ch2Floe5D1aLdbCY",
@@ -225,6 +297,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         enableIndexedDbPersistence(db).catch(() => {});
 
@@ -233,9 +306,104 @@
         let currentCalling = { A: null, B: null, C: null };
         let pendingQueueType = null;
         let pendingQueueDesc = null;
-        let activeTab = 'A'; // โต๊ะปัจจุบันที่เลือกดูอยู่
+        let activeTab = 'A';
         let lastActionState = null;
         let toastTimeout = null;
+        let currentBannerStoragePath = null;
+
+        const routes = {
+            '#queue': 'queue-system',
+            '#tv': 'queue-display',
+            '#database': 'database',
+            '#settings': 'settings'
+        };
+
+        window.navigateTo = function(targetId) {
+            const hash = Object.keys(routes).find(key => routes[key] === targetId) || '#queue';
+            window.location.hash = hash;
+        };
+
+        function handleHashChange() {
+            const currentHash = window.location.hash || '#queue';
+            const targetId = routes[currentHash] || 'queue-system';
+
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) targetSection.classList.add('active');
+
+            const activeBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+        window.addEventListener('DOMContentLoaded', handleHashChange);
+
+        // Realtime Listener สำหรับดึงแบนเนอร์ล่าสุดมาแสดงผล
+        onSnapshot(doc(db, "system", "tv_banner"), (docSnap) => {
+            if (docSnap.exists() && docSnap.data().url) {
+                const data = docSnap.data();
+                const bannerImg = document.getElementById('tv-bottom-banner');
+                const placeholder = document.getElementById('banner-placeholder');
+                
+                bannerImg.src = data.url;
+                bannerImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                currentBannerStoragePath = data.storagePath || null;
+            }
+        });
+
+        // ฟังก์ชันอัปโหลดภาพแบนเนอร์ใหม่ ทับภาพเดิม
+        window.uploadNewBanner = async function() {
+            const fileInput = document.getElementById('banner-file-input');
+            const statusDiv = document.getElementById('upload-status');
+            const btn = document.getElementById('upload-banner-btn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("กรุณาเลือกไฟล์รูปภาพก่อนครับ");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            btn.disabled = true;
+            statusDiv.style.color = "#d97706";
+            statusDiv.innerText = "กำลังลบไฟล์เก่าและอัปโหลดไฟล์ใหม่...";
+
+            try {
+                // 1. ลบรูปเดิมใน Firebase Storage ออกก่อน (ถ้ามีอยู่)
+                if (currentBannerStoragePath) {
+                    try {
+                        const oldStorageRef = ref(storage, currentBannerStoragePath);
+                        await deleteObject(oldStorageRef);
+                    } catch (e) {
+                        console.log("ไม่มีไฟล์เก่า หรือลบไม่สำเร็จ:", e);
+                    }
+                }
+
+                // 2. อัปโหลดรูปใหม่ลง Storage (ใช้ Timestamp ตั้งชื่อไฟล์)
+                const newPath = `banners/tv_banner_${Date.now()}`;
+                const newStorageRef = ref(storage, newPath);
+                await uploadBytes(newStorageRef, file);
+                const downloadURL = await getDownloadURL(newStorageRef);
+
+                // 3. บันทึก URL เวอร์ชันล่าสุดลง Firestore
+                await setDoc(doc(db, "system", "tv_banner"), {
+                    url: downloadURL,
+                    storagePath: newPath,
+                    updatedAt: serverTimestamp()
+                });
+
+                statusDiv.style.color = "#16a34a";
+                statusDiv.innerText = "✅ อัปโหลดแบนเนอร์ใหม่เรียบร้อยแล้ว!";
+                fileInput.value = "";
+            } catch (err) {
+                statusDiv.style.color = "#dc2626";
+                statusDiv.innerText = "❌ เกิดข้อผิดพลาด: " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        };
 
         const tabConfigs = {
             'A': { title: 'โต๊ะ A (1-2 คน)', color: '#d97706' },
@@ -243,7 +411,6 @@
             'C': { title: 'โต๊ะ C (5-6 คน)', color: '#7c3aed' }
         };
 
-        // สลับแท็บ A/B/C บนมือถือ
         window.switchMobileTab = function(type) {
             activeTab = type;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -257,7 +424,6 @@
             renderUI();
         };
 
-        // Real-time Queue Listener
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
@@ -337,15 +503,6 @@
             }
         };
 
-        window.resetDailyQueue = function() {
-            if (confirm("คุณต้องการรีเซ็ตตัวนับคิวประจำวันใช่หรือไม่?")) {
-                queueCounters = { A: 1, B: 1, C: 1 };
-                currentCalling = { A: null, B: null, C: null };
-                renderUI();
-                alert("รีเซ็ตตัวนับคิวเรียบร้อยแล้ว!");
-            }
-        };
-
         function getDefaultCount(type) {
             if(type === 'A') return '1-2 คน';
             if(type === 'B') return '3-4 คน';
@@ -418,13 +575,11 @@
         }
 
         function renderUI() {
-            // อัปเดตจำนวนคิวรอที่ปุ่มกดคิวด้านบน
             ['A', 'B', 'C'].forEach(type => {
                 const waitCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
                 document.getElementById(`btn-count-${type}`).innerText = `รอ ${waitCount} คิว`;
             });
 
-            // แสดงสถานะการเรียกของแท็บปัจจุบันที่เลือกอยู่
             const activeCall = currentCalling[activeTab];
             const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
             document.getElementById('calling-display').innerText = activeNum;
