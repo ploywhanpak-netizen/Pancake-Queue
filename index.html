@@ -80,27 +80,6 @@
 
         .btn-action { padding: 8px 12px; font-size: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
 
-        /* Banner Container for TV Display */
-        .banner-tv-container {
-            margin-top: 16px;
-            width: 100%;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid var(--accent-border);
-            background: #fff;
-            max-height: 380px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .banner-tv-img {
-            width: 100%;
-            height: auto;
-            max-height: 380px;
-            object-fit: cover;
-            display: block;
-        }
-
         /* Modal Nationality Selection */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -155,6 +134,7 @@
 
         <!-- หน้าที่ 1: จัดการคิว (#queue) -->
         <div id="queue-system" class="page-section">
+            <!-- Section: Issue Ticket Buttons -->
             <div class="issue-card">
                 <div class="section-title">กดออกบัตรคิว</div>
                 <div class="issue-btn-grid">
@@ -176,12 +156,14 @@
                 </div>
             </div>
 
+            <!-- Section: Mobile Tabs Switcher -->
             <div class="mobile-tabs">
                 <button class="tab-btn active" id="tab-btn-A" onclick="switchMobileTab('A')">โต๊ะ A</button>
                 <button class="tab-btn" id="tab-btn-B" onclick="switchMobileTab('B')">โต๊ะ B</button>
                 <button class="tab-btn" id="tab-btn-C" onclick="switchMobileTab('C')">โต๊ะ C</button>
             </div>
 
+            <!-- Queue Cards List -->
             <div class="column-card">
                 <div class="col-header-top">
                     <h3 id="current-tab-title" style="color:#d97706; font-size:14px; font-weight:800;">โต๊ะ A (1-2 คน)</h3>
@@ -197,17 +179,9 @@
 
         <!-- หน้าที่ 2: จอ TV (#tv) -->
         <div id="queue-display" class="page-section">
-            <div style="text-align:center; padding: 15px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+            <div style="text-align:center; padding: 20px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
                 <h3 style="color:#78350f; font-size:16px;">📺 โหมดแสดงผลจอ TV</h3>
-                <p style="font-size:12px; color:#a16207; margin-top:4px;">หน้าจอแสดงผลสถานะคิวประจำร้าน</p>
-            </div>
-
-            <!-- ส่วนแบนเนอร์ด้านล่างจอ TV -->
-            <div class="banner-tv-container">
-                <img id="tv-bottom-banner" class="banner-tv-img" src="" alt="TV Promotion Banner" style="display:none;">
-                <div id="banner-placeholder" style="color:#a16207; padding:40px; text-align:center; font-size:13px;">
-                    ยังไม่ได้ตั้งค่าภาพแบนเนอร์ส่วนล่าง
-                </div>
+                <p style="font-size:12px; color:#a16207; margin-top:6px;">หน้านี้ออกแบบสำหรับแสดงผลบนทีวีขนาดใหญ่</p>
             </div>
         </div>
 
@@ -221,16 +195,9 @@
 
         <!-- หน้าที่ 4: ตั้งค่า (#settings) -->
         <div id="settings" class="page-section">
-            <div style="padding: 16px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
-                <h3 style="color:#78350f; font-size:16px; margin-bottom:12px;">⚙️ อัปโหลดภาพแบนเนอร์จอ TV</h3>
-                <p style="font-size:11px; color:#a16207; margin-bottom:12px;">
-                    เลือกรูปภาพโปรโมชันใหม่เพื่อเปลี่ยนภาพด้านล่างจอ TV (ระบบจะลบรูปเก่าและบันทึกทับเฉพาะรูปเวอร์ชันล่าสุด)
-                </p>
-                <input type="file" id="banner-file-input" accept="image/*" style="display:block; margin-bottom:12px; font-size:12px;">
-                <button id="upload-banner-btn" onclick="uploadNewBanner()" style="background:var(--primary); color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; font-size:13px; cursor:pointer;">
-                    📤 อัปโหลดและทับภาพเดิม
-                </button>
-                <div id="upload-status" style="margin-top:10px; font-size:12px; font-weight:bold;"></div>
+            <div style="text-align:center; padding: 20px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px;">⚙️ ตั้งค่าระบบ</h3>
+                <p style="font-size:12px; color:#a16207; margin-top:6px;">จัดการรูปภาพโปรโมชันแบนเนอร์บนจอ TV</p>
             </div>
         </div>
 
@@ -282,9 +249,6 @@
         import { 
             getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { 
-            getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA22_Pap9C9qhnhU33Ch2Floe5D1aLdbCY",
@@ -297,7 +261,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         enableIndexedDbPersistence(db).catch(() => {});
 
@@ -309,7 +272,6 @@
         let activeTab = 'A';
         let lastActionState = null;
         let toastTimeout = null;
-        let currentBannerStoragePath = null;
 
         const routes = {
             '#queue': 'queue-system',
@@ -318,6 +280,7 @@
             '#settings': 'settings'
         };
 
+        // Navigation
         window.navigateTo = function(targetId) {
             const hash = Object.keys(routes).find(key => routes[key] === targetId) || '#queue';
             window.location.hash = hash;
@@ -340,71 +303,6 @@
         window.addEventListener('hashchange', handleHashChange);
         window.addEventListener('DOMContentLoaded', handleHashChange);
 
-        // Realtime Listener สำหรับดึงแบนเนอร์ล่าสุดมาแสดงผล
-        onSnapshot(doc(db, "system", "tv_banner"), (docSnap) => {
-            if (docSnap.exists() && docSnap.data().url) {
-                const data = docSnap.data();
-                const bannerImg = document.getElementById('tv-bottom-banner');
-                const placeholder = document.getElementById('banner-placeholder');
-                
-                bannerImg.src = data.url;
-                bannerImg.style.display = 'block';
-                placeholder.style.display = 'none';
-                currentBannerStoragePath = data.storagePath || null;
-            }
-        });
-
-        // ฟังก์ชันอัปโหลดภาพแบนเนอร์ใหม่ ทับภาพเดิม
-        window.uploadNewBanner = async function() {
-            const fileInput = document.getElementById('banner-file-input');
-            const statusDiv = document.getElementById('upload-status');
-            const btn = document.getElementById('upload-banner-btn');
-
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert("กรุณาเลือกไฟล์รูปภาพก่อนครับ");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            btn.disabled = true;
-            statusDiv.style.color = "#d97706";
-            statusDiv.innerText = "กำลังลบไฟล์เก่าและอัปโหลดไฟล์ใหม่...";
-
-            try {
-                // 1. ลบรูปเดิมใน Firebase Storage ออกก่อน (ถ้ามีอยู่)
-                if (currentBannerStoragePath) {
-                    try {
-                        const oldStorageRef = ref(storage, currentBannerStoragePath);
-                        await deleteObject(oldStorageRef);
-                    } catch (e) {
-                        console.log("ไม่มีไฟล์เก่า หรือลบไม่สำเร็จ:", e);
-                    }
-                }
-
-                // 2. อัปโหลดรูปใหม่ลง Storage (ใช้ Timestamp ตั้งชื่อไฟล์)
-                const newPath = `banners/tv_banner_${Date.now()}`;
-                const newStorageRef = ref(storage, newPath);
-                await uploadBytes(newStorageRef, file);
-                const downloadURL = await getDownloadURL(newStorageRef);
-
-                // 3. บันทึก URL เวอร์ชันล่าสุดลง Firestore
-                await setDoc(doc(db, "system", "tv_banner"), {
-                    url: downloadURL,
-                    storagePath: newPath,
-                    updatedAt: serverTimestamp()
-                });
-
-                statusDiv.style.color = "#16a34a";
-                statusDiv.innerText = "✅ อัปโหลดแบนเนอร์ใหม่เรียบร้อยแล้ว!";
-                fileInput.value = "";
-            } catch (err) {
-                statusDiv.style.color = "#dc2626";
-                statusDiv.innerText = "❌ เกิดข้อผิดพลาด: " + err.message;
-            } finally {
-                btn.disabled = false;
-            }
-        };
-
         const tabConfigs = {
             'A': { title: 'โต๊ะ A (1-2 คน)', color: '#d97706' },
             'B': { title: 'โต๊ะ B (3-4 คน)', color: '#059669' },
@@ -424,6 +322,7 @@
             renderUI();
         };
 
+        // Real-time Queue Listener
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
