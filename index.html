@@ -16,87 +16,56 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
         body { background-color: var(--bg); color: #0f172a; display: flex; flex-direction: column; min-height: 100vh; webkit-tap-highlight-color: transparent; }
 
-        /* Top Navigation Header (แทน Sidebar) */
         .header-bar {
-            background: #0f172a;
-            color: #fff;
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: #0f172a; color: #fff; padding: 10px 14px; display: flex;
+            justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
-
         .brand-title { font-size: 16px; font-weight: bold; color: #38bdf8; }
-
         .nav-buttons { display: flex; gap: 4px; }
-        .nav-btn {
-            background: #1e293b; color: #94a3b8; border: none; padding: 6px 10px;
-            border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
-        }
+        .nav-btn { background: #1e293b; color: #94a3b8; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; }
         .nav-btn.active { background: var(--primary); color: #fff; }
 
-        /* Main Container */
         .container { padding: 10px; flex-grow: 1; overflow-y: auto; }
         .page-section { display: none; }
         .page-section.active { display: block; }
 
-        .card {
-            background: #fff; border-radius: 10px; padding: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px;
-        }
-
+        .card { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; }
         .section-title { font-size: 14px; font-weight: bold; color: #334155; margin-bottom: 8px; }
 
-        /* Nationality Selector Grid */
         .nat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .nat-btn {
-            border: 1.5px solid #cbd5e1; background: #fff; padding: 8px 4px;
-            border-radius: 6px; font-size: 12px; font-weight: bold; color: #475569;
-            text-align: center; cursor: pointer;
-        }
+        .nat-btn { border: 1.5px solid #cbd5e1; background: #fff; padding: 8px 4px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #475569; text-align: center; cursor: pointer; }
         .nat-btn.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
 
-        /* Queue Issue Big Buttons */
         .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .btn-issue {
-            border: none; padding: 14px 4px; border-radius: 8px; color: #fff;
-            font-size: 14px; font-weight: bold; cursor: pointer; text-align: center;
-        }
-        .btn-a { background-color: #2563eb; }
-        .btn-b { background-color: #059669; }
-        .btn-c { background-color: #7c3aed; }
+        .btn-issue { border: none; padding: 14px 4px; border-radius: 8px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-a { background-color: #2563eb; } .btn-b { background-color: #059669; } .btn-c { background-color: #7c3aed; }
 
-        /* Kanban Stacked Columns (สำหรับจอแนวตั้ง) */
         .board-container { display: flex; flex-direction: column; gap: 12px; }
         .column-card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px; }
-        
-        .col-header-top { display: flex; justify-content: space-between; align-items: center; }
-        .calling-box {
-            background: #eff6ff; border: 1.5px dashed #3b82f6; border-radius: 6px;
-            padding: 4px 10px; text-align: center; display: flex; align-items: center; gap: 8px;
+        .col-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .calling-box { background: #eff6ff; border: 1.5px dashed #3b82f6; border-radius: 6px; padding: 4px 10px; display: flex; align-items: center; gap: 6px; }
+        .calling-num { font-size: 18px; font-weight: bold; color: var(--primary); }
+
+        .queue-list-container { max-height: 400px; overflow-y: auto; }
+        .queue-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .queue-item.served-item { background: #f1f5f9; border-color: #e2e8f0; opacity: 0.7; }
+
+        .status-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; color: #fff; font-weight: bold; }
+        .bg-waiting { background-color: var(--warning); }
+        .bg-calling { background-color: var(--primary); }
+        .bg-served { background-color: #64748b; }
+        .bg-skipped { background-color: #94a3b8; }
+        .bg-cancelled { background-color: var(--danger); }
+
+        .btn-action { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
+
+        #undo-toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: none; align-items: center; gap: 12px; z-index: 1000; font-size: 13px;
         }
-        .calling-num { font-size: 20px; font-weight: bold; color: var(--primary); }
+        .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 4px 10px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        .col-call-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
-        .btn-main-call {
-            border: none; padding: 10px; border-radius: 6px; color: #fff; font-size: 13px;
-            font-weight: bold; cursor: pointer; text-align: center;
-        }
-
-        .queue-list-container { max-height: 250px; overflow-y: auto; }
-        .queue-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
-        
-        .status-badge { padding: 2px 5px; border-radius: 4px; font-size: 10px; color: #fff; font-weight: bold; }
-        .bg-waiting { background-color: var(--warning); } .bg-calling { background-color: var(--primary); }
-        .bg-served { background-color: var(--success); } .bg-skipped { background-color: #6b7280; } .bg-cancelled { background-color: var(--danger); }
-        
-        .btn-action { padding: 6px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
-
-        /* Dashboard & TV Display Fixes */
         .display-container { background: #0f172a; color: #fff; padding: 15px; border-radius: 12px; text-align: center; }
         .display-box { background: #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 10px; border: 1px solid #334155; }
         .display-number { font-size: 48px; font-weight: bold; color: #facc15; margin: 5px 0; }
@@ -112,21 +81,16 @@
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         th, td { padding: 6px; text-align: left; border-bottom: 1px solid #e2e8f0; }
 
-        /* Sunmi V2 58mm Thermal Print CSS */
         @page { size: 58mm auto; margin: 0; }
         @media print {
             body * { visibility: hidden; }
             #ticket-print-area, #ticket-print-area * { visibility: visible; }
-            #ticket-print-area {
-                display: block !important; position: absolute; left: 0; top: 0;
-                width: 58mm; padding: 2mm; background: #fff; color: #000; font-family: monospace;
-            }
+            #ticket-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 58mm; padding: 2mm; background: #fff; color: #000; font-family: monospace; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation Bar -->
     <div class="header-bar">
         <div class="brand-title">☕ Pancafe</div>
         <div class="nav-buttons">
@@ -136,13 +100,10 @@
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
 
-        <!-- TAB 1: QUEUE SYSTEM -->
         <div id="queue-system" class="page-section active">
             
-            <!-- Issue Ticket Card -->
             <div class="card">
                 <div class="section-title">1. เลือกสัญชาติ (แท็กภายใน)</div>
                 <div class="nat-grid">
@@ -161,9 +122,7 @@
                 </div>
             </div>
 
-            <!-- Queue Kanban Board (Vertical Order for Sunmi V2) -->
             <div class="board-container">
-                <!-- Column A -->
                 <div class="column-card">
                     <div class="col-header-top">
                         <h3 style="color:#2563eb; font-size:15px;">โต๊ะ A (1-2 คน)</h3>
@@ -172,15 +131,10 @@
                             <span class="calling-num" id="calling-A">---</span>
                         </div>
                     </div>
-                    <div class="col-call-btns">
-                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('A')">เรียกถัดไป</button>
-                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('A')">เรียกซ้ำ</button>
-                    </div>
-                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-A">รอคิว: 0</div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px;" id="waiting-count-A">รอคิว: 0</div>
                     <div class="queue-list-container" id="list-A"></div>
                 </div>
 
-                <!-- Column B -->
                 <div class="column-card">
                     <div class="col-header-top">
                         <h3 style="color:#059669; font-size:15px;">โต๊ะ B (3-4 คน)</h3>
@@ -189,15 +143,10 @@
                             <span class="calling-num" id="calling-B">---</span>
                         </div>
                     </div>
-                    <div class="col-call-btns">
-                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('B')">เรียกถัดไป</button>
-                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('B')">เรียกซ้ำ</button>
-                    </div>
-                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-B">รอคิว: 0</div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px;" id="waiting-count-B">รอคิว: 0</div>
                     <div class="queue-list-container" id="list-B"></div>
                 </div>
 
-                <!-- Column C -->
                 <div class="column-card">
                     <div class="col-header-top">
                         <h3 style="color:#7c3aed; font-size:15px;">โต๊ะ C (5-6 คน)</h3>
@@ -206,22 +155,16 @@
                             <span class="calling-num" id="calling-C">---</span>
                         </div>
                     </div>
-                    <div class="col-call-btns">
-                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('C')">เรียกถัดไป</button>
-                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('C')">เรียกซ้ำ</button>
-                    </div>
-                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-C">รอคิว: 0</div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px;" id="waiting-count-C">รอคิว: 0</div>
                     <div class="queue-list-container" id="list-C"></div>
                 </div>
             </div>
 
-            <!-- Daily Reset Button Footer -->
             <div style="margin-top: 15px; margin-bottom: 20px;">
                 <button style="background-color: #dc2626; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 13px;" onclick="resetDailyQueue()">🔄 Reset คิวประจำวัน (เริ่ม 001)</button>
             </div>
         </div>
 
-        <!-- TAB 2: QUEUE DISPLAY (TV MODE) -->
         <div id="queue-display" class="page-section">
             <div class="display-container">
                 <div style="font-size: 18px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">ขอเชิญคิวหมายเลข</div>
@@ -241,7 +184,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: DATABASE & DASHBOARD -->
         <div id="database" class="page-section">
             <div class="filter-bar">
                 <button class="filter-btn active" onclick="setQuickFilter('today', this)">วันนี้</button>
@@ -286,7 +228,11 @@
 
     </div>
 
-    <!-- Ticket Printable Area (58mm Thermal Slip) -->
+    <div id="undo-toast">
+        <span id="toast-text">นำคิว A001 เข้าโต๊ะแล้ว</span>
+        <button class="btn-undo" onclick="undoLastAction()">ย้อนกลับ (Undo)</button>
+    </div>
+
     <div id="ticket-print-area" style="display: none;">
         <div style="text-align: center; width: 100%;">
             <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancafe Cafe</h2>
@@ -308,6 +254,8 @@
         let currentCalling = { A: null, B: null, C: null };
         let selectedNationality = 'Arabic';
         let currentFilterType = 'today';
+        let lastActionState = null;
+        let toastTimeout = null;
         const nationalities = ['Arabic', 'Indian', 'Japanese', 'Thai', 'Other'];
 
         function switchTab(tabId, element) {
@@ -367,33 +315,6 @@
             return '-';
         }
 
-        function callNextDirect(type) {
-            const nextQueue = queues.find(q => q.type === type && q.status === 'Waiting');
-            if (!nextQueue) { alert(`ไม่มีคิวที่รออยู่สำหรับ โต๊ะ ${type}`); return; }
-
-            if (currentCalling[type]) {
-                const prev = queues.find(q => q.id === currentCalling[type].id);
-                if (prev && prev.status === 'Calling') prev.status = 'Skipped';
-            }
-
-            nextQueue.status = 'Calling';
-            currentCalling[type] = nextQueue;
-            
-            renderUI();
-            triggerTVBlink(type);
-            speakQueue(nextQueue.number);
-        }
-
-        function recallDirect(type) {
-            const current = currentCalling[type];
-            if (current && current.status === 'Calling') {
-                triggerTVBlink(type);
-                speakQueue(current.number);
-            } else {
-                alert(`ยังไม่มีคิวที่กำลังเรียกสำหรับ โต๊ะ ${type}`);
-            }
-        }
-
         function recallSpecificQueue(id) {
             const q = queues.find(item => item.id === id);
             if (q) {
@@ -412,11 +333,41 @@
         function changeStatus(id, newStatus) {
             const q = queues.find(item => item.id === id);
             if (q) {
+                lastActionState = { id: q.id, prevStatus: q.status, number: q.number, type: q.type };
+
                 q.status = newStatus;
                 if (currentCalling[q.type] && currentCalling[q.type].id === id && newStatus !== 'Calling') {
                     currentCalling[q.type] = null;
                 }
                 renderUI();
+
+                if (newStatus === 'Served') {
+                    showUndoToast(`คิว ${q.number} เข้าโต๊ะแล้ว`);
+                }
+            }
+        }
+
+        function showUndoToast(msg) {
+            const toast = document.getElementById('undo-toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.display = 'flex';
+
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+        }
+
+        function undoLastAction() {
+            if (lastActionState) {
+                const q = queues.find(item => item.id === lastActionState.id);
+                if (q) {
+                    q.status = lastActionState.prevStatus;
+                    if(lastActionState.prevStatus === 'Calling') {
+                        currentCalling[q.type] = q;
+                    }
+                    renderUI();
+                }
+                document.getElementById('undo-toast').style.display = 'none';
+                lastActionState = null;
             }
         }
 
@@ -445,7 +396,7 @@
             document.getElementById('p-time').innerText = `Time: ${queue.time}`;
 
             if (window.SunmiPrinter) {
-                // Native Sunmi Call
+                // Native Call
             } else {
                 const printArea = document.getElementById('ticket-print-area');
                 printArea.style.display = 'block';
@@ -509,12 +460,18 @@
             const dbTableBody = document.getElementById('db-table-body');
             dbTableBody.innerHTML = '';
             [...filteredData].reverse().forEach(q => {
+                let statusTxt = 'รอเรียก';
+                if(q.status === 'Calling') statusTxt = 'กำลังเรียก';
+                if(q.status === 'Served') statusTxt = 'เข้าโต๊ะ';
+                if(q.status === 'Skipped') statusTxt = 'ข้ามคิว';
+                if(q.status === 'Cancelled') statusTxt = 'ยกเลิก';
+
                 dbTableBody.innerHTML += `
                     <tr>
                         <td>${q.time}</td>
                         <td><b>${q.number}</b></td>
                         <td>${q.nationality}</td>
-                        <td><span class="status-badge bg-${q.status.toLowerCase()}">${q.status}</span></td>
+                        <td><span class="status-badge bg-${q.status.toLowerCase()}">${statusTxt}</span></td>
                     </tr>
                 `;
             });
@@ -535,9 +492,22 @@
                 const listContainer = document.getElementById(`list-${type}`);
                 listContainer.innerHTML = '';
 
-                queues.filter(q => q.type === type).reverse().forEach(q => {
+                // การเรียงลำดับคิว: แสดงคิวที่รอ/กำลังเรียกอยู่บนสุด, ตามด้วยข้าม/ยกเลิก, และคิวที่เข้าโต๊ะแล้วไว้ล่างสุด
+                const statusOrder = { 'Calling': 1, 'Waiting': 2, 'Skipped': 3, 'Cancelled': 4, 'Served': 5 };
+                
+                const colQueues = queues.filter(q => q.type === type).sort((a, b) => {
+                    const orderA = statusOrder[a.status] || 99;
+                    const orderB = statusOrder[b.status] || 99;
+                    if (orderA !== orderB) {
+                        return orderA - orderB;
+                    }
+                    return a.id - b.id; // เรียงตามลำดับคิวก่อน-หลัง
+                });
+
+                colQueues.forEach(q => {
                     const item = document.createElement('div');
-                    item.className = `queue-item ${q.status === 'Calling' ? 'calling' : ''}`;
+                    const isServed = q.status === 'Served';
+                    item.className = `queue-item ${q.status === 'Calling' ? 'calling' : ''} ${isServed ? 'served-item' : ''}`;
 
                     let statusTxt = 'รอเรียก';
                     let bgClass = 'bg-waiting';
@@ -546,9 +516,19 @@
                     if(q.status === 'Skipped') { statusTxt = 'ข้ามคิว'; bgClass = 'bg-skipped'; }
                     if(q.status === 'Cancelled') { statusTxt = 'ยกเลิก'; bgClass = 'bg-cancelled'; }
 
-                    let recallBtnHTML = '';
-                    if (q.status === 'Skipped' || q.status === 'Waiting') {
-                        recallBtnHTML = `<button class="btn-action" style="background:#2563eb;" onclick="recallSpecificQueue(${q.id})">เรียก</button>`;
+                    let leftBtnsHTML = '';
+                    let rightBtnHTML = '';
+
+                    if (isServed) {
+                        leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">แก้ไข / ดึงกลับ</button>`;
+                    } else {
+                        leftBtnsHTML = `
+                            <button class="btn-action" style="background:#2563eb;" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
+                            <button class="btn-action" style="background:#ca8a04;" onclick="changeStatus(${q.id}, 'Skipped')">ข้าม</button>
+                            <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
+                        `;
+
+                        rightBtnHTML = `<button class="btn-action" style="background:#059669; font-size:13px; padding:7px 14px;" onclick="changeStatus(${q.id}, 'Served')">เข้าโต๊ะ</button>`;
                     }
 
                     item.innerHTML = `
@@ -556,16 +536,14 @@
                             <span style="font-size:16px; font-weight:bold;">${q.number}</span>
                             <span class="status-badge ${bgClass}">${statusTxt}</span>
                         </div>
-                        <div style="font-size:10px; color:#64748b; display:flex; justify-content:space-between; margin-top:2px;">
+                        <div style="font-size:11px; color:#64748b; display:flex; justify-content:space-between; margin-top:4px; margin-bottom:8px;">
                             <span>ลูกค้า: ${q.count}</span>
                             <span><b>${q.nationality}</b></span>
                             <span>${q.time.split(' ')[1] || q.time}</span>
                         </div>
-                        <div style="display:flex; gap:4px; margin-top:6px;">
-                            ${recallBtnHTML}
-                            <button class="btn-action" style="background:#059669;" onclick="changeStatus(${q.id}, 'Served')">เข้าโต๊ะ</button>
-                            <button class="btn-action" style="background:#ca8a04;" onclick="changeStatus(${q.id}, 'Skipped')">ข้าม</button>
-                            <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:8px;">
+                            <div style="display:flex; gap:4px;">${leftBtnsHTML}</div>
+                            <div>${rightBtnHTML}</div>
                         </div>
                     `;
                     listContainer.appendChild(item);
