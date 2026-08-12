@@ -1,216 +1,590 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pancake Cafe Queue System</title>
-  <style>
-    * { box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
-    body { padding: 15px; background-color: #f4f6f8; margin: 0; }
-    h2 { text-align: center; color: #333; margin-top: 5px; }
-    
-    .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
-    .card-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: #444; }
-    
-    .grid-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; color: white; transition: 0.2s; }
-    
-    .btn-green { background-color: #2e7d32; }
-    .btn-blue { background-color: #0288d1; }
-    .btn-orange { background-color: #ed6c02; }
-    .btn-red { background-color: #d32f2f; }
-    
-    .calling-display { text-align: center; padding: 15px; background: #e8f5e9; border-radius: 8px; font-size: 2rem; font-weight: bold; color: #2e7d32; margin-bottom: 10px; }
-    .action-group { display: flex; gap: 8px; margin-top: 10px; }
-    .action-group button { flex: 1; font-size: 0.9rem; }
-    
-    .queue-list { list-style: none; padding: 0; margin: 0; }
-    .queue-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #eee; }
-    .queue-item:last-child { border-bottom: none; }
-    .btn-sm { padding: 6px 10px; font-size: 0.8rem; border-radius: 4px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Queue System - Sunmi V2 Edition</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --danger: #dc2626;
+            --bg: #f1f5f9;
+        }
+
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: #0f172a; display: flex; flex-direction: column; min-height: 100vh; webkit-tap-highlight-color: transparent; }
+
+        /* Top Navigation Header (แทน Sidebar) */
+        .header-bar {
+            background: #0f172a;
+            color: #fff;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .brand-title { font-size: 16px; font-weight: bold; color: #38bdf8; }
+
+        .nav-buttons { display: flex; gap: 4px; }
+        .nav-btn {
+            background: #1e293b; color: #94a3b8; border: none; padding: 6px 10px;
+            border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
+        }
+        .nav-btn.active { background: var(--primary); color: #fff; }
+
+        /* Main Container */
+        .container { padding: 10px; flex-grow: 1; overflow-y: auto; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .card {
+            background: #fff; border-radius: 10px; padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px;
+        }
+
+        .section-title { font-size: 14px; font-weight: bold; color: #334155; margin-bottom: 8px; }
+
+        /* Nationality Selector Grid */
+        .nat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .nat-btn {
+            border: 1.5px solid #cbd5e1; background: #fff; padding: 8px 4px;
+            border-radius: 6px; font-size: 12px; font-weight: bold; color: #475569;
+            text-align: center; cursor: pointer;
+        }
+        .nat-btn.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+
+        /* Queue Issue Big Buttons */
+        .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .btn-issue {
+            border: none; padding: 14px 4px; border-radius: 8px; color: #fff;
+            font-size: 14px; font-weight: bold; cursor: pointer; text-align: center;
+        }
+        .btn-a { background-color: #2563eb; }
+        .btn-b { background-color: #059669; }
+        .btn-c { background-color: #7c3aed; }
+
+        /* Kanban Stacked Columns (สำหรับจอแนวตั้ง) */
+        .board-container { display: flex; flex-direction: column; gap: 12px; }
+        .column-card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px; }
+        
+        .col-header-top { display: flex; justify-content: space-between; align-items: center; }
+        .calling-box {
+            background: #eff6ff; border: 1.5px dashed #3b82f6; border-radius: 6px;
+            padding: 4px 10px; text-align: center; display: flex; align-items: center; gap: 8px;
+        }
+        .calling-num { font-size: 20px; font-weight: bold; color: var(--primary); }
+
+        .col-call-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+        .btn-main-call {
+            border: none; padding: 10px; border-radius: 6px; color: #fff; font-size: 13px;
+            font-weight: bold; cursor: pointer; text-align: center;
+        }
+
+        .queue-list-container { max-height: 250px; overflow-y: auto; }
+        .queue-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
+        
+        .status-badge { padding: 2px 5px; border-radius: 4px; font-size: 10px; color: #fff; font-weight: bold; }
+        .bg-waiting { background-color: var(--warning); } .bg-calling { background-color: var(--primary); }
+        .bg-served { background-color: var(--success); } .bg-skipped { background-color: #6b7280; } .bg-cancelled { background-color: var(--danger); }
+        
+        .btn-action { padding: 6px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
+
+        /* Dashboard & TV Display Fixes */
+        .display-container { background: #0f172a; color: #fff; padding: 15px; border-radius: 12px; text-align: center; }
+        .display-box { background: #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 10px; border: 1px solid #334155; }
+        .display-number { font-size: 48px; font-weight: bold; color: #facc15; margin: 5px 0; }
+        .display-number.blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.2; } }
+
+        .db-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .db-card { background: #fff; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary); }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #fff; padding: 8px; border-radius: 6px; }
+        .filter-btn { border: 1px solid #cbd5e1; background: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .filter-btn.active { background: var(--primary); color: #fff; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th, td { padding: 6px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+
+        /* Sunmi V2 58mm Thermal Print CSS */
+        @page { size: 58mm auto; margin: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            #ticket-print-area, #ticket-print-area * { visibility: visible; }
+            #ticket-print-area {
+                display: block !important; position: absolute; left: 0; top: 0;
+                width: 58mm; padding: 2mm; background: #fff; color: #000; font-family: monospace;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <h2>Pancake Cafe Queue 🥞</h2>
-
-  <!-- 1. ส่วนออกคิวใหม่ -->
-  <div class="card">
-    <div class="card-title">1. ออกคิวใหม่ (เลือกจำนวนคน)</div>
-    <div class="grid-btn">
-      <button class="btn-green" onclick="addQueue('A', '1-2 ท่าน')">+ คิว A (1-2 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('B', '3-4 ท่าน')">+ คิว B (3-4 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('C', '5-6 ท่าน')">+ คิว C (5-6 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('D', '7+ ท่าน')">+ คิว D (7+ ท่าน)</button>
+    <!-- Header Navigation Bar -->
+    <div class="header-bar">
+        <div class="brand-title">☕ Pancafe</div>
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="switchTab('queue-system', this)">คิว</button>
+            <button class="nav-btn" onclick="switchTab('queue-display', this)">จอ TV</button>
+            <button class="nav-btn" onclick="switchTab('database', this)">สถิติ</button>
+        </div>
     </div>
-  </div>
 
-  <!-- 2. ส่วนเรียกคิว -->
-  <div class="card">
-    <div class="card-title">2. คิวกำลังเรียก</div>
-    <div id="currentCallDisplay" class="calling-display">---</div>
-    
-    <button class="btn-blue" style="width: 100%; font-size: 1.1rem;" onclick="callNextQueue()">เรียกคิวถัดไป</button>
-    
-    <div class="action-group">
-      <button class="btn-green" onclick="completeCurrentQueue()">รับบริการแล้ว</button>
-      <button class="btn-orange" onclick="skipCurrentQueue()">ข้ามคิวนี้</button>
-      <button class="btn-red" onclick="cancelCurrentQueue()">ยกเลิกคิว</button>
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- TAB 1: QUEUE SYSTEM -->
+        <div id="queue-system" class="page-section active">
+            
+            <!-- Issue Ticket Card -->
+            <div class="card">
+                <div class="section-title">1. เลือกสัญชาติ (แท็กภายใน)</div>
+                <div class="nat-grid">
+                    <button class="nat-btn active" onclick="selectNationality('Arabic', this)">🇦🇪 Arabic</button>
+                    <button class="nat-btn" onclick="selectNationality('Indian', this)">🇮🇳 Indian</button>
+                    <button class="nat-btn" onclick="selectNationality('Japanese', this)">🇯🇵 Japan</button>
+                    <button class="nat-btn" onclick="selectNationality('Thai', this)">🇹🇭 Thai</button>
+                    <button class="nat-btn" onclick="selectNationality('Other', this)">🌐 Other</button>
+                </div>
+
+                <div class="section-title" style="margin-top: 10px;">2. กดออกบัตรคิว</div>
+                <div class="issue-btn-grid">
+                    <button class="btn-issue btn-a" onclick="createQueue('A', 'โต๊ะ A (1-2 ท่าน)')">โต๊ะ A<br><small>1-2 คน</small></button>
+                    <button class="btn-issue btn-b" onclick="createQueue('B', 'โต๊ะ B (3-4 ท่าน)')">โต๊ะ B<br><small>3-4 คน</small></button>
+                    <button class="btn-issue btn-c" onclick="createQueue('C', 'โต๊ะ C (5-6 ท่าน)')">โต๊ะ C<br><small>5-6 คน</small></button>
+                </div>
+            </div>
+
+            <!-- Queue Kanban Board (Vertical Order for Sunmi V2) -->
+            <div class="board-container">
+                <!-- Column A -->
+                <div class="column-card">
+                    <div class="col-header-top">
+                        <h3 style="color:#2563eb; font-size:15px;">โต๊ะ A (1-2 คน)</h3>
+                        <div class="calling-box">
+                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span class="calling-num" id="calling-A">---</span>
+                        </div>
+                    </div>
+                    <div class="col-call-btns">
+                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('A')">เรียกถัดไป</button>
+                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('A')">เรียกซ้ำ</button>
+                    </div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-A">รอคิว: 0</div>
+                    <div class="queue-list-container" id="list-A"></div>
+                </div>
+
+                <!-- Column B -->
+                <div class="column-card">
+                    <div class="col-header-top">
+                        <h3 style="color:#059669; font-size:15px;">โต๊ะ B (3-4 คน)</h3>
+                        <div class="calling-box">
+                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span class="calling-num" id="calling-B">---</span>
+                        </div>
+                    </div>
+                    <div class="col-call-btns">
+                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('B')">เรียกถัดไป</button>
+                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('B')">เรียกซ้ำ</button>
+                    </div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-B">รอคิว: 0</div>
+                    <div class="queue-list-container" id="list-B"></div>
+                </div>
+
+                <!-- Column C -->
+                <div class="column-card">
+                    <div class="col-header-top">
+                        <h3 style="color:#7c3aed; font-size:15px;">โต๊ะ C (5-6 คน)</h3>
+                        <div class="calling-box">
+                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span class="calling-num" id="calling-C">---</span>
+                        </div>
+                    </div>
+                    <div class="col-call-btns">
+                        <button class="btn-main-call" style="background:var(--success);" onclick="callNextDirect('C')">เรียกถัดไป</button>
+                        <button class="btn-main-call" style="background:var(--primary);" onclick="recallDirect('C')">เรียกซ้ำ</button>
+                    </div>
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 6px;" id="waiting-count-C">รอคิว: 0</div>
+                    <div class="queue-list-container" id="list-C"></div>
+                </div>
+            </div>
+
+            <!-- Daily Reset Button Footer -->
+            <div style="margin-top: 15px; margin-bottom: 20px;">
+                <button style="background-color: #dc2626; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 13px;" onclick="resetDailyQueue()">🔄 Reset คิวประจำวัน (เริ่ม 001)</button>
+            </div>
+        </div>
+
+        <!-- TAB 2: QUEUE DISPLAY (TV MODE) -->
+        <div id="queue-display" class="page-section">
+            <div class="display-container">
+                <div style="font-size: 18px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">ขอเชิญคิวหมายเลข</div>
+                <div class="display-box">
+                    <div style="font-size:14px; color:#94a3b8;">TABLE A</div>
+                    <div class="display-number" id="tv-A">---</div>
+                </div>
+                <div class="display-box">
+                    <div style="font-size:14px; color:#94a3b8;">TABLE B</div>
+                    <div class="display-number" id="tv-B">---</div>
+                </div>
+                <div class="display-box">
+                    <div style="font-size:14px; color:#94a3b8;">TABLE C</div>
+                    <div class="display-number" id="tv-C">---</div>
+                </div>
+                <div id="tv-waiting-summary" style="font-size: 12px; margin-top: 10px; color: #cbd5e1;"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: DATABASE & DASHBOARD -->
+        <div id="database" class="page-section">
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="setQuickFilter('today', this)">วันนี้</button>
+                <button class="filter-btn" onclick="setQuickFilter('month', this)">เดือนนี้</button>
+                <button class="filter-btn" onclick="setQuickFilter('all', this)">ทั้งหมด</button>
+                <button style="background:#059669; color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; margin-left:auto;" onclick="exportCSV()">📥 Export CSV</button>
+            </div>
+
+            <div class="db-stats-grid">
+                <div class="db-card" style="border-left-color: #2563eb;">
+                    <div style="font-size:10px; color:#64748b;">คิวทั้งหมด</div>
+                    <div style="font-size:18px; font-weight:bold;" id="db-total">0</div>
+                </div>
+                <div class="db-card" style="border-left-color: #059669;">
+                    <div style="font-size:10px; color:#64748b;">เข้าโต๊ะแล้ว</div>
+                    <div style="font-size:18px; font-weight:bold; color:#059669;" id="db-served">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">สถิติสัญชาติลูกค้า</div>
+                <div id="db-nat-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px;"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">ประวัติคิว</div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>เวลา</th>
+                                <th>คิว</th>
+                                <th>สัญชาติ</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="db-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
-  </div>
 
-  <!-- 3. รายการคิวที่ถูกข้าม -->
-  <div class="card">
-    <div class="card-title">3. รายการคิวที่ถูกข้าม (<span id="skippedCount">0</span>)</div>
-    <ul id="skippedList" class="queue-list"></ul>
-  </div>
+    <!-- Ticket Printable Area (58mm Thermal Slip) -->
+    <div id="ticket-print-area" style="display: none;">
+        <div style="text-align: center; width: 100%;">
+            <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancafe Cafe</h2>
+            <p style="font-size: 10px;">--------------------------------</p>
+            <p style="font-size: 10px; margin-top: 2px;">Queue Number</p>
+            <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
+            <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Seats)</p>
+            <p id="p-count" style="font-size: 10px;">Guests: 1-2</p>
+            <p style="font-size: 10px;">--------------------------------</p>
+            <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
+            <p id="p-time" style="font-size: 10px;">Date/Time: --/-- --:--</p>
+            <p style="font-size: 10px; margin-top: 6px; font-weight: bold;">Thank You!</p>
+        </div>
+    </div>
 
-  <!-- 4. รายการคิวมารอ -->
-  <div class="card">
-    <div class="card-title">4. รายการคิวมารอ (<span id="waitingCount">0</span> คิว)</div>
-    <ul id="waitingList" class="queue-list"></ul>
-  </div>
+    <script>
+        let queues = [];
+        let queueCounters = { A: 1, B: 1, C: 1 };
+        let currentCalling = { A: null, B: null, C: null };
+        let selectedNationality = 'Arabic';
+        let currentFilterType = 'today';
+        const nationalities = ['Arabic', 'Indian', 'Japanese', 'Thai', 'Other'];
 
-  <!-- Hidden iframe สำหรับยิงคำสั่งพิมพ์โดยไม่เปลี่ยนหน้าเว็บ -->
-  <iframe id="printFrame" style="display:none;"></iframe>
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
 
-<script>
-  let queueData = JSON.parse(localStorage.getItem('cafe_queue_data')) || {
-    counters: { A: 1, B: 1, C: 1, D: 1 },
-    waiting: [],
-    skipped: [],
-    current: null
-  };
+        function selectNationality(nat, btnElement) {
+            selectedNationality = nat;
+            document.querySelectorAll('.nat-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
 
-  function saveData() {
-    localStorage.setItem('cafe_queue_data', JSON.stringify(queueData));
-    updateUI();
-  }
+        function resetDailyQueue() {
+            if (confirm("คุณต้องการรีเซ็ตคิวประจำวันใช่หรือไม่?\n(เลขคิว A, B, C จะกลับมาเริ่มที่ 001 ใหม่)")) {
+                queueCounters = { A: 1, B: 1, C: 1 };
+                currentCalling = { A: null, B: null, C: null };
+                queues = [];
+                renderUI();
+                alert("รีเซ็ตระบบคิวประจำวันเรียบร้อยแล้ว!");
+            }
+        }
 
-  // ระบบยิงคำสั่งพิมพ์เข้า Sunmi InnerPrinter โดยตรง
-  function printSunmi(text) {
-    // 1. ตรวจสอบ JavaScript Interface จากแอปเบราว์เซอร์
-    if (window.SunmiPrinter && typeof window.SunmiPrinter.printText === "function") {
-      window.SunmiPrinter.printText(text);
-      window.SunmiPrinter.lineWrap(3);
-      return;
-    } 
-    if (window.Android && typeof window.Android.printText === "function") {
-      window.Android.printText(text);
-      return;
-    }
+        function createQueue(type, desc) {
+            const numStr = queueCounters[type].toString().padStart(3, '0');
+            const queueNumber = `${type}${numStr}`;
+            queueCounters[type]++;
 
-    // 2. ยิงผ่าน Sunmi InnerPrinter Intent Protocol (ทำงานได้โดยตรงบน Sunmi OS)
-    try {
-      const intentUrl = "intent://print#Intent;scheme=sunmi;package=com.sunmi.innerprinter;S.text=" + encodeURIComponent(text) + ";end";
-      const iframe = document.getElementById('printFrame');
-      if (iframe) {
-        iframe.src = intentUrl;
-      } else {
-        window.location.href = intentUrl;
-      }
-    } catch (e) {
-      console.log("Print Error:", e);
-    }
-  }
+            const waitingCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
+            const now = new Date();
+            const timeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }) + ' ' + 
+                            now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-  // 1. ออกคิวใหม่
-  function addQueue(type, desc) {
-    const number = type + String(queueData.counters[type]).padStart(3, '0');
-    queueData.counters[type]++;
-    
-    const newItem = {
-      number: number,
-      typeDesc: desc,
-      time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
-    };
+            const newQueue = {
+                id: Date.now(),
+                number: queueNumber,
+                type: type,
+                desc: desc,
+                count: getDefaultCount(type),
+                nationality: selectedNationality,
+                status: 'Waiting',
+                time: timeStr,
+                timestamp: now.getTime()
+            };
 
-    queueData.waiting.push(newItem);
-    saveData();
+            queues.push(newQueue);
+            renderUI();
+            printQueueTicket(newQueue, waitingCount);
+        }
 
-    // ข้อความที่จะส่งพิมพ์เข้า Sunmi
-    const slipText = 
-      "==============================\n" +
-      "       Pancake Cafe Queue     \n" +
-      "==============================\n" +
-      "หมายเลขคิว : " + newItem.number + "\n" +
-      "ประเภท     : " + newItem.typeDesc + "\n" +
-      "เวลา       : " + newItem.time + "\n" +
-      "==============================\n" +
-      "   กรุณารอเรียกหมายเลขคิว ขอบคุณค่ะ  \n\n\n\n\n";
-    
-    printSunmi(slipText);
-  }
+        function getDefaultCount(type) {
+            if(type === 'A') return '1-2 คน';
+            if(type === 'B') return '3-4 คน';
+            if(type === 'C') return '5-6 คน';
+            return '-';
+        }
 
-  // 2. เรียกคิวถัดไป
-  function callNextQueue() {
-    if (queueData.waiting.length === 0) {
-      alert("ไม่มีคิวรอในระบบ");
-      return;
-    }
-    queueData.current = queueData.waiting.shift();
-    saveData();
-  }
+        function callNextDirect(type) {
+            const nextQueue = queues.find(q => q.type === type && q.status === 'Waiting');
+            if (!nextQueue) { alert(`ไม่มีคิวที่รออยู่สำหรับ โต๊ะ ${type}`); return; }
 
-  // 3. ข้ามคิว
-  function skipCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.skipped.push(queueData.current);
-    queueData.current = null;
-    saveData();
-  }
+            if (currentCalling[type]) {
+                const prev = queues.find(q => q.id === currentCalling[type].id);
+                if (prev && prev.status === 'Calling') prev.status = 'Skipped';
+            }
 
-  // 4. ดึงคิวที่ข้ามกลับมารับบริการ
-  function recallSkipped(index) {
-    const recalled = queueData.skipped.splice(index, 1)[0];
-    queueData.waiting.unshift(recalled);
-    saveData();
-  }
+            nextQueue.status = 'Calling';
+            currentCalling[type] = nextQueue;
+            
+            renderUI();
+            triggerTVBlink(type);
+            speakQueue(nextQueue.number);
+        }
 
-  // 5. รับบริการเรียบร้อย
-  function completeCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.current = null;
-    saveData();
-  }
+        function recallDirect(type) {
+            const current = currentCalling[type];
+            if (current && current.status === 'Calling') {
+                triggerTVBlink(type);
+                speakQueue(current.number);
+            } else {
+                alert(`ยังไม่มีคิวที่กำลังเรียกสำหรับ โต๊ะ ${type}`);
+            }
+        }
 
-  // 6. ยกเลิกคิว
-  function cancelCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.current = null;
-    saveData();
-  }
+        function recallSpecificQueue(id) {
+            const q = queues.find(item => item.id === id);
+            if (q) {
+                if (currentCalling[q.type]) {
+                    const prev = queues.find(item => item.id === currentCalling[q.type].id);
+                    if (prev && prev.status === 'Calling') prev.status = 'Skipped';
+                }
+                q.status = 'Calling';
+                currentCalling[q.type] = q;
+                renderUI();
+                triggerTVBlink(q.type);
+                speakQueue(q.number);
+            }
+        }
 
-  // อัปเดตหน้าจอ UI
-  function updateUI() {
-    const display = document.getElementById('currentCallDisplay');
-    if (queueData.current) {
-      display.innerText = queueData.current.number + " (" + queueData.current.typeDesc + ")";
-    } else {
-      display.innerText = "---";
-    }
+        function changeStatus(id, newStatus) {
+            const q = queues.find(item => item.id === id);
+            if (q) {
+                q.status = newStatus;
+                if (currentCalling[q.type] && currentCalling[q.type].id === id && newStatus !== 'Calling') {
+                    currentCalling[q.type] = null;
+                }
+                renderUI();
+            }
+        }
 
-    document.getElementById('waitingCount').innerText = queueData.waiting.length;
-    const waitingList = document.getElementById('waitingList');
-    waitingList.innerHTML = '';
-    queueData.waiting.forEach(item => {
-      waitingList.innerHTML += `<li class="queue-item"><span><b>${item.number}</b> (${item.typeDesc})</span><small>${item.time}</small></li>`;
-    });
+        function triggerTVBlink(type) {
+            const el = document.getElementById(`tv-${type}`);
+            if(el) {
+                el.classList.add('blink');
+                setTimeout(() => el.classList.remove('blink'), 4000);
+            }
+        }
 
-    document.getElementById('skippedCount').innerText = queueData.skipped.length;
-    const skippedList = document.getElementById('skippedList');
-    skippedList.innerHTML = '';
-    queueData.skipped.forEach((item, index) => {
-      skippedList.innerHTML += `
-        <li class="queue-item">
-          <span><b>${item.number}</b> (${item.typeDesc})</span>
-          <button class="btn-blue btn-sm" onclick="recallSkipped(${index})">เรียกซ้ำ</button>
-        </li>`;
-    });
-  }
+        function speakQueue(number) {
+            if ('speechSynthesis' in window) {
+                const text = `Queue number ${number.split('').join(' ')}`;
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US';
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
-  updateUI();
-</script>
+        function printQueueTicket(queue, waitingCount) {
+            document.getElementById('p-number').innerText = queue.number;
+            document.getElementById('p-desc').innerText = queue.desc;
+            document.getElementById('p-count').innerText = `Guests: ${queue.count}`;
+            document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
+            document.getElementById('p-time').innerText = `Time: ${queue.time}`;
 
+            if (window.SunmiPrinter) {
+                // Native Sunmi Call
+            } else {
+                const printArea = document.getElementById('ticket-print-area');
+                printArea.style.display = 'block';
+                window.print();
+                printArea.style.display = 'none';
+            }
+        }
+
+        function setQuickFilter(type, btnElement) {
+            currentFilterType = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+            renderDatabase();
+        }
+
+        function getFilteredQueues() {
+            const now = new Date();
+            return queues.filter(q => {
+                const qDate = new Date(q.timestamp);
+                if (currentFilterType === 'today') return qDate.toDateString() === now.toDateString();
+                if (currentFilterType === 'month') return qDate.getMonth() === now.getMonth() && qDate.getFullYear() === now.getFullYear();
+                return true;
+            });
+        }
+
+        function exportCSV() {
+            const data = getFilteredQueues();
+            if (data.length === 0) { alert('ไม่มีข้อมูลคิวสำหรับส่งออก'); return; }
+
+            let csvContent = "\uFEFFDate/Time,Queue No,Type,Nationality,Status\n";
+            data.forEach(q => {
+                csvContent += `"${q.time}","${q.number}","${q.desc}","${q.nationality}","${q.status}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Queue_Report_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function renderDatabase() {
+            const filteredData = getFilteredQueues();
+            document.getElementById('db-total').innerText = filteredData.length;
+            document.getElementById('db-served').innerText = filteredData.filter(q => q.status === 'Served').length;
+
+            const dbNatGrid = document.getElementById('db-nat-grid');
+            dbNatGrid.innerHTML = '';
+            nationalities.forEach(nat => {
+                const count = filteredData.filter(q => q.nationality === nat).length;
+                dbNatGrid.innerHTML += `
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:6px; border-radius:4px; text-align:center;">
+                        <div style="font-size:10px; color:#475569;">${nat}</div>
+                        <div style="font-size:14px; font-weight:bold; color:#2563eb;">${count}</div>
+                    </div>
+                `;
+            });
+
+            const dbTableBody = document.getElementById('db-table-body');
+            dbTableBody.innerHTML = '';
+            [...filteredData].reverse().forEach(q => {
+                dbTableBody.innerHTML += `
+                    <tr>
+                        <td>${q.time}</td>
+                        <td><b>${q.number}</b></td>
+                        <td>${q.nationality}</td>
+                        <td><span class="status-badge bg-${q.status.toLowerCase()}">${q.status}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderUI() {
+            ['A', 'B', 'C'].forEach(type => {
+                const activeCall = currentCalling[type];
+                const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
+                
+                document.getElementById(`calling-${type}`).innerText = activeNum;
+                const tvEl = document.getElementById(`tv-${type}`);
+                if(tvEl) tvEl.innerText = activeNum;
+
+                const waitingList = queues.filter(q => q.type === type && q.status === 'Waiting');
+                document.getElementById(`waiting-count-${type}`).innerText = `รอคิว: ${waitingList.length}`;
+
+                const listContainer = document.getElementById(`list-${type}`);
+                listContainer.innerHTML = '';
+
+                queues.filter(q => q.type === type).reverse().forEach(q => {
+                    const item = document.createElement('div');
+                    item.className = `queue-item ${q.status === 'Calling' ? 'calling' : ''}`;
+
+                    let statusTxt = 'รอเรียก';
+                    let bgClass = 'bg-waiting';
+                    if(q.status === 'Calling') { statusTxt = 'กำลังเรียก'; bgClass = 'bg-calling'; }
+                    if(q.status === 'Served') { statusTxt = 'เข้าโต๊ะ'; bgClass = 'bg-served'; }
+                    if(q.status === 'Skipped') { statusTxt = 'ข้ามคิว'; bgClass = 'bg-skipped'; }
+                    if(q.status === 'Cancelled') { statusTxt = 'ยกเลิก'; bgClass = 'bg-cancelled'; }
+
+                    let recallBtnHTML = '';
+                    if (q.status === 'Skipped' || q.status === 'Waiting') {
+                        recallBtnHTML = `<button class="btn-action" style="background:#2563eb;" onclick="recallSpecificQueue(${q.id})">เรียก</button>`;
+                    }
+
+                    item.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:16px; font-weight:bold;">${q.number}</span>
+                            <span class="status-badge ${bgClass}">${statusTxt}</span>
+                        </div>
+                        <div style="font-size:10px; color:#64748b; display:flex; justify-content:space-between; margin-top:2px;">
+                            <span>ลูกค้า: ${q.count}</span>
+                            <span><b>${q.nationality}</b></span>
+                            <span>${q.time.split(' ')[1] || q.time}</span>
+                        </div>
+                        <div style="display:flex; gap:4px; margin-top:6px;">
+                            ${recallBtnHTML}
+                            <button class="btn-action" style="background:#059669;" onclick="changeStatus(${q.id}, 'Served')">เข้าโต๊ะ</button>
+                            <button class="btn-action" style="background:#ca8a04;" onclick="changeStatus(${q.id}, 'Skipped')">ข้าม</button>
+                            <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
+                        </div>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            });
+
+            const tvSummary = document.getElementById('tv-waiting-summary');
+            if(tvSummary) {
+                tvSummary.innerHTML = `
+                    A: <b>${queues.filter(q => q.type === 'A' && q.status === 'Waiting').length}</b> | 
+                    B: <b>${queues.filter(q => q.type === 'B' && q.status === 'Waiting').length}</b> | 
+                    C: <b>${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
+                `;
+            }
+
+            renderDatabase();
+        }
+
+        renderDatabase();
+    </script>
 </body>
 </html>
