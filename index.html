@@ -32,12 +32,8 @@
         .card { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; }
         .section-title { font-size: 14px; font-weight: bold; color: #334155; margin-bottom: 8px; }
 
-        .nat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .nat-btn { border: 1.5px solid #cbd5e1; background: #fff; padding: 8px 4px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #475569; text-align: center; cursor: pointer; }
-        .nat-btn.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
-
         .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .btn-issue { border: none; padding: 14px 4px; border-radius: 8px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-issue { border: none; padding: 16px 4px; border-radius: 8px; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; }
         .btn-a { background-color: #2563eb; } .btn-b { background-color: #059669; } .btn-c { background-color: #7c3aed; }
 
         .board-container { display: flex; flex-direction: column; gap: 12px; }
@@ -57,6 +53,26 @@
         .bg-cancelled { background-color: #dc2626; }
 
         .btn-action { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
+
+        /* Modal สำหรับเลือกสัญชาติ */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #fff; width: 90%; max-width: 360px; border-radius: 12px; padding: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .nat-modal-btn {
+            border: 1.5px solid #cbd5e1; background: #f8fafc; padding: 12px 8px;
+            border-radius: 8px; font-size: 14px; font-weight: bold; color: #334155;
+            cursor: pointer; text-align: center;
+        }
+        .nat-modal-btn:active { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
 
         #undo-toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -104,20 +120,11 @@
         <div id="queue-system" class="page-section active">
             
             <div class="card">
-                <div class="section-title">1. เลือกสัญชาติ (แท็กภายใน)</div>
-                <div class="nat-grid">
-                    <button class="nat-btn active" onclick="selectNationality('Arabic', this)">🇦🇪 Arabic</button>
-                    <button class="nat-btn" onclick="selectNationality('Indian', this)">🇮🇳 Indian</button>
-                    <button class="nat-btn" onclick="selectNationality('Japanese', this)">🇯🇵 Japan</button>
-                    <button class="nat-btn" onclick="selectNationality('Thai', this)">🇹🇭 Thai</button>
-                    <button class="nat-btn" onclick="selectNationality('Other', this)">🌐 Other</button>
-                </div>
-
-                <div class="section-title" style="margin-top: 10px;">2. กดออกบัตรคิว</div>
+                <div class="section-title">กดออกบัตรคิว</div>
                 <div class="issue-btn-grid">
-                    <button class="btn-issue btn-a" onclick="createQueue('A', 'โต๊ะ A (1-2 ท่าน)')">โต๊ะ A<br><small>1-2 คน</small></button>
-                    <button class="btn-issue btn-b" onclick="createQueue('B', 'โต๊ะ B (3-4 ท่าน)')">โต๊ะ B<br><small>3-4 คน</small></button>
-                    <button class="btn-issue btn-c" onclick="createQueue('C', 'โต๊ะ C (5-6 ท่าน)')">โต๊ะ C<br><small>5-6 คน</small></button>
+                    <button class="btn-issue btn-a" onclick="openNationalityModal('A', 'โต๊ะ A (1-2 ท่าน)')">โต๊ะ A<br><small>1-2 คน</small></button>
+                    <button class="btn-issue btn-b" onclick="openNationalityModal('B', 'โต๊ะ B (3-4 ท่าน)')">โต๊ะ B<br><small>3-4 คน</small></button>
+                    <button class="btn-issue btn-c" onclick="openNationalityModal('C', 'โต๊ะ C (5-6 ท่าน)')">โต๊ะ C<br><small>5-6 คน</small></button>
                 </div>
             </div>
 
@@ -227,6 +234,24 @@
 
     </div>
 
+    <!-- Modal ป๊อปอัปเลือกสัญชาติ -->
+    <div id="nat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h3 style="font-size: 16px; color: #0f172a;" id="modal-title">เลือกสัญชาติ</h3>
+                <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 18px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
+            </div>
+            <p style="font-size: 12px; color: #64748b;">ระบุสัญชาติลูกค้าเพื่อออกบัตรคิว</p>
+            <div class="nat-modal-grid">
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese')">🇯🇵 Japan</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" style="grid-column: span 2;" onclick="submitQueueWithNat('Other')">🌐 Other</button>
+            </div>
+        </div>
+    </div>
+
     <div id="undo-toast">
         <span id="toast-text">นำคิว A001 เข้าโต๊ะแล้ว</span>
         <button class="btn-undo" onclick="undoLastAction()">ย้อนกลับ (Undo)</button>
@@ -271,7 +296,8 @@
         let queues = [];
         let queueCounters = { A: 1, B: 1, C: 1 };
         let currentCalling = { A: null, B: null, C: null };
-        let selectedNationality = 'Arabic';
+        let pendingQueueType = null;
+        let pendingQueueDesc = null;
         let currentFilterType = 'today';
         let lastActionState = null;
         let toastTimeout = null;
@@ -294,7 +320,7 @@
             }
         });
 
-        // 2. ฟังการอัปเดตข้อมูลคิวเฉพาะของ "วันนี้" เพื่อประสิทธิภาพและความเร็วสูงสุดใน Production Mode
+        // 2. ฟังการอัปเดตข้อมูลคิวเฉพาะของ "วันนี้"
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
@@ -320,12 +346,10 @@
                     queueCounters[type] = 1;
                 }
 
-                // หาคิวที่กำลังเรียกอยู่ล่าสุด
                 const callingQueue = typeQueues.filter(q => q.status === 'Calling').pop();
                 currentCalling[type] = callingQueue || null;
             });
 
-            // อัปเดต UI หน้าคิว จอ TV และ สถิติ พร้อมกันทุกอุปกรณ์
             renderUI();
             renderDatabase();
         });
@@ -337,22 +361,26 @@
             element.classList.add('active');
         }
 
-        window.selectNationality = function(nat, btnElement) {
-            selectedNationality = nat;
-            document.querySelectorAll('.nat-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
+        window.openNationalityModal = function(type, desc) {
+            pendingQueueType = type;
+            pendingQueueDesc = desc;
+            document.getElementById('modal-title').innerText = `เลือกสัญชาติ (${desc})`;
+            document.getElementById('nat-modal').style.display = 'flex';
         }
 
-        window.resetDailyQueue = function() {
-            if (confirm("คุณต้องการรีเซ็ตคิวประจำวันใช่หรือไม่?\n(เลขคิว A, B, C จะกลับมาเริ่มที่ 001 ใหม่)")) {
-                queueCounters = { A: 1, B: 1, C: 1 };
-                currentCalling = { A: null, B: null, C: null };
-                renderUI();
-                alert("รีเซ็ตตัวนับคิวฝั่งเครื่องเรียบร้อยแล้ว!");
-            }
+        window.closeNationalityModal = function() {
+            document.getElementById('nat-modal').style.display = 'none';
+            pendingQueueType = null;
+            pendingQueueDesc = null;
         }
 
-        window.createQueue = async function(type, desc) {
+        window.submitQueueWithNat = async function(nat) {
+            if (!pendingQueueType) return;
+            const type = pendingQueueType;
+            const desc = pendingQueueDesc;
+
+            closeNationalityModal();
+
             const numStr = queueCounters[type].toString().padStart(3, '0');
             const queueNumber = `${type}${numStr}`;
             const waitingCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
@@ -366,7 +394,7 @@
                 type: type,
                 desc: desc,
                 count: getDefaultCount(type),
-                nationality: selectedNationality,
+                nationality: nat,
                 status: 'Waiting',
                 time: timeStr,
                 timestamp: now.getTime(),
@@ -379,6 +407,15 @@
             } catch (error) {
                 console.error("Error adding doc: ", error);
                 alert("เกิดข้อผิดพลาดในการบันทึกคิวลง Firestore: " + error.message);
+            }
+        }
+
+        window.resetDailyQueue = function() {
+            if (confirm("คุณต้องการรีเซ็ตคิวประจำวันใช่หรือไม่?\n(เลขคิว A, B, C จะกลับมาเริ่มที่ 001 ใหม่)")) {
+                queueCounters = { A: 1, B: 1, C: 1 };
+                currentCalling = { A: null, B: null, C: null };
+                renderUI();
+                alert("รีเซ็ตตัวนับคิวฝั่งเครื่องเรียบร้อยแล้ว!");
             }
         }
 
@@ -402,7 +439,6 @@
                     await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
                 }
 
-                // ส่งคำสั่งกะพริบจอและพูดไปยัง Firestore เพื่อให้ทุกจอกระพริบและพูดพร้อมกัน
                 await setDoc(doc(db, "system", "display_state"), {
                     [q.type]: {
                         blinkTimestamp: Date.now(),
