@@ -81,29 +81,114 @@
         }
         .nat-modal-btn:active { background: #fef3c7; border-color: var(--primary); color: var(--primary); }
 
-        /* TV Display Warm Theme */
+        /* ==================== TV Display Custom Styled ==================== */
         #queue-display {
-            background-color: var(--bg-main); color: var(--text-dark); padding: 16px; border-radius: 16px;
+            background: linear-gradient(180deg, #fffcf0 0%, #fef3c7 100%);
+            color: var(--text-dark);
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: inset 0 0 15px rgba(217, 119, 6, 0.08);
+            border: 2px solid #fde68a;
         }
         .tv-header-title {
-            font-size: 22px; font-weight: 800; color: #78350f; text-align: center; margin-bottom: 16px; letter-spacing: 0.5px;
+            font-size: 26px;
+            font-weight: 900;
+            color: #78350f;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 0px #fff;
         }
-        .tv-table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .tv-table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         .tv-card {
-            background: #ffffff; border: 2px solid #fde68a; border-radius: 16px; padding: 16px; text-align: center;
-            box-shadow: 0 4px 12px rgba(120, 53, 15, 0.05);
+            background: #ffffff;
+            border: 2px solid #fcd34d;
+            border-radius: 20px;
+            padding: 20px 14px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(120, 53, 15, 0.08);
+            transition: transform 0.2s;
         }
-        .tv-table-name {
-            font-size: 15px; font-weight: 800; color: #92400e; background: #fef3c7; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 8px;
-        }
-        .tv-current-label { font-size: 11px; color: #b45309; font-weight: 700; text-transform: uppercase; }
-        .tv-current-num { font-size: 52px; font-weight: 900; color: #d97706; line-height: 1.1; margin: 4px 0 12px 0; }
-        .tv-current-num.blink { animation: pancakeBlink 0.8s ease-in-out infinite alternate; }
-        @keyframes pancakeBlink { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(1.05); color: #b45309; } }
+        .tv-card-a { border-top: 6px solid #d97706; }
+        .tv-card-b { border-top: 6px solid #059669; }
+        .tv-card-c { border-top: 6px solid #7c3aed; }
 
-        .tv-next-box { background: #fffbeb; border-radius: 10px; padding: 8px 10px; border: 1.5px dashed #fcd34d; }
-        .tv-next-label { font-size: 11px; font-weight: 700; color: #a16207; margin-bottom: 4px; }
-        .tv-next-list { font-size: 14px; font-weight: 800; color: #78350f; word-spacing: 4px; }
+        .tv-table-name {
+            font-size: 15px;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .tv-card-a .tv-table-name { color: #92400e; background: #fef3c7; }
+        .tv-card-b .tv-table-name { color: #065f46; background: #d1fae5; }
+        .tv-card-c .tv-table-name { color: #5b21b6; background: #ede9fe; }
+
+        .tv-current-label { font-size: 12px; color: #b45309; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tv-current-num { font-size: 58px; font-weight: 900; color: #b45309; line-height: 1.1; margin: 6px 0 16px 0; font-family: 'Arial Rounded MT Bold', sans-serif; }
+        .tv-current-num.blink { animation: pancakeBlink 0.8s ease-in-out infinite alternate; }
+        @keyframes pancakeBlink { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0.2; transform: scale(1.08); color: #d97706; } }
+
+        .tv-next-box {
+            background: #fffdf5;
+            border-radius: 14px;
+            padding: 10px 8px;
+            border: 1.5px dashed #fcd34d;
+        }
+        .tv-next-label { font-size: 11px; font-weight: 800; color: #92400e; margin-bottom: 6px; letter-spacing: 0.5px; }
+        
+        .tv-next-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            min-height: 32px;
+            align-items: center;
+        }
+        .tv-next-badge {
+            background: #fef3c7;
+            color: #78350f;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid #fde68a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .tv-next-empty { font-size: 13px; font-weight: 700; color: #a16207; }
+
+        .tv-summary-bar {
+            background: #ffffff;
+            border: 1.5px solid #fde68a;
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(120, 53, 15, 0.05);
+        }
+
+        /* Banner Container บน TV */
+        .tv-banner-container {
+            margin-top: 20px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #fde68a;
+            box-shadow: 0 8px 20px rgba(120, 53, 15, 0.08);
+            background: #fff;
+            position: relative;
+            max-height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .tv-banner-img {
+            width: 100%;
+            height: 100%;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
+        }
 
         /* Stats & Toast */
         #undo-toast {
@@ -154,6 +239,18 @@
                 </div>
             </div>
 
+            <!-- ส่วนตั้งค่ารูปภาพแบนเนอร์โปรโมชัน -->
+            <div class="card">
+                <div class="section-title">🖼️ อัปเดตรูปป้ายโปรโมชันบนจอ TV</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <input type="file" id="banner-file-input" accept="image/*" onchange="uploadBannerImage(event)" style="font-size: 12px;">
+                    <div style="display: flex; gap: 6px;">
+                        <input type="text" id="banner-url-input" placeholder="หรือใส่ URL รูปภาพโปรโมชัน" style="flex: 1; padding: 6px; border: 1px solid #fde68a; border-radius: 6px; font-size: 12px;">
+                        <button onclick="saveBannerUrl()" style="background: #d97706; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="board-container">
                 <div class="column-card">
                     <div class="col-header-top">
@@ -197,44 +294,52 @@
             </div>
         </div>
 
-        <!-- หน้าจอ TV แสดงผลคิวหลัก + คิวถัดไป -->
+        <!-- หน้าจอ TV แสดงผลคิวหลัก + คิวถัดไป + แบนเนอร์โปรโมชัน -->
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">🥞 NOW SERVING / ขอเชิญเข้าโต๊ะ</div>
             <div class="tv-table-grid">
                 <!-- Table A -->
-                <div class="tv-card">
+                <div class="tv-card tv-card-a">
                     <div class="tv-table-name">TABLE A (1-2 ท่าน)</div>
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-num" id="tv-A">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
-                        <div class="tv-next-list" id="tv-next-A">-</div>
+                        <div class="tv-next-label">คิวถัดไป (NEXT 5 QUEUES)</div>
+                        <div class="tv-next-badges" id="tv-next-A">-</div>
                     </div>
                 </div>
 
                 <!-- Table B -->
-                <div class="tv-card">
+                <div class="tv-card tv-card-b">
                     <div class="tv-table-name">TABLE B (3-4 ท่าน)</div>
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-num" id="tv-B">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
-                        <div class="tv-next-list" id="tv-next-B">-</div>
+                        <div class="tv-next-label">คิวถัดไป (NEXT 5 QUEUES)</div>
+                        <div class="tv-next-badges" id="tv-next-B">-</div>
                     </div>
                 </div>
 
                 <!-- Table C -->
-                <div class="tv-card">
+                <div class="tv-card tv-card-c">
                     <div class="tv-table-name">TABLE C (5-6 ท่าน)</div>
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-num" id="tv-C">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
-                        <div class="tv-next-list" id="tv-next-C">-</div>
+                        <div class="tv-next-label">คิวถัดไป (NEXT 5 QUEUES)</div>
+                        <div class="tv-next-badges" id="tv-next-C">-</div>
                     </div>
                 </div>
             </div>
-            <div id="tv-waiting-summary" style="font-size: 13px; text-align: center; margin-top: 16px; color: #78350f; font-weight: bold;"></div>
+            
+            <div class="tv-summary-bar">
+                <div id="tv-waiting-summary" style="font-size: 14px; text-align: center; color: #78350f; font-weight: bold;"></div>
+            </div>
+
+            <!-- พื้นที่สำหรับแสดง Banner โปรโมชัน -->
+            <div class="tv-banner-container">
+                <img id="tv-banner-img" class="tv-banner-img" src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1200&q=80" alt="Pancake Café Promotion Banner">
+            </div>
         </div>
 
         <!-- หน้าสถิติและประวัติ -->
@@ -352,7 +457,7 @@
         let lastBlinkState = { A: 0, B: 0, C: 0 };
         const nationalities = ['Arabic', 'Indian', 'Japanese', 'Thai', 'Other'];
 
-        // 1. ซิงค์สถานะการกระพริบจอ TV และการขานเสียงข้ามอุปกรณ์
+        // 1. ซิงค์สถานะการกระพริบจอ TV, การขานเสียง และรูป Banner โปรโมชัน
         onSnapshot(doc(db, "system", "display_state"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -365,8 +470,35 @@
                         }
                     }
                 });
+
+                if (data.bannerUrl) {
+                    const bannerImg = document.getElementById('tv-banner-img');
+                    if (bannerImg) bannerImg.src = data.bannerUrl;
+                }
             }
         });
+
+        // ฟังก์ชันจัดการรูปภาพแบนเนอร์
+        window.saveBannerUrl = async function() {
+            const url = document.getElementById('banner-url-input').value.trim();
+            if (url) {
+                await setDoc(doc(db, "system", "display_state"), { bannerUrl: url }, { merge: true });
+                alert('อัปเดต URL รูปแบนเนอร์เรียบร้อยแล้ว!');
+            }
+        };
+
+        window.uploadBannerImage = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const base64Img = e.target.result;
+                    await setDoc(doc(db, "system", "display_state"), { bannerUrl: base64Img }, { merge: true });
+                    alert('อัปโหลดรูปภาพแบนเนอร์เรียบร้อยแล้ว!');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
 
         // 2. ฟังการอัปเดตข้อมูลคิวเฉพาะของ "วันนี้"
         const startOfToday = new Date();
@@ -640,7 +772,7 @@
                 const tvEl = document.getElementById(`tv-${type}`);
                 if(tvEl) tvEl.innerText = activeNum;
 
-                // อัปเดตคิวถัดไปบน TV (ดึงรอคิว 2 คิวแรก)
+                // อัปเดตคิวถัดไปบน TV (ดึงรอคิวสูงสุด 5 คิว)
                 const waitingList = queues
                     .filter(q => q.type === type && q.status === 'Waiting')
                     .sort((a, b) => a.id - b.id);
@@ -648,9 +780,10 @@
                 const nextEl = document.getElementById(`tv-next-${type}`);
                 if(nextEl) {
                     if (waitingList.length > 0) {
-                        nextEl.innerText = waitingList.slice(0, 2).map(q => q.number).join(', ');
+                        const top5 = waitingList.slice(0, 5);
+                        nextEl.innerHTML = top5.map(q => `<span class="tv-next-badge">${q.number}</span>`).join('');
                     } else {
-                        nextEl.innerText = '-';
+                        nextEl.innerHTML = `<span class="tv-next-empty">-</span>`;
                     }
                 }
 
@@ -715,9 +848,9 @@
             const tvSummary = document.getElementById('tv-waiting-summary');
             if(tvSummary) {
                 tvSummary.innerHTML = `
-                    จำนวนคิวรอขณะนี้ — Table A: <b>${queues.filter(q => q.type === 'A' && q.status === 'Waiting').length}</b> | 
-                    Table B: <b>${queues.filter(q => q.type === 'B' && q.status === 'Waiting').length}</b> | 
-                    Table C: <b>${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
+                    จำนวนคิวรอขณะนี้ — Table A: <b style="color:#d97706;">${queues.filter(q => q.type === 'A' && q.status === 'Waiting').length}</b> | 
+                    Table B: <b style="color:#059669;">${queues.filter(q => q.type === 'B' && q.status === 'Waiting').length}</b> | 
+                    Table C: <b style="color:#7c3aed;">${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
                 `;
             }
         }
