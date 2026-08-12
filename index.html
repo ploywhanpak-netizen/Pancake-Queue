@@ -2,359 +2,652 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pancake Café - Queue Management</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pancake Café - Mobile Queue Management</title>
     <style>
         :root {
-            --primary: #4a2c11;
-            --secondary: #d97706;
-            --bg: #fefce8;
+            --primary: #d97706;
+            --primary-hover: #b45309;
+            --bg-main: #fefae0;
             --card-bg: #ffffff;
-            --text: #1f2937;
+            --text-dark: #4a3b32;
+            --text-muted: #78350f;
+            --accent-border: #fde68a;
+            --success: #16a34a;
+            --danger: #dc2626;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Sukhumvit Set', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; -webkit-tap-highlight-color: transparent; padding-bottom: 20px; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
+        /* Header Bar & Navigation */
+        .header-bar {
+            background: #5c1809; color: #fff; padding: 10px 12px; display: flex;
+            justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
+        .brand-title { font-size: 16px; font-weight: 800; color: #fef3c7; display: flex; align-items: center; gap: 4px; }
+        .nav-buttons { display: flex; gap: 4px; background: rgba(0, 0, 0, 0.25); padding: 3px; border-radius: 20px; }
+        .nav-btn { background: transparent; color: #fef3c7; border: none; padding: 5px 10px; border-radius: 14px; font-weight: bold; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .nav-btn.active { background: #ffffff; color: #5c1809; font-weight: 800; }
 
-        /* Navbar Header */
-        header {
-            background-color: var(--primary);
-            color: #fff;
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .container { padding: 12px; flex-grow: 1; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .section-title { font-size: 13px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Mobile Issue Ticket Buttons */
+        .issue-card { background: var(--card-bg); border-radius: 14px; padding: 12px; box-shadow: 0 2px 6px rgba(120,53,15,0.06); border: 1px solid var(--accent-border); margin-bottom: 14px; }
+        .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .btn-issue {
+            border: none; padding: 12px 4px; border-radius: 12px; color: #fff; font-size: 13px; font-weight: bold;
+            cursor: pointer; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+            transition: transform 0.1s;
         }
+        .btn-issue:active { transform: scale(0.96); }
+        .btn-a { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .btn-b { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .btn-c { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .badge-wait-count { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: normal; margin-top: 4px; }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fef08a;
+        /* Mobile Table Filter Tabs */
+        .mobile-tabs { display: flex; background: #ebd9b4; padding: 3px; border-radius: 10px; margin-bottom: 12px; }
+        .tab-btn {
+            flex: 1; padding: 8px 4px; border: none; background: transparent; font-size: 12px; font-weight: 800;
+            color: #78350f; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;
         }
+        .tab-btn.active { background: #ffffff; color: #5c1809; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        nav {
-            display: flex;
-            gap: 8px;
-        }
+        /* Column Status Card */
+        .column-card { background: var(--card-bg); border-radius: 12px; border: 1.5px solid var(--accent-border); padding: 12px; }
+        .col-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calling-box { background: #fffbeb; border: 1.5px dashed #fcd34d; border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; gap: 6px; }
+        .calling-num { font-size: 20px; font-weight: 900; color: var(--primary); }
 
-        .nav-btn {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
+        /* Queue List & Mobile Queue Card */
+        .queue-list-container { max-height: 50vh; overflow-y: auto; }
+        .queue-item { background: #fffdf7; border: 1px solid #fde68a; border-radius: 10px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .queue-item.calling-active { border: 2px solid var(--primary); background: #fffbeb; }
+        .queue-item.served-item { background: #f8fafc; border-color: #cbd5e1; opacity: 0.65; }
 
-        .nav-btn.active, .nav-btn:hover {
-            background: #fff;
-            color: var(--primary);
-            font-weight: bold;
-        }
+        .status-badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; color: #fff; font-weight: bold; }
+        .bg-waiting { background-color: #ca8a04; }
+        .bg-calling { background-color: var(--primary); }
+        .bg-served { background-color: #64748b; }
+        .bg-cancelled { background-color: #dc2626; }
 
-        /* Main Container */
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+        .btn-action { padding: 8px 12px; font-size: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
 
-        .view-section {
-            display: none;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        /* Card Component */
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #fef08a;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--primary);
-        }
-
-        select, input {
+        /* Banner Container for TV Display */
+        .banner-tv-container {
+            margin-top: 16px;
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 1rem;
-            outline: none;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--accent-border);
             background: #fff;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--secondary);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
+            max-height: 380px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+        }
+        .banner-tv-img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: cover;
+            display: block;
         }
 
-        .btn-submit:hover {
-            background-color: #b45309;
+        /* Modal Nationality Selection */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
         }
-
-        /* Banner Placeholder */
-        .banner-box {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-            background: #fff8f1;
-            border: 2px dashed #fde68a;
-            border-radius: 12px;
+        .modal-content {
+            background: #fffdf7; width: 90%; max-width: 340px; border-radius: 16px; padding: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--accent-border); animation: popIn 0.2s ease-out;
         }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Ticket Layout for Fallback Print */
-        #ticket-print-area {
-            display: none;
+        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .nat-modal-btn {
+            border: 1.5px solid #fde68a; background: #ffffff; padding: 12px 8px;
+            border-radius: 10px; font-size: 14px; font-weight: bold; color: var(--text-dark);
+            cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
+        .nat-modal-btn:active { background: #fef3c7; border-color: var(--primary); color: var(--primary); }
 
+        /* Toast Popup */
+        #undo-toast {
+            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: #4a3b32; color: #fff; padding: 10px 16px; border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: none; align-items: center; gap: 10px; z-index: 1000; font-size: 12px; width: 90%; max-width: 360px; justify-content: space-between;
+        }
+        .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 5px 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        /* Thermal Print Format */
+        @page { size: 58mm auto; margin: 0; }
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #ticket-print-area, #ticket-print-area * {
-                visibility: visible;
-            }
-            #ticket-print-area {
-                display: block !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 58mm;
-                padding: 10px;
-                font-family: monospace;
-                text-align: center;
-            }
-            .t-title { font-size: 16px; font-weight: bold; }
-            .t-divider { border-top: 1px dashed #000; margin: 8px 0; }
-            .t-num { font-size: 32px; font-weight: bold; margin: 10px 0; }
-            .t-text { font-size: 12px; margin: 4px 0; }
+            body * { visibility: hidden; }
+            #ticket-print-area, #ticket-print-area * { visibility: visible; }
+            #ticket-print-area { display: block !important; position: absolute; left: 0; top: 0; width: 58mm; padding: 2mm; background: #fff; color: #000; font-family: monospace; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-pancake"></i> Pancake Café
+    <!-- Header Bar พร้อมปุ่มเมนูสลับหน้าสำหรับมือถือ -->
+    <div class="header-bar">
+        <div class="brand-title">🥞 Pancake Café</div>
+        <div class="nav-buttons">
+            <button class="nav-btn" data-target="queue-system" onclick="navigateTo('queue-system')">คิว</button>
+            <button class="nav-btn" data-target="queue-display" onclick="navigateTo('queue-display')">จอ TV</button>
+            <button class="nav-btn" data-target="database" onclick="navigateTo('database')">สถิติ</button>
+            <button class="nav-btn" data-target="settings" onclick="navigateTo('settings')">ตั้งค่า</button>
         </div>
-        <nav>
-            <button class="nav-btn active" onclick="switchTab('queue')">คิว</button>
-            <button class="nav-btn" onclick="switchTab('tv')">จอ TV</button>
-            <button class="nav-btn" onclick="switchTab('stats')">สถิติ</button>
-            <button class="nav-btn" onclick="switchTab('settings')">ตั้งค่า</button>
-        </nav>
-    </header>
+    </div>
 
     <div class="container">
-        
-        <!-- SECTION 1: หน้ากดคิว -->
-        <div id="section-queue" class="view-section active">
-            <div class="card">
-                <div class="card-title">
-                    <i class="fa-solid fa-ticket"></i> ออกบัตรคิวใหม่
-                </div>
-                
-                <div class="form-group">
-                    <label for="queue-type">ประเภทคิว</label>
-                    <select id="queue-type">
-                        <option value="A">โต๊ะเล็ก (1-2 ท่าน)</option>
-                        <option value="B">โต๊ะกลาง (3-4 ท่าน)</option>
-                        <option value="C">โต๊ะใหญ่ (5 ท่านขึ้นไป)</option>
-                    </select>
-                </div>
 
-                <div class="form-group">
-                    <label for="guest-count">จำนวนลูกค้า (คน)</label>
-                    <input type="number" id="guest-count" value="2" min="1" max="20">
+        <!-- หน้าที่ 1: จัดการคิว (#queue) -->
+        <div id="queue-system" class="page-section">
+            <div class="issue-card">
+                <div class="section-title">กดออกบัตรคิว</div>
+                <div class="issue-btn-grid">
+                    <button class="btn-issue btn-a" onclick="openNationalityModal('A', 'โต๊ะ A (1-2 ท่าน)')">
+                        <span>โต๊ะ A</span>
+                        <small style="font-size: 9px; opacity:0.9;">1-2 คน</small>
+                        <span class="badge-wait-count" id="btn-count-A">รอ 0 คิว</span>
+                    </button>
+                    <button class="btn-issue btn-b" onclick="openNationalityModal('B', 'โต๊ะ B (3-4 ท่าน)')">
+                        <span>โต๊ะ B</span>
+                        <small style="font-size: 9px; opacity:0.9;">3-4 คน</small>
+                        <span class="badge-wait-count" id="btn-count-B">รอ 0 คิว</span>
+                    </button>
+                    <button class="btn-issue btn-c" onclick="openNationalityModal('C', 'โต๊ะ C (5-6 ท่าน)')">
+                        <span>โต๊ะ C</span>
+                        <small style="font-size: 9px; opacity:0.9;">5-6 คน</small>
+                        <span class="badge-wait-count" id="btn-count-C">รอ 0 คิว</span>
+                    </button>
                 </div>
+            </div>
 
-                <button class="btn-submit" onclick="handleIssueQueue()">
-                    <i class="fa-solid fa-print"></i> พิมพ์บัตรคิว
+            <div class="mobile-tabs">
+                <button class="tab-btn active" id="tab-btn-A" onclick="switchMobileTab('A')">โต๊ะ A</button>
+                <button class="tab-btn" id="tab-btn-B" onclick="switchMobileTab('B')">โต๊ะ B</button>
+                <button class="tab-btn" id="tab-btn-C" onclick="switchMobileTab('C')">โต๊ะ C</button>
+            </div>
+
+            <div class="column-card">
+                <div class="col-header-top">
+                    <h3 id="current-tab-title" style="color:#d97706; font-size:14px; font-weight:800;">โต๊ะ A (1-2 คน)</h3>
+                    <div class="calling-box">
+                        <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
+                        <span class="calling-num" id="calling-display">---</span>
+                    </div>
+                </div>
+                <div style="font-size: 11px; font-weight: bold; margin-bottom: 8px; color:#78350f;" id="waiting-count-display">รอคิวทั้งหมด: 0 คิว</div>
+                <div class="queue-list-container" id="mobile-queue-list"></div>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 2: จอ TV (#tv) -->
+        <div id="queue-display" class="page-section">
+            <div style="text-align:center; padding: 15px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px;">📺 โหมดแสดงผลจอ TV</h3>
+                <p style="font-size:12px; color:#a16207; margin-top:4px;">หน้าจอแสดงผลสถานะคิวประจำร้าน</p>
+            </div>
+
+            <!-- ส่วนแบนเนอร์ด้านล่างจอ TV -->
+            <div class="banner-tv-container">
+                <img id="tv-bottom-banner" class="banner-tv-img" src="" alt="TV Promotion Banner" style="display:none;">
+                <div id="banner-placeholder" style="color:#a16207; padding:40px; text-align:center; font-size:13px;">
+                    ยังไม่ได้ตั้งค่าภาพแบนเนอร์ส่วนล่าง
+                </div>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 3: สถิติ (#database) -->
+        <div id="database" class="page-section">
+            <div style="text-align:center; padding: 20px 10px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px;">📊 รายงานสถิติ</h3>
+                <p style="font-size:12px; color:#a16207; margin-top:6px;">ดูรายงานสรุปคิวและส่งออกข้อมูล CSV</p>
+            </div>
+        </div>
+
+        <!-- หน้าที่ 4: ตั้งค่า (#settings) -->
+        <div id="settings" class="page-section">
+            <div style="padding: 16px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
+                <h3 style="color:#78350f; font-size:16px; margin-bottom:12px;">⚙️ อัปโหลดภาพแบนเนอร์จอ TV</h3>
+                <p style="font-size:11px; color:#a16207; margin-bottom:12px;">
+                    เลือกรูปภาพโปรโมชันใหม่เพื่อเปลี่ยนภาพด้านล่างจอ TV (ระบบจะลบรูปเก่าและบันทึกทับเฉพาะรูปเวอร์ชันล่าสุด)
+                </p>
+                <input type="file" id="banner-file-input" accept="image/*" style="display:block; margin-bottom:12px; font-size:12px;">
+                <button id="upload-banner-btn" onclick="uploadNewBanner()" style="background:var(--primary); color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; font-size:13px; cursor:pointer;">
+                    📤 อัปโหลดและทับภาพเดิม
                 </button>
-            </div>
-        </div>
-
-        <!-- SECTION 2: หน้าจอ TV -->
-        <div id="section-tv" class="view-section">
-            <div class="card">
-                <div class="card-title" style="justify-content: center;">
-                    <i class="fa-solid fa-tv"></i> โหมดแสดงผลจอ TV
-                </div>
-                <p style="text-align: center; color: #64748b; font-size: 0.9rem;">หน้าจอแสดงผลสถานะคิวประจำร้าน</p>
-            </div>
-
-            <div class="banner-box">
-                ยังไม่ได้ตั้งค่าภาพแบนเนอร์ส่วนล่าง
-            </div>
-        </div>
-
-        <!-- SECTION 3: หน้าสถิติ -->
-        <div id="section-stats" class="view-section">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-chart-line"></i> สถิติประจำวัน</div>
-                <p style="text-align: center; color: #64748b; padding: 20px;">ยังไม่มีข้อมูลคิวประจำวันนี้</p>
-            </div>
-        </div>
-
-        <!-- SECTION 4: ตั้งค่า -->
-        <div id="section-settings" class="view-section">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-gear"></i> ตั้งค่าระบบ</div>
-                <div class="form-group">
-                    <label>ชื่อร้าน</label>
-                    <input type="text" value="Pancake Café">
-                </div>
+                <div id="upload-status" style="margin-top:10px; font-size:12px; font-weight:bold;"></div>
             </div>
         </div>
 
     </div>
 
-    <!-- Print Fallback Template -->
-    <div id="ticket-print-area">
-        <div class="t-title">Pancake Café</div>
-        <div class="t-divider"></div>
-        <div class="t-text">หมายเลขคิวของคุณ</div>
-        <div class="t-num" id="p-number">A001</div>
-        <div class="t-text" id="p-desc">โต๊ะเล็ก (1-2 ท่าน)</div>
-        <div class="t-text" id="p-count">จำนวน: 2 ท่าน</div>
-        <div class="t-divider"></div>
-        <div class="t-text" id="p-waiting">จำนวนคิวก่อนหน้า: 0 คิว</div>
-        <div class="t-text" id="p-time">เวลา: --:--</div>
-        <br>
-        <div class="t-text">ขอบคุณที่ใช้บริการ</div>
+    <!-- Nationality Selection Modal -->
+    <div id="nat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h3 style="font-size: 15px; color: #78350f;" id="modal-title">เลือกสัญชาติ</h3>
+                <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 20px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
+            </div>
+            <p style="font-size: 11px; color: #78350f;">ระบุสัญชาติลูกค้าเพื่อพิมพ์บัตรคิว</p>
+            <div class="nat-modal-grid">
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese')">🇯🇵 Japan</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" style="grid-column: span 2;" onclick="submitQueueWithNat('Other')">🌐 Other</button>
+            </div>
+        </div>
     </div>
 
-    <script>
-        let currentQueueNumber = 1;
+    <!-- Undo Toast Notification -->
+    <div id="undo-toast">
+        <span id="toast-text">นำคิว A001 เข้าโต๊ะแล้ว</span>
+        <button class="btn-undo" onclick="undoLastAction()">ย้อนกลับ (Undo)</button>
+    </div>
 
-        // สลับ Tab เมนู
-        function switchTab(tabName) {
+    <!-- Thermal Print Format -->
+    <div id="ticket-print-area" style="display: none;">
+        <div style="text-align: center; width: 100%;">
+            <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancake Café</h2>
+            <p style="font-size: 10px;">--------------------------------</p>
+            <p style="font-size: 10px; margin-top: 2px;">Queue Number</p>
+            <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
+            <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Seats)</p>
+            <p id="p-count" style="font-size: 10px;">Guests: 1-2</p>
+            <p style="font-size: 10px;">--------------------------------</p>
+            <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
+            <p id="p-time" style="font-size: 10px;">Date/Time: --/-- --:--</p>
+            <p style="font-size: 10px; margin-top: 6px; font-weight: bold;">Thank You!</p>
+        </div>
+    </div>
+
+    <!-- Firebase Script Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, enableIndexedDbPersistence 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA22_Pap9C9qhnhU33Ch2Floe5D1aLdbCY",
+            authDomain: "pancake-queue.firebaseapp.com",
+            projectId: "pancake-queue",
+            storageBucket: "pancake-queue.firebasestorage.app",
+            messagingSenderId: "348148291921",
+            appId: "1:348148291921:web:69af29138cd7e556e79b70"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        enableIndexedDbPersistence(db).catch(() => {});
+
+        let queues = [];
+        let queueCounters = { A: 1, B: 1, C: 1 };
+        let currentCalling = { A: null, B: null, C: null };
+        let pendingQueueType = null;
+        let pendingQueueDesc = null;
+        let activeTab = 'A';
+        let lastActionState = null;
+        let toastTimeout = null;
+        let currentBannerStoragePath = null;
+
+        const routes = {
+            '#queue': 'queue-system',
+            '#tv': 'queue-display',
+            '#database': 'database',
+            '#settings': 'settings'
+        };
+
+        window.navigateTo = function(targetId) {
+            const hash = Object.keys(routes).find(key => routes[key] === targetId) || '#queue';
+            window.location.hash = hash;
+        };
+
+        function handleHashChange() {
+            const currentHash = window.location.hash || '#queue';
+            const targetId = routes[currentHash] || 'queue-system';
+
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
 
-            event.target.classList.add('active');
-            document.getElementById(`section-${tabName}`).classList.add('active');
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) targetSection.classList.add('active');
+
+            const activeBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
         }
 
-        async function handleIssueQueue() {
-            const type = document.getElementById('queue-type').value;
-            const count = document.getElementById('guest-count').value;
-            const typeText = document.getElementById('queue-type').options[document.getElementById('queue-type').selectedIndex].text;
-            
-            const queueNo = type + String(currentQueueNumber).padStart(3, '0');
+        window.addEventListener('hashchange', handleHashChange);
+        window.addEventListener('DOMContentLoaded', handleHashChange);
+
+        // Realtime Listener สำหรับดึงแบนเนอร์ล่าสุดมาแสดงผล
+        onSnapshot(doc(db, "system", "tv_banner"), (docSnap) => {
+            if (docSnap.exists() && docSnap.data().url) {
+                const data = docSnap.data();
+                const bannerImg = document.getElementById('tv-bottom-banner');
+                const placeholder = document.getElementById('banner-placeholder');
+                
+                bannerImg.src = data.url;
+                bannerImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                currentBannerStoragePath = data.storagePath || null;
+            }
+        });
+
+        // ฟังก์ชันอัปโหลดภาพแบนเนอร์ใหม่ ทับภาพเดิม
+        window.uploadNewBanner = async function() {
+            const fileInput = document.getElementById('banner-file-input');
+            const statusDiv = document.getElementById('upload-status');
+            const btn = document.getElementById('upload-banner-btn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("กรุณาเลือกไฟล์รูปภาพก่อนครับ");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            btn.disabled = true;
+            statusDiv.style.color = "#d97706";
+            statusDiv.innerText = "กำลังลบไฟล์เก่าและอัปโหลดไฟล์ใหม่...";
+
+            try {
+                // 1. ลบรูปเดิมใน Firebase Storage ออกก่อน (ถ้ามีอยู่)
+                if (currentBannerStoragePath) {
+                    try {
+                        const oldStorageRef = ref(storage, currentBannerStoragePath);
+                        await deleteObject(oldStorageRef);
+                    } catch (e) {
+                        console.log("ไม่มีไฟล์เก่า หรือลบไม่สำเร็จ:", e);
+                    }
+                }
+
+                // 2. อัปโหลดรูปใหม่ลง Storage (ใช้ Timestamp ตั้งชื่อไฟล์)
+                const newPath = `banners/tv_banner_${Date.now()}`;
+                const newStorageRef = ref(storage, newPath);
+                await uploadBytes(newStorageRef, file);
+                const downloadURL = await getDownloadURL(newStorageRef);
+
+                // 3. บันทึก URL เวอร์ชันล่าสุดลง Firestore
+                await setDoc(doc(db, "system", "tv_banner"), {
+                    url: downloadURL,
+                    storagePath: newPath,
+                    updatedAt: serverTimestamp()
+                });
+
+                statusDiv.style.color = "#16a34a";
+                statusDiv.innerText = "✅ อัปโหลดแบนเนอร์ใหม่เรียบร้อยแล้ว!";
+                fileInput.value = "";
+            } catch (err) {
+                statusDiv.style.color = "#dc2626";
+                statusDiv.innerText = "❌ เกิดข้อผิดพลาด: " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        };
+
+        const tabConfigs = {
+            'A': { title: 'โต๊ะ A (1-2 คน)', color: '#d97706' },
+            'B': { title: 'โต๊ะ B (3-4 คน)', color: '#059669' },
+            'C': { title: 'โต๊ะ C (5-6 คน)', color: '#7c3aed' }
+        };
+
+        window.switchMobileTab = function(type) {
+            activeTab = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-btn-${type}`).classList.add('active');
+
+            const config = tabConfigs[type];
+            const titleEl = document.getElementById('current-tab-title');
+            titleEl.innerText = config.title;
+            titleEl.style.color = config.color;
+
+            renderUI();
+        };
+
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+
+        const qQuery = query(
+            collection(db, "queues"), 
+            where("timestamp", ">=", startOfToday.getTime()),
+            orderBy("timestamp", "asc")
+        );
+
+        onSnapshot(qQuery, (snapshot) => {
+            queues = snapshot.docs.map(docSnap => ({
+                docId: docSnap.id,
+                ...docSnap.data()
+            }));
+
+            ['A', 'B', 'C'].forEach(type => {
+                const typeQueues = queues.filter(q => q.type === type);
+                if (typeQueues.length > 0) {
+                    const maxNum = Math.max(...typeQueues.map(q => parseInt(q.number.substring(1)) || 0));
+                    queueCounters[type] = maxNum + 1;
+                } else {
+                    queueCounters[type] = 1;
+                }
+
+                const callingQueue = typeQueues.filter(q => q.status === 'Calling').pop();
+                currentCalling[type] = callingQueue || null;
+            });
+
+            renderUI();
+        });
+
+        window.openNationalityModal = function(type, desc) {
+            pendingQueueType = type;
+            pendingQueueDesc = desc;
+            document.getElementById('modal-title').innerText = `เลือกสัญชาติ (${desc})`;
+            document.getElementById('nat-modal').style.display = 'flex';
+        };
+
+        window.closeNationalityModal = function() {
+            document.getElementById('nat-modal').style.display = 'none';
+            pendingQueueType = null;
+            pendingQueueDesc = null;
+        };
+
+        window.submitQueueWithNat = async function(nat) {
+            if (!pendingQueueType) return;
+            const type = pendingQueueType;
+            const desc = pendingQueueDesc;
+
+            closeNationalityModal();
+
+            const numStr = queueCounters[type].toString().padStart(3, '0');
+            const queueNumber = `${type}${numStr}`;
+            const waitingCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            const timeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }) + ' ' + 
+                            now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-            const queueData = {
-                number: queueNo,
-                desc: typeText,
-                count: count,
-                time: timeStr
-            };
-
-            const waitingCount = Math.floor(Math.random() * 3);
-
-            await printQueueTicket(queueData, waitingCount);
-            currentQueueNumber++;
-        }
-
-        async function printQueueTicket(queue, waitingCount) {
-            const printData = {
-                text: [
-                    { content: "Pancake Café\n", align: "center", size: "large", bold: true },
-                    { content: "--------------------------------\n", align: "center" },
-                    { content: "หมายเลขคิวของคุณ\n", align: "center", size: "small" },
-                    { content: `${queue.number}\n`, align: "center", size: "xlarge", bold: true },
-                    { content: `${queue.desc}\n`, align: "center", bold: true },
-                    { content: `จำนวนลูกค้า: ${queue.count} ท่าน\n`, align: "center" },
-                    { content: "--------------------------------\n", align: "center" },
-                    { content: `จำนวนคิวก่อนหน้า: ${waitingCount} คิว\n`, align: "center" },
-                    { content: `เวลา: ${queue.time}\n\n`, align: "center" },
-                    { content: "ขอบคุณที่ใช้บริการ\n\n\n\n", align: "center", bold: true }
-                ]
+            const newQueueData = {
+                id: Date.now(),
+                number: queueNumber,
+                type: type,
+                desc: desc,
+                count: getDefaultCount(type),
+                nationality: nat,
+                status: 'Waiting',
+                time: timeStr,
+                timestamp: now.getTime(),
+                createdAt: serverTimestamp()
             };
 
             try {
-                // พยายามยิงไปที่ Sunmi Local Print Service (พอร์ต 8080)
-                const response = await fetch("http://127.0.0.1:8080/print", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(printData)
-                });
-
-                if (!response.ok) throw new Error("Local Service Error");
+                await addDoc(collection(db, "queues"), newQueueData);
+                printQueueTicket(newQueueData, waitingCount);
             } catch (error) {
-                // Fallback พิมพ์ปกติเมื่อเปิดบนคอมพิวเตอร์ หรือเครื่องที่ไม่มี Service
-                document.getElementById('p-number').innerText = queue.number;
-                document.getElementById('p-desc').innerText = queue.desc;
-                document.getElementById('p-count').innerText = `จำนวน: ${queue.count} ท่าน`;
-                document.getElementById('p-waiting').innerText = `จำนวนคิวก่อนหน้า: ${waitingCount} คิว`;
-                document.getElementById('p-time').innerText = `เวลา: ${queue.time}`;
-
-                const printArea = document.getElementById('ticket-print-area');
-                printArea.style.display = 'block';
-                window.print();
-                printArea.style.display = 'none';
+                alert("เกิดข้อผิดพลาดในการบันทึกคิว: " + error.message);
             }
+        };
+
+        function getDefaultCount(type) {
+            if(type === 'A') return '1-2 คน';
+            if(type === 'B') return '3-4 คน';
+            if(type === 'C') return '5-6 คน';
+            return '-';
+        }
+
+        window.recallSpecificQueue = async function(id) {
+            const q = queues.find(item => item.id === id);
+            if (q) {
+                if (currentCalling[q.type]) {
+                    const prev = queues.find(item => item.id === currentCalling[q.type].id);
+                    if (prev && prev.status === 'Calling' && prev.docId) {
+                        await updateDoc(doc(db, "queues", prev.docId), { status: 'Waiting' });
+                    }
+                }
+                if (q.docId) {
+                    await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
+                }
+
+                await setDoc(doc(db, "system", "display_state"), {
+                    [q.type]: {
+                        blinkTimestamp: Date.now(),
+                        speakNum: q.number
+                    }
+                }, { merge: true });
+            }
+        };
+
+        window.changeStatus = async function(id, newStatus) {
+            const q = queues.find(item => item.id === id);
+            if (q && q.docId) {
+                lastActionState = { id: q.id, docId: q.docId, prevStatus: q.status, number: q.number, type: q.type };
+                await updateDoc(doc(db, "queues", q.docId), { status: newStatus });
+
+                if (newStatus === 'Served') {
+                    showUndoToast(`คิว ${q.number} เข้าโต๊ะแล้ว`);
+                }
+            }
+        };
+
+        function showUndoToast(msg) {
+            const toast = document.getElementById('undo-toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.display = 'flex';
+
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+        }
+
+        window.undoLastAction = async function() {
+            if (lastActionState && lastActionState.docId) {
+                await updateDoc(doc(db, "queues", lastActionState.docId), { status: lastActionState.prevStatus });
+                document.getElementById('undo-toast').style.display = 'none';
+                lastActionState = null;
+            }
+        };
+
+        function printQueueTicket(queue, waitingCount) {
+            document.getElementById('p-number').innerText = queue.number;
+            document.getElementById('p-desc').innerText = queue.desc;
+            document.getElementById('p-count').innerText = `Guests: ${queue.count}`;
+            document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
+            document.getElementById('p-time').innerText = `Time: ${queue.time}`;
+
+            const printArea = document.getElementById('ticket-print-area');
+            printArea.style.display = 'block';
+            window.print();
+            printArea.style.display = 'none';
+        }
+
+        function renderUI() {
+            ['A', 'B', 'C'].forEach(type => {
+                const waitCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
+                document.getElementById(`btn-count-${type}`).innerText = `รอ ${waitCount} คิว`;
+            });
+
+            const activeCall = currentCalling[activeTab];
+            const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
+            document.getElementById('calling-display').innerText = activeNum;
+
+            const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting');
+            document.getElementById('waiting-count-display').innerText = `รอคิวทั้งหมด: ${waitingList.length} คิว`;
+
+            const listContainer = document.getElementById('mobile-queue-list');
+            listContainer.innerHTML = '';
+
+            const statusOrder = { 'Calling': 1, 'Waiting': 2, 'Cancelled': 3, 'Served': 4 };
+            
+            const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => {
+                const orderA = statusOrder[a.status] || 99;
+                const orderB = statusOrder[b.status] || 99;
+                if (orderA !== orderB) return orderA - orderB;
+                return a.id - b.id;
+            });
+
+            if (colQueues.length === 0) {
+                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">ยังไม่มีคิวในประเภทนี้</div>`;
+                return;
+            }
+
+            colQueues.forEach(q => {
+                const item = document.createElement('div');
+                const isServed = q.status === 'Served';
+                const isCalling = q.status === 'Calling';
+
+                item.className = `queue-item ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''}`;
+
+                let statusTxt = 'รอเรียก';
+                let bgClass = 'bg-waiting';
+                if(isCalling) { statusTxt = 'กำลังเรียก'; bgClass = 'bg-calling'; }
+                if(isServed) { statusTxt = 'เข้าโต๊ะ'; bgClass = 'bg-served'; }
+                if(q.status === 'Cancelled') { statusTxt = 'ยกเลิก'; bgClass = 'bg-cancelled'; }
+
+                let leftBtnsHTML = '';
+                let rightBtnHTML = '';
+
+                if (isServed) {
+                    leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">แก้ไข / ดึงกลับ</button>`;
+                } else {
+                    leftBtnsHTML = `
+                        <button class="btn-action" style="background:#d97706;" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
+                        <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
+                    `;
+
+                    rightBtnHTML = `<button class="btn-action" style="background:#059669; font-size:13px; padding:8px 16px;" onclick="changeStatus(${q.id}, 'Served')">เข้าโต๊ะ</button>`;
+                }
+
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:18px; font-weight:bold; color:#78350f;">${q.number}</span>
+                        <span class="status-badge ${bgClass}">${statusTxt}</span>
+                    </div>
+                    <div style="font-size:12px; color:#78350f; display:flex; justify-content:space-between; margin-top:6px; margin-bottom:10px;">
+                        <span>จำนวน: <b>${q.count}</b></span>
+                        <span>สัญชาติ: <b>${q.nationality}</b></span>
+                        <span style="color:#a16207;">${q.time.split(' ')[1] || q.time}</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #fde68a; padding-top:10px;">
+                        <div style="display:flex; gap:6px;">${leftBtnsHTML}</div>
+                        <div>${rightBtnHTML}</div>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
         }
     </script>
 </body>
