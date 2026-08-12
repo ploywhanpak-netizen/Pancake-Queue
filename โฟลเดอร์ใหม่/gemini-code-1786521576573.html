@@ -320,7 +320,7 @@
             color: #9ca3af;
         }
 
-        /* Modal Nationality Selection & Custom Add */
+        /* Modal Nationality Selection */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
@@ -328,7 +328,7 @@
         }
 
         .modal-content {
-            background: #fffdf7; width: 90%; max-width: 380px; border-radius: 16px; padding: 20px;
+            background: #fffdf7; width: 90%; max-width: 360px; border-radius: 16px; padding: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--card-border); animation: popIn 0.2s ease-out;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -338,9 +338,8 @@
             border: 1.5px solid #fde68a; background: #ffffff; padding: 12px 8px;
             border-radius: 10px; font-size: 14px; font-weight: bold; color: var(--text-dark);
             cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .nat-modal-btn:active, .nat-modal-btn:hover { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
+        .nat-modal-btn:active { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
 
         /* Undo Toast Notification */
         #undo-toast {
@@ -573,21 +572,6 @@
             outline: none;
         }
 
-        .btn-export {
-            background: var(--green-btn);
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-export:hover { background: #047857; }
-
         .report-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -754,7 +738,7 @@
 
         <!-- Page 3: Report & Analytics (#report) -->
         <div id="report" class="page-section">
-            <!-- Custom Filter Bar (Dropdowns, Date customizer & Export CSV) -->
+            <!-- Custom Filter Bar (Dropdowns & Date customizer) -->
             <div class="report-header-bar">
                 <div class="section-title" style="margin: 0;"><i class="fa-solid fa-chart-pie"></i> Queue Analytics & Reports</div>
                 <div class="filter-group">
@@ -770,7 +754,6 @@
                         <span>to</span>
                         <input type="date" id="report-end-date" class="filter-date-input" onchange="triggerReportRender()">
                     </div>
-                    <button class="btn-export" onclick="exportReportCSV()"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
                 </div>
             </div>
             
@@ -846,18 +829,13 @@
                 <h3 style="font-size: 15px; color: #78350f;" id="modal-title">Select Nationality</h3>
                 <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 20px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
             </div>
-            <p style="font-size: 11px; color: #78350f; margin-bottom: 4px;">Select customer nationality for queue ticket printing</p>
+            <p style="font-size: 11px; color: #78350f;">Select customer nationality for queue ticket printing</p>
             <div class="nat-modal-grid">
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai 🇹🇭')">🇹🇭 Thai</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Chinese 🇨🇳')">🇨🇳 Chinese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese 🇯🇵')">🇯🇵 Japanese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Korean 🇰🇷')">🇰🇷 Korean</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Western 🌍')">🌍 Western</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Other 🌐')">🌐 Other</button>
-            </div>
-            <div style="margin-top: 10px; display: flex; gap: 6px;">
-                <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 8px; border: 1.5px solid #fde68a; border-radius: 8px; font-size: 12px; outline: none; background: #fff;">
-                <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer;">Add</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese')">🇯🇵 Japan</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" style="grid-column: span 2;" onclick="submitQueueWithNat('Other')">🌐 Other</button>
             </div>
         </div>
     </div>
@@ -876,7 +854,6 @@
         <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
         <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Seats)</p>
         <p id="p-count" style="font-size: 10px;">Persons: 1-2 Persons</p>
-        <p id="p-nationality" style="font-size: 10px;">Nationality: Thai</p>
         <p style="font-size: 10px;">--------------------------------</p>
         <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
         <p id="p-time" style="font-size: 10px;">Time: --:--</p>
@@ -887,7 +864,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
+            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1031,6 +1008,7 @@
             }
         }
 
+        // Fetch all recent queues for dashboard reporting
         const qQuery = query(collection(db, "queues"), orderBy("timestamp", "asc"));
 
         onSnapshot(qQuery, (snapshot) => {
@@ -1060,11 +1038,12 @@
             renderUI();
         });
 
+        window.myDeviceSessionId = 'dev_' + Math.random().toString(36.2);
+
         window.openNationalityModal = function(type, desc) {
             pendingQueueType = type;
             pendingQueueDesc = desc;
             document.getElementById('modal-title').innerText = `Select Nationality (${desc})`;
-            document.getElementById('custom-nat-input').value = '';
             document.getElementById('nat-modal').style.display = 'flex';
         };
 
@@ -1072,13 +1051,6 @@
             document.getElementById('nat-modal').style.display = 'none';
             pendingQueueType = null;
             pendingQueueDesc = null;
-        };
-
-        window.submitCustomNationality = function() {
-            const customVal = document.getElementById('custom-nat-input').value.trim();
-            if (customVal) {
-                submitQueueWithNat(customVal);
-            }
         };
 
         window.submitQueueWithNat = async function(nat) {
@@ -1152,7 +1124,6 @@
             document.getElementById('p-number').innerText = queue.number;
             document.getElementById('p-desc').innerText = queue.desc;
             document.getElementById('p-count').innerText = `Persons: ${queue.count}`;
-            document.getElementById('p-nationality').innerText = `Nationality: ${queue.nationality}`;
             document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
             document.getElementById('p-time').innerText = `Time: ${queue.time}`;
 
@@ -1250,7 +1221,7 @@
             renderReport();
         };
 
-        function getFilteredQueues() {
+        function renderReport() {
             const range = document.getElementById('report-range-select').value;
             const now = new Date();
             let startTimestamp = 0;
@@ -1273,14 +1244,12 @@
                 endTimestamp = eVal ? new Date(eVal).setHours(23,59,59,999) : now.getTime();
             }
 
-            return queues.filter(q => {
+            // Filter queues based on selected date range
+            const filtered = queues.filter(q => {
                 const t = q.timestamp || 0;
                 return t >= startTimestamp && t <= endTimestamp;
             });
-        }
 
-        function renderReport() {
-            const filtered = getFilteredQueues();
             const natCounts = {};
             const sizeCounts = {};
             let totalWaitMins = 0;
@@ -1302,6 +1271,7 @@
                 }
             });
 
+            // Populate Nationality Table & Chart
             const natTbody = document.getElementById('table-nat-body');
             natTbody.innerHTML = '';
             const natKeys = Object.keys(natCounts);
@@ -1314,6 +1284,7 @@
             }
             updateChartNationality(natCounts);
 
+            // Populate Party Size Table & Chart
             const sizeTbody = document.getElementById('table-size-body');
             sizeTbody.innerHTML = '';
             const sizeKeys = Object.keys(sizeCounts);
@@ -1326,32 +1297,11 @@
             }
             updateChartPartySize(sizeCounts);
 
+            // Average Wait Time Box
             const avg = seatedCount > 0 ? Math.round(totalWaitMins / seatedCount) : 0;
             document.getElementById('report-avg-time').innerText = `${avg} mins`;
             document.getElementById('report-seated-count').innerText = `Based on ${seatedCount} seated customers`;
         }
-
-        window.exportReportCSV = function() {
-            const filtered = getFilteredQueues();
-            if (filtered.length === 0) {
-                alert("No data available to export for the selected range.");
-                return;
-            }
-
-            let csvContent = "\uFEFFQueue Number,Table Type,Party Size,Nationality,Status,Time\n";
-            filtered.forEach(q => {
-                csvContent += `"${q.number}","${q.desc}","${q.count}","${q.nationality}","${q.status}","${q.time}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `queue_report_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
 
         function updateChartNationality(dataObj) {
             const ctx = document.getElementById('chartNationality').getContext('2d');

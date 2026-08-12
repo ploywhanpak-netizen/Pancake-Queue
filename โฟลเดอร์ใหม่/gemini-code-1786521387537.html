@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pancake Café - Advanced Queue Analytics & Dashboard</title>
+    <title>Pancake Café - Queue Management & Report</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Chart.js for Graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-bg: #fdf8e2;
@@ -227,6 +225,7 @@
             font-size: 1.2rem;
         }
 
+        /* Queue List & Queue Card Item */
         .queue-list-container {
             max-height: 55vh;
             overflow-y: auto;
@@ -320,7 +319,7 @@
             color: #9ca3af;
         }
 
-        /* Modal Nationality Selection & Custom Add */
+        /* Modal Nationality Selection */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
@@ -328,7 +327,7 @@
         }
 
         .modal-content {
-            background: #fffdf7; width: 90%; max-width: 380px; border-radius: 16px; padding: 20px;
+            background: #fffdf7; width: 90%; max-width: 360px; border-radius: 16px; padding: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--card-border); animation: popIn 0.2s ease-out;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -338,9 +337,8 @@
             border: 1.5px solid #fde68a; background: #ffffff; padding: 12px 8px;
             border-radius: 10px; font-size: 14px; font-weight: bold; color: var(--text-dark);
             cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .nat-modal-btn:active, .nat-modal-btn:hover { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
+        .nat-modal-btn:active { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
 
         /* Undo Toast Notification */
         #undo-toast {
@@ -451,6 +449,7 @@
             color: #78350f;
         }
 
+        /* Banner Image Container */
         .tv-banner-container {
             width: 100%;
             height: 220px;
@@ -516,6 +515,16 @@
             color: #1f2937;
         }
 
+        .settings-form-group input:focus {
+            border-color: var(--orange-btn);
+        }
+
+        .settings-hint {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
         .btn-save-settings {
             background: var(--orange-btn);
             color: #fff;
@@ -527,70 +536,34 @@
             cursor: pointer;
             width: 100%;
             margin-top: 8px;
+            transition: opacity 0.2s;
         }
 
-        .file-upload-wrapper { display: flex; gap: 8px; align-items: center; }
-        .btn-upload-file {
-            background: #475569; color: #fff; border: none; padding: 10px 16px;
-            border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
-        }
+        .btn-save-settings:active { opacity: 0.9; }
 
-        /* Report & Filter Bar Styles */
-        .report-header-bar {
+        .file-upload-wrapper {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            background: #fff;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1.5px solid var(--card-border);
-            margin-bottom: 16px;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
             gap: 8px;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .filter-group label {
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #78350f;
-        }
-
-        .filter-select, .filter-date-input {
-            padding: 8px 12px;
-            border: 1.5px solid #fde68a;
-            border-radius: 8px;
-            background: #fffdf7;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #1f2937;
-            outline: none;
-        }
-
-        .btn-export {
-            background: var(--green-btn);
+        .btn-upload-file {
+            background: #475569;
             color: #fff;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 16px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 0.85rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            white-space: nowrap;
         }
-        .btn-export:hover { background: #047857; }
+        .btn-upload-file:hover { background: #334155; }
 
+        /* Report Page Styles */
         .report-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -612,34 +585,26 @@
             gap: 8px;
         }
 
-        /* Tables inside Report */
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 8px;
-        }
-
-        .report-table th, .report-table td {
-            padding: 8px 10px;
-            text-align: left;
-            border-bottom: 1px solid #fef3c7;
-        }
-
-        .report-table th {
-            color: #78350f;
-            background: #fffdf7;
-            font-weight: bold;
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 220px;
-            margin-top: 10px;
+        .stat-list {
+            list-style: none;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            background: #fffdf7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #fef3c7;
+            font-size: 0.9rem;
+        }
+
+        .stat-item span:last-child {
+            font-weight: bold;
+            color: var(--orange-btn);
         }
     </style>
 </head>
@@ -689,6 +654,7 @@
                 <button class="tab-item" id="tab-btn-C" onclick="switchMobileTab('C')">Table C</button>
             </div>
 
+            <!-- Active Table Queue Status Card -->
             <div class="column-card">
                 <div class="col-header-top">
                     <div>
@@ -707,10 +673,12 @@
         <!-- Page 2: TV Display (#tv) -->
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">
-                <i class="fa-solid fa-pancake" style="color: #d97706;"></i> NOW SERVING
+                <i class="fa-solid fa-pancake" style="color: #d97706;"></i> 
+                NOW SERVING
             </div>
 
             <div class="tv-columns-grid">
+                <!-- Column A -->
                 <div class="tv-card">
                     <div class="tv-table-badge">TABLE A (1-2 Persons)</div>
                     <div class="tv-current-label">CURRENTLY SERVING</div>
@@ -720,6 +688,8 @@
                         <div class="tv-next-numbers" id="tv-waiting-A">---</div>
                     </div>
                 </div>
+
+                <!-- Column B -->
                 <div class="tv-card">
                     <div class="tv-table-badge">TABLE B (3-4 Persons)</div>
                     <div class="tv-current-label">CURRENTLY SERVING</div>
@@ -729,6 +699,8 @@
                         <div class="tv-next-numbers" id="tv-waiting-B">---</div>
                     </div>
                 </div>
+
+                <!-- Column C -->
                 <div class="tv-card">
                     <div class="tv-table-badge">TABLE C (5-6 Persons)</div>
                     <div class="tv-current-label">CURRENTLY SERVING</div>
@@ -744,6 +716,7 @@
                 Total Waiting — Table A: 0 | Table B: 0 | Table C: 0
             </div>
 
+            <!-- Banner Image Area -->
             <div class="tv-banner-container" id="tv-banner-area">
                 <div class="tv-banner-placeholder">
                     <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
@@ -752,69 +725,33 @@
             </div>
         </div>
 
-        <!-- Page 3: Report & Analytics (#report) -->
+        <!-- Page 3: Report (#report) -->
         <div id="report" class="page-section">
-            <!-- Custom Filter Bar (Dropdowns, Date customizer & Export CSV) -->
-            <div class="report-header-bar">
-                <div class="section-title" style="margin: 0;"><i class="fa-solid fa-chart-pie"></i> Queue Analytics & Reports</div>
-                <div class="filter-group">
-                    <label>Range:</label>
-                    <select id="report-range-select" class="filter-select" onchange="onDateRangeChange()">
-                        <option value="today">Today</option>
-                        <option value="this_month" selected>This Month</option>
-                        <option value="this_year">This Year</option>
-                        <option value="custom">Custom Date</option>
-                    </select>
-                    <div id="custom-date-wrapper" style="display: none; display: flex; gap: 6px; align-items: center;">
-                        <input type="date" id="report-start-date" class="filter-date-input" onchange="triggerReportRender()">
-                        <span>to</span>
-                        <input type="date" id="report-end-date" class="filter-date-input" onchange="triggerReportRender()">
-                    </div>
-                    <button class="btn-export" onclick="exportReportCSV()"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
-                </div>
-            </div>
+            <div class="section-title"><i class="fa-solid fa-chart-pie"></i> Daily Queue Statistics & Analytics</div>
             
             <div class="report-grid">
-                <!-- Card 1: Nationality Stats & Chart -->
+                <!-- Card 1: Nationality -->
                 <div class="report-card">
                     <h4><i class="fa-solid fa-globe"></i> Queues by Nationality</h4>
-                    <div class="chart-container">
-                        <canvas id="chartNationality"></canvas>
-                    </div>
-                    <table class="report-table" style="margin-top: 14px;">
-                        <thead>
-                            <tr><th>Nationality</th><th>Total Queues</th></tr>
-                        </thead>
-                        <tbody id="table-nat-body">
-                            <tr><td colspan="2" style="text-align:center;">No data</td></tr>
-                        </tbody>
-                    </table>
+                    <ul class="stat-list" id="report-nat-list">
+                        <li class="stat-item"><span>No data</span><span>0</span></li>
+                    </ul>
                 </div>
 
-                <!-- Card 2: Party Size Stats & Chart -->
+                <!-- Card 2: Party Size -->
                 <div class="report-card">
                     <h4><i class="fa-solid fa-users"></i> Queues by Party Size</h4>
-                    <div class="chart-container">
-                        <canvas id="chartPartySize"></canvas>
-                    </div>
-                    <table class="report-table" style="margin-top: 14px;">
-                        <thead>
-                            <tr><th>Party Size</th><th>Total Queues</th></tr>
-                        </thead>
-                        <tbody id="table-size-body">
-                            <tr><td colspan="2" style="text-align:center;">No data</td></tr>
-                        </tbody>
-                    </table>
+                    <ul class="stat-list" id="report-size-list">
+                        <li class="stat-item"><span>No data</span><span>0</span></li>
+                    </ul>
                 </div>
 
-                <!-- Card 3: Waiting Time Summary -->
+                <!-- Card 3: Waiting Time -->
                 <div class="report-card">
                     <h4><i class="fa-solid fa-clock"></i> Average Waiting Time</h4>
-                    <div style="background: #fffdf7; border: 1.5px dashed #fde68a; border-radius: 12px; padding: 24px; text-align: center; margin-top: 10px;">
-                        <div style="font-size: 0.85rem; color: #b45309; font-weight: bold;">Average Wait Duration</div>
-                        <div id="report-avg-time" style="font-size: 2.8rem; font-weight: 900; color: #d97706; margin: 8px 0;">0 mins</div>
-                        <div id="report-seated-count" style="font-size: 0.8rem; color: #6b7280;">Based on 0 seated customers</div>
-                    </div>
+                    <ul class="stat-list" id="report-time-list">
+                        <li class="stat-item"><span>Average Wait (Seated)</span><span id="avg-wait-time">0 mins</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -823,6 +760,7 @@
         <div id="settings" class="page-section">
             <div class="settings-card">
                 <h3 style="color:#78350f; font-size:18px; margin-bottom: 16px; text-align: center;"><i class="fa-solid fa-gear"></i> System & TV Settings</h3>
+                
                 <div class="settings-form-group">
                     <label>TV Banner Image URL</label>
                     <div class="file-upload-wrapper">
@@ -832,7 +770,9 @@
                             <i class="fa-solid fa-upload"></i> Browse File
                         </button>
                     </div>
+                    <div class="settings-hint">Recommended dimensions: Width 1200 × Height 350 px</div>
                 </div>
+
                 <button class="btn-save-settings" onclick="saveSettings()">Save Settings</button>
             </div>
         </div>
@@ -846,18 +786,13 @@
                 <h3 style="font-size: 15px; color: #78350f;" id="modal-title">Select Nationality</h3>
                 <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 20px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
             </div>
-            <p style="font-size: 11px; color: #78350f; margin-bottom: 4px;">Select customer nationality for queue ticket printing</p>
+            <p style="font-size: 11px; color: #78350f;">Select customer nationality for queue ticket printing</p>
             <div class="nat-modal-grid">
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai 🇹🇭')">🇹🇭 Thai</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Chinese 🇨🇳')">🇨🇳 Chinese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese 🇯🇵')">🇯🇵 Japanese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Korean 🇰🇷')">🇰🇷 Korean</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Western 🌍')">🌍 Western</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Other 🌐')">🌐 Other</button>
-            </div>
-            <div style="margin-top: 10px; display: flex; gap: 6px;">
-                <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 8px; border: 1.5px solid #fde68a; border-radius: 8px; font-size: 12px; outline: none; background: #fff;">
-                <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer;">Add</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese')">🇯🇵 Japan</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" style="grid-column: span 2;" onclick="submitQueueWithNat('Other')">🌐 Other</button>
             </div>
         </div>
     </div>
@@ -876,7 +811,6 @@
         <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
         <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Seats)</p>
         <p id="p-count" style="font-size: 10px;">Persons: 1-2 Persons</p>
-        <p id="p-nationality" style="font-size: 10px;">Nationality: Thai</p>
         <p style="font-size: 10px;">--------------------------------</p>
         <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
         <p id="p-time" style="font-size: 10px;">Time: --:--</p>
@@ -887,7 +821,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
+            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -914,9 +848,6 @@
         let toastTimeout = null;
         let appSettings = { bannerUrl: "" };
 
-        let chartNatInstance = null;
-        let chartSizeInstance = null;
-
         const routes = {
             '#queue': 'queue-system',
             '#tv': 'queue-display',
@@ -941,10 +872,6 @@
 
             const activeBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
             if (activeBtn) activeBtn.classList.add('active');
-
-            if (targetId === 'report') {
-                setTimeout(() => renderReport(), 100);
-            }
         }
 
         window.addEventListener('hashchange', handleHashChange);
@@ -970,17 +897,23 @@
         };
 
         window.testAudioSystem = function() {
-            if (!('speechSynthesis' in window)) return;
+            if (!('speechSynthesis' in window)) {
+                alert("This browser does not support voice speech synthesis.");
+                return;
+            }
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance("Audio system activated successfully.");
             utterance.lang = 'en-US';
+            utterance.rate = 1.0;
             window.speechSynthesis.speak(utterance);
         };
 
         function speakQueue(queueNumber, tableName) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(`Number ${queueNumber}, please go to ${tableName}.`);
+
+            let textToSpeak = `Number ${queueNumber}, please go to ${tableName}.`;
+            let utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'en-US';
             utterance.rate = 0.9;
             window.speechSynthesis.speak(utterance);
@@ -996,17 +929,26 @@
                         updateBannerDisplay(appSettings.bannerUrl);
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error("Error loading settings", e);
+            }
         }
         loadSettings();
 
         window.handleImageUpload = function(event) {
             const file = event.target.files[0];
             if (!file) return;
+
+            if (file.size > 1024 * 1024 * 2) {
+                alert("File size is too large (recommended under 2MB).");
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = function(uploadEvent) {
-                document.getElementById('setting-banner-url').value = uploadEvent.target.result;
-                updateBannerDisplay(uploadEvent.target.result);
+                const base64String = uploadEvent.target.result;
+                document.getElementById('setting-banner-url').value = base64String;
+                updateBannerDisplay(base64String);
             };
             reader.readAsDataURL(file);
         };
@@ -1018,23 +960,39 @@
                 await setDoc(doc(db, "system", "settings"), { bannerUrl: url }, { merge: true });
                 updateBannerDisplay(url);
                 alert("Settings saved successfully.");
-            } catch (e) { alert("Error saving settings"); }
+            } catch (e) {
+                alert("Error saving settings: " + e.message);
+            }
         };
 
         function updateBannerDisplay(url) {
             const bannerArea = document.getElementById('tv-banner-area');
             if (!bannerArea) return;
+
             if (url) {
-                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion">`;
+                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'tv-banner-placeholder\'><i class=\'fa-solid fa-triangle-exclamation\' style=\'font-size: 1.5rem;\'><span>Failed to load image from URL</span></div>';">`;
             } else {
-                bannerArea.innerHTML = `<div class="tv-banner-placeholder"><i class="fa-regular fa-image" style="font-size: 2rem;"></i><span>Promotion Banner Area</span></div>`;
+                bannerArea.innerHTML = `
+                    <div class="tv-banner-placeholder">
+                        <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
+                        <span>Promotion Banner Area (Recommended Size: 1200 × 350 px)</span>
+                    </div>
+                `;
             }
         }
 
-        const qQuery = query(collection(db, "queues"), orderBy("timestamp", "asc"));
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+
+        const qQuery = query(
+            collection(db, "queues"), 
+            where("timestamp", ">=", startOfToday.getTime()),
+            orderBy("timestamp", "asc")
+        );
 
         onSnapshot(qQuery, (snapshot) => {
             let previousCalling = { ...currentCalling };
+
             queues = snapshot.docs.map(docSnap => ({
                 docId: docSnap.id,
                 ...docSnap.data()
@@ -1053,18 +1011,36 @@
                 currentCalling[type] = callingQueue || null;
 
                 if (callingQueue && (!previousCalling[type] || previousCalling[type].id !== callingQueue.id)) {
-                    speakQueue(callingQueue.number, type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C');
+                    const tableName = type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C';
+                    speakQueue(callingQueue.number, tableName);
                 }
             });
 
             renderUI();
         });
 
+        onSnapshot(doc(db, "system", "display_state"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                ['A', 'B', 'C'].forEach(type => {
+                    if (data[type] && data[type].speakTimestamp) {
+                        if (Date.now() - data[type].speakTimestamp < 2000) {
+                            if (data[type].speakNum && data[type].lastTriggerId !== window.myDeviceSessionId) {
+                                const tableName = type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C';
+                                speakQueue(data[type].speakNum, tableName);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        window.myDeviceSessionId = 'dev_' + Math.random().toString(36.2);
+
         window.openNationalityModal = function(type, desc) {
             pendingQueueType = type;
             pendingQueueDesc = desc;
             document.getElementById('modal-title').innerText = `Select Nationality (${desc})`;
-            document.getElementById('custom-nat-input').value = '';
             document.getElementById('nat-modal').style.display = 'flex';
         };
 
@@ -1074,17 +1050,11 @@
             pendingQueueDesc = null;
         };
 
-        window.submitCustomNationality = function() {
-            const customVal = document.getElementById('custom-nat-input').value.trim();
-            if (customVal) {
-                submitQueueWithNat(customVal);
-            }
-        };
-
         window.submitQueueWithNat = async function(nat) {
             if (!pendingQueueType) return;
             const type = pendingQueueType;
             const desc = pendingQueueDesc;
+
             closeNationalityModal();
 
             const numStr = queueCounters[type].toString().padStart(3, '0');
@@ -1099,7 +1069,7 @@
                 number: queueNumber,
                 type: type,
                 desc: desc,
-                count: type === 'A' ? '1-2 Persons' : type === 'B' ? '3-4 Persons' : '5-6 Persons',
+                count: getDefaultCount(type),
                 nationality: nat,
                 status: 'Waiting',
                 time: timeStr,
@@ -1111,25 +1081,59 @@
             try {
                 await addDoc(collection(db, "queues"), newQueueData);
                 await printQueueTicket(newQueueData, waitingCount);
-            } catch (error) { alert("Error saving queue"); }
+            } catch (error) {
+                alert("Error saving queue: " + error.message);
+            }
         };
+
+        function getDefaultCount(type) {
+            if(type === 'A') return '1-2 Persons';
+            if(type === 'B') return '3-4 Persons';
+            if(type === 'C') return '5-6 Persons';
+            return '-';
+        }
 
         window.recallSpecificQueue = async function(id) {
             const q = queues.find(item => item.id === id);
-            if (q && q.docId) {
-                await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
-                speakQueue(q.number, q.type === 'A' ? 'Table A' : q.type === 'B' ? 'Table B' : 'Table C');
+            if (q) {
+                if (currentCalling[q.type]) {
+                    const prev = queues.find(item => item.id === currentCalling[q.type].id);
+                    if (prev && prev.status === 'Calling' && prev.docId) {
+                        await updateDoc(doc(db, "queues", prev.docId), { status: 'Waiting' });
+                    }
+                }
+                if (q.docId) {
+                    await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
+                }
+
+                const tableName = q.type === 'A' ? 'Table A' : q.type === 'B' ? 'Table B' : 'Table C';
+                speakQueue(q.number, tableName);
+
+                await setDoc(doc(db, "system", "display_state"), {
+                    [q.type]: {
+                        speakTimestamp: Date.now(),
+                        speakNum: q.number,
+                        lastTriggerId: window.myDeviceSessionId
+                    }
+                }, { merge: true });
             }
         };
 
         window.changeStatus = async function(id, newStatus) {
             const q = queues.find(item => item.id === id);
             if (q && q.docId) {
-                lastActionState = { id: q.id, docId: q.docId, prevStatus: q.status, number: q.number };
-                let payload = { status: newStatus };
-                if (newStatus === 'Served') payload.seatedTimestamp = Date.now();
-                await updateDoc(doc(db, "queues", q.docId), payload);
-                if (newStatus === 'Served') showUndoToast(`Queue ${q.number} seated successfully`);
+                lastActionState = { id: q.id, docId: q.docId, prevStatus: q.status, number: q.number, type: q.type };
+                
+                let updatePayload = { status: newStatus };
+                if (newStatus === 'Served') {
+                    updatePayload.seatedTimestamp = Date.now();
+                }
+
+                await updateDoc(doc(db, "queues", q.docId), updatePayload);
+
+                if (newStatus === 'Served') {
+                    showUndoToast(`Queue ${q.number} seated successfully`);
+                }
             }
         };
 
@@ -1137,6 +1141,7 @@
             const toast = document.getElementById('undo-toast');
             document.getElementById('toast-text').innerText = msg;
             toast.style.display = 'flex';
+
             if(toastTimeout) clearTimeout(toastTimeout);
             toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
         }
@@ -1145,21 +1150,45 @@
             if (lastActionState && lastActionState.docId) {
                 await updateDoc(doc(db, "queues", lastActionState.docId), { status: lastActionState.prevStatus, seatedTimestamp: null });
                 document.getElementById('undo-toast').style.display = 'none';
+                lastActionState = null;
             }
         };
 
         async function printQueueTicket(queue, waitingCount) {
-            document.getElementById('p-number').innerText = queue.number;
-            document.getElementById('p-desc').innerText = queue.desc;
-            document.getElementById('p-count').innerText = `Persons: ${queue.count}`;
-            document.getElementById('p-nationality').innerText = `Nationality: ${queue.nationality}`;
-            document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
-            document.getElementById('p-time').innerText = `Time: ${queue.time}`;
+            const printData = {
+                text: [
+                    { content: "Pancake Café\n", align: "center", size: "large", bold: true },
+                    { content: "--------------------------------\n", align: "center" },
+                    { content: "Your Queue Number\n", align: "center", size: "small" },
+                    { content: `${queue.number}\n`, align: "center", size: "xlarge", bold: true },
+                    { content: `${queue.desc}\n`, align: "center", bold: true },
+                    { content: `Party Size: ${queue.count}\n`, align: "center" },
+                    { content: "--------------------------------\n", align: "center" },
+                    { content: `Queues Ahead: ${waitingCount}\n`, align: "center" },
+                    { content: `Time: ${queue.time}\n\n`, align: "center" },
+                    { content: "Thank you for visiting\n\n\n\n", align: "center", bold: true }
+                ]
+            };
 
-            const printArea = document.getElementById('ticket-print-area');
-            printArea.style.display = 'block';
-            window.print();
-            printArea.style.display = 'none';
+            try {
+                const response = await fetch("http://127.0.0.1:8080/print", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(printData)
+                });
+                if (!response.ok) throw new Error("Sunmi Print Service Unavailable");
+            } catch (error) {
+                document.getElementById('p-number').innerText = queue.number;
+                document.getElementById('p-desc').innerText = queue.desc;
+                document.getElementById('p-count').innerText = `Persons: ${queue.count}`;
+                document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
+                document.getElementById('p-time').innerText = `Time: ${queue.time}`;
+
+                const printArea = document.getElementById('ticket-print-area');
+                printArea.style.display = 'block';
+                window.print();
+                printArea.style.display = 'none';
+            }
         }
 
         function renderUI() {
@@ -1168,63 +1197,94 @@
             ['A', 'B', 'C'].forEach(type => {
                 const waitCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
                 document.getElementById(`btn-count-${type}`).innerText = `Waiting: ${waitCount}`;
+
                 if(type === 'A') waitA = waitCount;
                 if(type === 'B') waitB = waitCount;
                 if(type === 'C') waitC = waitCount;
 
                 const calling = currentCalling[type];
                 const callingEl = document.getElementById(`tv-calling-${type}`);
-                if (callingEl) callingEl.innerText = (calling && calling.status === 'Calling') ? calling.number : '---';
+                if (callingEl) {
+                    callingEl.innerText = (calling && calling.status === 'Calling') ? calling.number : '---';
+                }
 
                 const waitingContainer = document.getElementById(`tv-waiting-${type}`);
                 if (waitingContainer) {
-                    const waitingList = queues.filter(q => q.type === type && q.status === 'Waiting').sort((a, b) => a.id - b.id);
-                    waitingContainer.innerText = waitingList.length === 0 ? '---' : waitingList.slice(0, 5).map(q => q.number).join(', ');
+                    const waitingList = queues
+                        .filter(q => q.type === type && q.status === 'Waiting')
+                        .sort((a, b) => a.id - b.id);
+
+                    if (waitingList.length === 0) {
+                        waitingContainer.innerText = '---';
+                    } else {
+                        const nextFiveQueues = waitingList.slice(0, 5).map(q => q.number).join(', ');
+                        waitingContainer.innerText = nextFiveQueues;
+                    }
                 }
             });
 
-            document.getElementById('tv-footer-summary').innerText = `Total Waiting — Table A: ${waitA} | Table B: ${waitB} | Table C: ${waitC}`;
+            const summaryEl = document.getElementById('tv-footer-summary');
+            if (summaryEl) {
+                summaryEl.innerText = `Total Waiting — Table A: ${waitA} | Table B: ${waitB} | Table C: ${waitC}`;
+            }
 
             const activeCall = currentCalling[activeTab];
-            document.getElementById('calling-display').innerText = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
+            const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
+            document.getElementById('calling-display').innerText = activeNum;
 
             const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting');
             document.getElementById('waiting-count-display').innerText = `Total Waiting: ${waitingList.length}`;
 
             const listContainer = document.getElementById('mobile-queue-list');
             listContainer.innerHTML = '';
-            const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => b.id - a.id);
+            
+            const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => {
+                return b.id - a.id;
+            });
 
             if (colQueues.length === 0) {
-                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">No queues available</div>`;
+                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">No queues available in this category</div>`;
             } else {
                 colQueues.forEach(q => {
                     const item = document.createElement('div');
                     const isServed = q.status === 'Served';
                     const isCalling = q.status === 'Calling';
+
                     item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''}`;
 
-                    let statusTxt = 'Waiting', bgClass = 'bg-waiting';
+                    let statusTxt = 'Waiting';
+                    let bgClass = 'bg-waiting';
                     if(isCalling) { statusTxt = 'Calling'; bgClass = 'bg-calling'; }
                     if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
                     if(q.status === 'Cancelled') { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
 
-                    let leftBtnsHTML = isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` :
-                        `<button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
-                         <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>`;
+                    let leftBtnsHTML = '';
+                    let rightBtnHTML = '';
 
-                    let rightBtnHTML = !isServed ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
+                    if (isServed) {
+                        leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Edit / Revert</button>`;
+                    } else {
+                        leftBtnsHTML = `
+                            <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
+                            <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>
+                        `;
+
+                        rightBtnHTML = `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>`;
+                    }
 
                     item.innerHTML = `
                         <div class="q-info-left">
                             <div class="q-number">${q.number}</div>
-                            <div class="q-details"><span>Persons: <b>${q.count}</b></span><span>Nationality: <b>${q.nationality}</b></span></div>
+                            <div class="q-details">
+                                <span>Persons: <b>${q.count}</b></span>
+                                <span>Nationality: <b>${q.nationality}</b></span>
+                            </div>
                             <div class="q-actions-left">${leftBtnsHTML}</div>
                         </div>
                         <div class="q-info-right">
                             <span class="badge-status ${bgClass}">${statusTxt}</span>
                             <span class="time-text">${q.time.split(' ')[1] || q.time}</span>
-                            <div>${rightBtnHTML}</div>
+                            <div style="margin-top: 6px;">${rightBtnHTML}</div>
                         </div>
                     `;
                     listContainer.appendChild(item);
@@ -1234,155 +1294,66 @@
             renderReport();
         }
 
-        // --- REPORT & DATE RANGE FILTER LOGIC ---
-        window.onDateRangeChange = function() {
-            const val = document.getElementById('report-range-select').value;
-            const customWrapper = document.getElementById('custom-date-wrapper');
-            if (val === 'custom') {
-                customWrapper.style.display = 'flex';
-            } else {
-                customWrapper.style.display = 'none';
-                renderReport();
-            }
-        };
-
-        window.triggerReportRender = function() {
-            renderReport();
-        };
-
-        function getFilteredQueues() {
-            const range = document.getElementById('report-range-select').value;
-            const now = new Date();
-            let startTimestamp = 0;
-            let endTimestamp = now.getTime();
-
-            if (range === 'today') {
-                const d = new Date();
-                d.setHours(0,0,0,0);
-                startTimestamp = d.getTime();
-            } else if (range === 'this_month') {
-                const d = new Date(now.getFullYear(), now.getMonth(), 1);
-                startTimestamp = d.getTime();
-            } else if (range === 'this_year') {
-                const d = new Date(now.getFullYear(), 0, 1);
-                startTimestamp = d.getTime();
-            } else if (range === 'custom') {
-                const sVal = document.getElementById('report-start-date').value;
-                const eVal = document.getElementById('report-end-date').value;
-                startTimestamp = sVal ? new Date(sVal).setHours(0,0,0,0) : 0;
-                endTimestamp = eVal ? new Date(eVal).setHours(23,59,59,999) : now.getTime();
-            }
-
-            return queues.filter(q => {
-                const t = q.timestamp || 0;
-                return t >= startTimestamp && t <= endTimestamp;
-            });
-        }
-
         function renderReport() {
-            const filtered = getFilteredQueues();
+            // 1. Nationality Count
             const natCounts = {};
+            // 2. Party Size / Count Breakdown
             const sizeCounts = {};
-            let totalWaitMins = 0;
-            let seatedCount = 0;
+            // 3. Waiting Time calculation
+            let totalWaitMinutes = 0;
+            let seatedCountWithTime = 0;
 
-            filtered.forEach(q => {
+            queues.forEach(q => {
+                // Nationality
                 const nat = q.nationality || 'Other';
                 natCounts[nat] = (natCounts[nat] || 0) + 1;
 
+                // Party Size
                 const size = q.count || '-';
                 sizeCounts[size] = (sizeCounts[size] || 0) + 1;
 
+                // Waiting Time (From created timestamp to seated timestamp)
                 if (q.status === 'Served' && q.timestamp && q.seatedTimestamp) {
-                    const diff = Math.round((q.seatedTimestamp - q.timestamp) / 60000);
-                    if (diff >= 0) {
-                        totalWaitMins += diff;
-                        seatedCount++;
+                    const diffMins = Math.round((q.seatedTimestamp - q.timestamp) / 60000);
+                    if (diffMins >= 0) {
+                        totalWaitMinutes += diffMins;
+                        seatedCountWithTime++;
                     }
                 }
             });
 
-            const natTbody = document.getElementById('table-nat-body');
-            natTbody.innerHTML = '';
+            // Render Nationality List
+            const natListEl = document.getElementById('report-nat-list');
+            natListEl.innerHTML = '';
             const natKeys = Object.keys(natCounts);
             if (natKeys.length === 0) {
-                natTbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No data</td></tr>`;
+                natListEl.innerHTML = `<li class="stat-item"><span>No data today</span><span>0</span></li>`;
             } else {
-                natKeys.forEach(k => {
-                    natTbody.innerHTML += `<tr><td>${k}</td><td><b>${natCounts[k]}</b></td></tr>`;
+                natKeys.forEach(nat => {
+                    natListEl.innerHTML += `<li class="stat-item"><span>${nat}</span><span>${natCounts[nat]} queues</span></li>`;
                 });
             }
-            updateChartNationality(natCounts);
 
-            const sizeTbody = document.getElementById('table-size-body');
-            sizeTbody.innerHTML = '';
+            // Render Size List
+            const sizeListEl = document.getElementById('report-size-list');
+            sizeListEl.innerHTML = '';
             const sizeKeys = Object.keys(sizeCounts);
             if (sizeKeys.length === 0) {
-                sizeTbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No data</td></tr>`;
+                sizeListEl.innerHTML = `<li class="stat-item"><span>No data today</span><span>0</span></li>`;
             } else {
-                sizeKeys.forEach(k => {
-                    sizeTbody.innerHTML += `<tr><td>${k}</td><td><b>${sizeCounts[k]}</b></td></tr>`;
+                sizeKeys.forEach(size => {
+                    sizeListEl.innerHTML += `<li class="stat-item"><span>${size}</span><span>${sizeCounts[size]} queues</span></li>`;
                 });
             }
-            updateChartPartySize(sizeCounts);
 
-            const avg = seatedCount > 0 ? Math.round(totalWaitMins / seatedCount) : 0;
-            document.getElementById('report-avg-time').innerText = `${avg} mins`;
-            document.getElementById('report-seated-count').innerText = `Based on ${seatedCount} seated customers`;
-        }
-
-        window.exportReportCSV = function() {
-            const filtered = getFilteredQueues();
-            if (filtered.length === 0) {
-                alert("No data available to export for the selected range.");
-                return;
+            // Render Average Time
+            const avgTimeEl = document.getElementById('avg-wait-time');
+            if (seatedCountWithTime > 0) {
+                const avg = Math.round(totalWaitMinutes / seatedCountWithTime);
+                avgTimeEl.innerText = `${avg} mins (${seatedCountWithTime} seated)`;
+            } else {
+                avgTimeEl.innerText = `0 mins`;
             }
-
-            let csvContent = "\uFEFFQueue Number,Table Type,Party Size,Nationality,Status,Time\n";
-            filtered.forEach(q => {
-                csvContent += `"${q.number}","${q.desc}","${q.count}","${q.nationality}","${q.status}","${q.time}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `queue_report_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        function updateChartNationality(dataObj) {
-            const ctx = document.getElementById('chartNationality').getContext('2d');
-            const labels = Object.keys(dataObj);
-            const data = Object.values(dataObj);
-
-            if (chartNatInstance) chartNatInstance.destroy();
-            chartNatInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels.length ? labels : ['No Data'],
-                    datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
-            });
-        }
-
-        function updateChartPartySize(dataObj) {
-            const ctx = document.getElementById('chartPartySize').getContext('2d');
-            const labels = Object.keys(dataObj);
-            const data = Object.values(dataObj);
-
-            if (chartSizeInstance) chartSizeInstance.destroy();
-            chartSizeInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels.length ? labels : ['No Data'],
-                    datasets: [{ label: 'Queues', data: data.length ? data : [0], backgroundColor: '#d97706', borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-            });
         }
     </script>
 </body>
