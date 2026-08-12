@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -546,15 +546,15 @@
 </head>
 <body>
 
-    <!-- Header Navbar -->
+    <!-- Header Navbar (เอาปุ่มสถิติออกแล้ว) -->
     <header>
         <div class="brand-title">
             <i class="fa-solid fa-pancake"></i> Pancake Café
         </div>
         <div class="nav-buttons">
-            <button class="nav-btn" data-target="queue-system" onclick="navigateTo('queue-system')">Queue</button>
-            <button class="nav-btn" data-target="queue-display" onclick="navigateTo('queue-display')">TV Display</button>
-            <button class="nav-btn" data-target="settings" onclick="navigateTo('settings')">Settings</button>
+            <button class="nav-btn" data-target="queue-system" onclick="navigateTo('queue-system')">คิว</button>
+            <button class="nav-btn" data-target="queue-display" onclick="navigateTo('queue-display')">จอ TV</button>
+            <button class="nav-btn" data-target="settings" onclick="navigateTo('settings')">ตั้งค่า</button>
         </div>
     </header>
 
@@ -562,41 +562,41 @@
 
         <!-- Page 1: Managing Queues (#queue) -->
         <div id="queue-system" class="page-section">
-            <div class="section-title">Issue Queue Ticket</div>
+            <div class="section-title">กดออกบัตรคิว</div>
             <div class="action-cards">
-                <button class="btn-issue table-a" onclick="openNationalityModal('A', 'Table A (1-2 Seats)')">
-                    <span class="title">Table A</span>
-                    <span class="sub">1-2 Persons</span>
-                    <span class="status" id="btn-count-A">Waiting: 0</span>
+                <button class="btn-issue table-a" onclick="openNationalityModal('A', 'โต๊ะ A (1-2 ท่าน)')">
+                    <span class="title">โต๊ะ A</span>
+                    <span class="sub">1-2 คน</span>
+                    <span class="status" id="btn-count-A">รอ 0 คิว</span>
                 </button>
-                <button class="btn-issue table-b" onclick="openNationalityModal('B', 'Table B (3-4 Seats)')">
-                    <span class="title">Table B</span>
-                    <span class="sub">3-4 Persons</span>
-                    <span class="status" id="btn-count-B">Waiting: 0</span>
+                <button class="btn-issue table-b" onclick="openNationalityModal('B', 'โต๊ะ B (3-4 ท่าน)')">
+                    <span class="title">โต๊ะ B</span>
+                    <span class="sub">3-4 คน</span>
+                    <span class="status" id="btn-count-B">รอ 0 คิว</span>
                 </button>
-                <button class="btn-issue table-c" onclick="openNationalityModal('C', 'Table C (5-6 Seats)')">
-                    <span class="title">Table C</span>
-                    <span class="sub">5-6 Persons</span>
-                    <span class="status" id="btn-count-C">Waiting: 0</span>
+                <button class="btn-issue table-c" onclick="openNationalityModal('C', 'โต๊ะ C (5-6 ท่าน)')">
+                    <span class="title">โต๊ะ C</span>
+                    <span class="sub">5-6 คน</span>
+                    <span class="status" id="btn-count-C">รอ 0 คิว</span>
                 </button>
             </div>
 
             <!-- Filter Tabs -->
             <div class="filter-tabs">
-                <button class="tab-item active" id="tab-btn-A" onclick="switchMobileTab('A')">Table A</button>
-                <button class="tab-item" id="tab-btn-B" onclick="switchMobileTab('B')">Table B</button>
-                <button class="tab-item" id="tab-btn-C" onclick="switchMobileTab('C')">Table C</button>
+                <button class="tab-item active" id="tab-btn-A" onclick="switchMobileTab('A')">โต๊ะ A</button>
+                <button class="tab-item" id="tab-btn-B" onclick="switchMobileTab('B')">โต๊ะ B</button>
+                <button class="tab-item" id="tab-btn-C" onclick="switchMobileTab('C')">โต๊ะ C</button>
             </div>
 
             <!-- Active Table Queue Status Card -->
             <div class="column-card">
                 <div class="col-header-top">
                     <div>
-                        <span class="queue-title" id="current-tab-title">Table A (1-2 Persons)</span>
-                        <span style="font-size: 0.8rem; color: #6b7280; margin-left: 8px;" id="waiting-count-display">Total Waiting: 0</span>
+                        <span class="queue-title" id="current-tab-title">โต๊ะ A (1-2 คน)</span>
+                        <span style="font-size: 0.8rem; color: #6b7280; margin-left: 8px;" id="waiting-count-display">รอคิวทั้งหมด: 0 คิว</span>
                     </div>
                     <div class="calling-box">
-                        <span>Calling:</span>
+                        <span>เรียกอยู่:</span>
                         <span class="num" id="calling-display">---</span>
                     </div>
                 </div>
@@ -608,53 +608,53 @@
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">
                 <i class="fa-solid fa-pancake" style="color: #d97706;"></i> 
-                NOW SERVING
+                NOW SERVING / ขอเชิญเข้าโต๊ะ
             </div>
 
             <div class="tv-columns-grid">
                 <!-- Column A -->
                 <div class="tv-card">
-                    <div class="tv-table-badge">TABLE A (1-2 Persons)</div>
-                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-table-badge">TABLE A (1-2 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-A">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-A">---</div>
                     </div>
                 </div>
 
                 <!-- Column B -->
                 <div class="tv-card">
-                    <div class="tv-table-badge">TABLE B (3-4 Persons)</div>
-                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-table-badge">TABLE B (3-4 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-B">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-B">---</div>
                     </div>
                 </div>
 
                 <!-- Column C -->
                 <div class="tv-card">
-                    <div class="tv-table-badge">TABLE C (5-6 Persons)</div>
-                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-table-badge">TABLE C (5-6 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-C">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-C">---</div>
                     </div>
                 </div>
             </div>
 
             <div class="tv-footer-summary" id="tv-footer-summary">
-                Total Waiting — Table A: 0 | Table B: 0 | Table C: 0
+                จำนวนคิวรอขณะนี้ — Table A: 0 | Table B: 0 | Table C: 0
             </div>
 
             <!-- Banner Image Area -->
             <div class="tv-banner-container" id="tv-banner-area">
                 <div class="tv-banner-placeholder">
                     <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
-                    <span>Promotion Banner Area (Recommended Size: 1200 × 350 px)</span>
+                    <span>พื้นที่แสดงภาพโฆษณา / โปรโมชัน (ขนาดแนะนำ: 1200 × 350 พิกเซล)</span>
                 </div>
             </div>
         </div>
@@ -662,21 +662,21 @@
         <!-- Page 3: Settings (#settings) -->
         <div id="settings" class="page-section">
             <div class="settings-card">
-                <h3 style="color:#78350f; font-size:18px; margin-bottom: 16px; text-align: center;"><i class="fa-solid fa-gear"></i> System & TV Settings</h3>
+                <h3 style="color:#78350f; font-size:18px; margin-bottom: 16px; text-align: center;"><i class="fa-solid fa-gear"></i> ตั้งค่าระบบและจอ TV</h3>
                 
                 <div class="settings-form-group">
-                    <label>TV Banner Image URL</label>
+                    <label>ลิงก์รูปภาพแบนเนอร์ด้านล่างจอ TV (Image URL)</label>
                     <div class="file-upload-wrapper">
-                        <input type="text" id="setting-banner-url" placeholder="https://example.com/image.jpg or upload file">
+                        <input type="text" id="setting-banner-url" placeholder="https://example.com/image.jpg หรืออัปโหลดภาพ">
                         <input type="file" id="banner-file-input" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
                         <button type="button" class="btn-upload-file" onclick="document.getElementById('banner-file-input').click()">
-                            <i class="fa-solid fa-upload"></i> Browse File
+                            <i class="fa-solid fa-upload"></i> เลือกไฟล์ภาพ
                         </button>
                     </div>
-                    <div class="settings-hint">Recommended dimensions: Width 1200 × Height 350 px</div>
+                    <div class="settings-hint">ขนาดภาพที่เหมาะสม: กว้าง 1200 × สูง 350 พิกเซล (อัตราส่วน 24:7)</div>
                 </div>
 
-                <button class="btn-save-settings" onclick="saveSettings()">Save Settings</button>
+                <button class="btn-save-settings" onclick="saveSettings()">บันทึกการตั้งค่า</button>
             </div>
         </div>
 
@@ -686,10 +686,10 @@
     <div id="nat-modal" class="modal-overlay">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <h3 style="font-size: 15px; color: #78350f;" id="modal-title">Select Nationality</h3>
+                <h3 style="font-size: 15px; color: #78350f;" id="modal-title">เลือกสัญชาติ</h3>
                 <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 20px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
             </div>
-            <p style="font-size: 11px; color: #78350f;">Select customer nationality for queue ticket printing</p>
+            <p style="font-size: 11px; color: #78350f;">ระบุสัญชาติลูกค้าเพื่อพิมพ์บัตรคิว</p>
             <div class="nat-modal-grid">
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
@@ -702,22 +702,22 @@
 
     <!-- Undo Toast Notification -->
     <div id="undo-toast">
-        <span id="toast-text">Queue seated successfully</span>
-        <button class="btn-undo" onclick="undoLastAction()">Undo</button>
+        <span id="toast-text">นำคิว A001 เข้าโต๊ะแล้ว</span>
+        <button class="btn-undo" onclick="undoLastAction()">ย้อนกลับ (Undo)</button>
     </div>
 
     <!-- Thermal Print Area (Fallback) -->
     <div id="ticket-print-area" style="display: none;">
         <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancake Café</h2>
         <p style="font-size: 10px;">--------------------------------</p>
-        <p style="font-size: 10px; margin-top: 2px;">Your Queue Number</p>
+        <p style="font-size: 10px; margin-top: 2px;">หมายเลขคิวของคุณ</p>
         <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
-        <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Persons)</p>
-        <p id="p-count" style="font-size: 10px;">Persons: 1-2 Persons</p>
+        <p id="p-desc" style="font-size: 11px; font-weight: bold;">โต๊ะ A (1-2 คน)</p>
+        <p id="p-count" style="font-size: 10px;">จำนวน: 1-2 คน</p>
         <p style="font-size: 10px;">--------------------------------</p>
-        <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
-        <p id="p-time" style="font-size: 10px;">Time: --:--</p>
-        <p style="font-size: 10px; margin-top: 6px; font-weight: bold;">Thank you for visiting</p>
+        <p id="p-waiting" style="font-size: 10px;">จำนวนคิวก่อนหน้า: 0 คิว</p>
+        <p id="p-time" style="font-size: 10px;">เวลา: --:--</p>
+        <p style="font-size: 10px; margin-top: 6px; font-weight: bold;">ขอบคุณที่ใช้บริการ</p>
     </div>
 
     <!-- Firebase Script Logic -->
@@ -751,6 +751,7 @@
         let toastTimeout = null;
         let appSettings = { bannerUrl: "" };
 
+        // ตัด Routing ของหน้า database ออก
         const routes = {
             '#queue': 'queue-system',
             '#tv': 'queue-display',
@@ -780,9 +781,9 @@
         window.addEventListener('DOMContentLoaded', handleHashChange);
 
         const tabConfigs = {
-            'A': { title: 'Table A (1-2 Persons)', color: '#d97706' },
-            'B': { title: 'Table B (3-4 Persons)', color: '#059669' },
-            'C': { title: 'Table C (5-6 Persons)', color: '#7c3aed' }
+            'A': { title: 'โต๊ะ A (1-2 คน)', color: '#d97706' },
+            'B': { title: 'โต๊ะ B (3-4 คน)', color: '#059669' },
+            'C': { title: 'โต๊ะ C (5-6 คน)', color: '#7c3aed' }
         };
 
         window.switchMobileTab = function(type) {
@@ -798,17 +799,19 @@
             renderUI();
         };
 
+        // Speech Synthesis Function
         function speakQueue(queueNumber, tableName) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
 
-            let textToSpeak = `Number ${queueNumber}, please go to ${tableName}.`;
+            let textToSpeak = `ขอเชิญคิวที่ ${queueNumber} ที่ ${tableName} ค่ะ`;
             let utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'en-US';
+            utterance.lang = 'th-TH';
             utterance.rate = 0.9;
             window.speechSynthesis.speak(utterance);
         }
 
+        // Fetch Settings on load
         async function loadSettings() {
             try {
                 const docSnap = await getDoc(doc(db, "system", "settings"));
@@ -830,7 +833,7 @@
             if (!file) return;
 
             if (file.size > 1024 * 1024 * 2) {
-                alert("File size is too large (recommended under 2MB).");
+                alert("ขนาดไฟล์ใหญ่เกินไป (แนะนำไม่เกิน 2MB เพื่อความเสถียรของฐานข้อมูล)");
                 return;
             }
 
@@ -849,9 +852,9 @@
             try {
                 await setDoc(doc(db, "system", "settings"), { bannerUrl: url }, { merge: true });
                 updateBannerDisplay(url);
-                alert("Settings saved successfully.");
+                alert("บันทึกการตั้งค่าเรียบร้อยแล้ว");
             } catch (e) {
-                alert("Error saving settings: " + e.message);
+                alert("เกิดข้อผิดพลาดในการบันทึก: " + e.message);
             }
         };
 
@@ -860,17 +863,18 @@
             if (!bannerArea) return;
 
             if (url) {
-                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'tv-banner-placeholder\'><i class=\'fa-solid fa-triangle-exclamation\' style=\'font-size: 1.5rem;\'><span>Failed to load image from URL</span></div>';">`;
+                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'tv-banner-placeholder\'><i class=\'fa-solid fa-triangle-exclamation\' style=\'font-size: 1.5rem;\'><span>ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้</span></div>';">`;
             } else {
                 bannerArea.innerHTML = `
                     <div class="tv-banner-placeholder">
                         <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
-                        <span>Promotion Banner Area (Recommended Size: 1200 × 350 px)</span>
+                        <span>พื้นที่แสดงภาพโฆษณา / โปรโมชัน (ขนาดแนะนำ: 1200 × 350 พิกเซล)</span>
                     </div>
                 `;
             }
         }
 
+        // Real-time Queue Listener
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
@@ -901,7 +905,7 @@
                 currentCalling[type] = callingQueue || null;
 
                 if (callingQueue && (!previousCalling[type] || previousCalling[type].id !== callingQueue.id)) {
-                    const tableName = type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C';
+                    const tableName = type === 'A' ? 'โต๊ะเอ' : type === 'B' ? 'โต๊ะบี' : 'โต๊ะซี';
                     speakQueue(callingQueue.number, tableName);
                 }
             });
@@ -909,28 +913,10 @@
             renderUI();
         });
 
-        onSnapshot(doc(db, "system", "display_state"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                ['A', 'B', 'C'].forEach(type => {
-                    if (data[type] && data[type].speakTimestamp) {
-                        if (Date.now() - data[type].speakTimestamp < 2000) {
-                            if (data[type].speakNum && data[type].lastTriggerId !== window.myDeviceSessionId) {
-                                const tableName = type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C';
-                                speakQueue(data[type].speakNum, tableName);
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        window.myDeviceSessionId = 'dev_' + Math.random().toString(36.2);
-
         window.openNationalityModal = function(type, desc) {
             pendingQueueType = type;
             pendingQueueDesc = desc;
-            document.getElementById('modal-title').innerText = `Select Nationality (${desc})`;
+            document.getElementById('modal-title').innerText = `เลือกสัญชาติ (${desc})`;
             document.getElementById('nat-modal').style.display = 'flex';
         };
 
@@ -971,14 +957,14 @@
                 await addDoc(collection(db, "queues"), newQueueData);
                 await printQueueTicket(newQueueData, waitingCount);
             } catch (error) {
-                alert("Error saving queue: " + error.message);
+                alert("เกิดข้อผิดพลาดในการบันทึกคิว: " + error.message);
             }
         };
 
         function getDefaultCount(type) {
-            if(type === 'A') return '1-2 Persons';
-            if(type === 'B') return '3-4 Persons';
-            if(type === 'C') return '5-6 Persons';
+            if(type === 'A') return '1-2 คน';
+            if(type === 'B') return '3-4 คน';
+            if(type === 'C') return '5-6 คน';
             return '-';
         }
 
@@ -995,14 +981,13 @@
                     await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
                 }
 
-                const tableName = q.type === 'A' ? 'Table A' : q.type === 'B' ? 'Table B' : 'Table C';
+                const tableName = q.type === 'A' ? 'โต๊ะเอ' : q.type === 'B' ? 'โต๊ะบี' : 'โต๊ะซี';
                 speakQueue(q.number, tableName);
 
                 await setDoc(doc(db, "system", "display_state"), {
                     [q.type]: {
-                        speakTimestamp: Date.now(),
-                        speakNum: q.number,
-                        lastTriggerId: window.myDeviceSessionId
+                        blinkTimestamp: Date.now(),
+                        speakNum: q.number
                     }
                 }, { merge: true });
             }
@@ -1015,7 +1000,7 @@
                 await updateDoc(doc(db, "queues", q.docId), { status: newStatus });
 
                 if (newStatus === 'Served') {
-                    showUndoToast(`Queue ${q.number} seated successfully`);
+                    showUndoToast(`คิว ${q.number} เข้าโต๊ะแล้ว`);
                 }
             }
         };
@@ -1042,14 +1027,14 @@
                 text: [
                     { content: "Pancake Café\n", align: "center", size: "large", bold: true },
                     { content: "--------------------------------\n", align: "center" },
-                    { content: "Your Queue Number\n", align: "center", size: "small" },
+                    { content: "หมายเลขคิวของคุณ\n", align: "center", size: "small" },
                     { content: `${queue.number}\n`, align: "center", size: "xlarge", bold: true },
                     { content: `${queue.desc}\n`, align: "center", bold: true },
-                    { content: `Party Size: ${queue.count}\n`, align: "center" },
+                    { content: `จำนวนลูกค้า: ${queue.count}\n`, align: "center" },
                     { content: "--------------------------------\n", align: "center" },
-                    { content: `Queues Ahead: ${waitingCount}\n`, align: "center" },
-                    { content: `Time: ${queue.time}\n\n`, align: "center" },
-                    { content: "Thank you for visiting\n\n\n\n", align: "center", bold: true }
+                    { content: `จำนวนคิวก่อนหน้า: ${waitingCount} คิว\n`, align: "center" },
+                    { content: `เวลา: ${queue.time}\n\n`, align: "center" },
+                    { content: "ขอบคุณที่ใช้บริการ\n\n\n\n", align: "center", bold: true }
                 ]
             };
 
@@ -1063,9 +1048,9 @@
             } catch (error) {
                 document.getElementById('p-number').innerText = queue.number;
                 document.getElementById('p-desc').innerText = queue.desc;
-                document.getElementById('p-count').innerText = `Persons: ${queue.count}`;
-                document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
-                document.getElementById('p-time').innerText = `Time: ${queue.time}`;
+                document.getElementById('p-count').innerText = `จำนวน: ${queue.count}`;
+                document.getElementById('p-waiting').innerText = `จำนวนคิวก่อนหน้า: ${waitingCount} คิว`;
+                document.getElementById('p-time').innerText = `เวลา: ${queue.time}`;
 
                 const printArea = document.getElementById('ticket-print-area');
                 printArea.style.display = 'block';
@@ -1077,20 +1062,23 @@
         function renderUI() {
             let waitA = 0, waitB = 0, waitC = 0;
 
+            // Update Tab Badge Counts & TV Display
             ['A', 'B', 'C'].forEach(type => {
                 const waitCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
-                document.getElementById(`btn-count-${type}`).innerText = `Waiting: ${waitCount}`;
+                document.getElementById(`btn-count-${type}`).innerText = `รอ ${waitCount} คิว`;
 
                 if(type === 'A') waitA = waitCount;
                 if(type === 'B') waitB = waitCount;
                 if(type === 'C') waitC = waitCount;
 
+                // Update TV Display Page - คิวปัจจุบัน
                 const calling = currentCalling[type];
                 const callingEl = document.getElementById(`tv-calling-${type}`);
                 if (callingEl) {
                     callingEl.innerText = (calling && calling.status === 'Calling') ? calling.number : '---';
                 }
 
+                // Update TV Display Page - คิวถัดไป (NEXT) เรียงจากน้อยไปมาก สูงสุด 5 คิว
                 const waitingContainer = document.getElementById(`tv-waiting-${type}`);
                 if (waitingContainer) {
                     const waitingList = queues
@@ -1106,17 +1094,19 @@
                 }
             });
 
+            // Update TV Footer Summary
             const summaryEl = document.getElementById('tv-footer-summary');
             if (summaryEl) {
-                summaryEl.innerText = `Total Waiting — Table A: ${waitA} | Table B: ${waitB} | Table C: ${waitC}`;
+                summaryEl.innerText = `จำนวนคิวรอขณะนี้ — Table A: ${waitA} | Table B: ${waitB} | Table C: ${waitC}`;
             }
 
+            // Update Current Mobile Tab Calling Info
             const activeCall = currentCalling[activeTab];
             const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
             document.getElementById('calling-display').innerText = activeNum;
 
             const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting');
-            document.getElementById('waiting-count-display').innerText = `Total Waiting: ${waitingList.length}`;
+            document.getElementById('waiting-count-display').innerText = `รอคิวทั้งหมด: ${waitingList.length} คิว`;
 
             const listContainer = document.getElementById('mobile-queue-list');
             listContainer.innerHTML = '';
@@ -1126,7 +1116,7 @@
             });
 
             if (colQueues.length === 0) {
-                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">No queues available in this category</div>`;
+                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">ยังไม่มีคิวในประเภทนี้</div>`;
                 return;
             }
 
@@ -1137,32 +1127,32 @@
 
                 item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''}`;
 
-                let statusTxt = 'Waiting';
+                let statusTxt = 'รอเรียก';
                 let bgClass = 'bg-waiting';
-                if(isCalling) { statusTxt = 'Calling'; bgClass = 'bg-calling'; }
-                if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
-                if(q.status === 'Cancelled') { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
+                if(isCalling) { statusTxt = 'กำลังเรียก'; bgClass = 'bg-calling'; }
+                if(isServed) { statusTxt = 'เข้าโต๊ะ'; bgClass = 'bg-served'; }
+                if(q.status === 'Cancelled') { statusTxt = 'ยกเลิก'; bgClass = 'bg-cancelled'; }
 
                 let leftBtnsHTML = '';
                 let rightBtnHTML = '';
 
                 if (isServed) {
-                    leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Edit / Revert</button>`;
+                    leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">แก้ไข / ดึงกลับ</button>`;
                 } else {
                     leftBtnsHTML = `
-                        <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
-                        <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>
+                        <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
+                        <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
                     `;
 
-                    rightBtnHTML = `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>`;
+                    rightBtnHTML = `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">เข้าโต๊ะ</button>`;
                 }
 
                 item.innerHTML = `
                     <div class="q-info-left">
                         <div class="q-number">${q.number}</div>
                         <div class="q-details">
-                            <span>Persons: <b>${q.count}</b></span>
-                            <span>Nationality: <b>${q.nationality}</b></span>
+                            <span>จำนวน: <b>${q.count}</b></span>
+                            <span>สัญชาติ: <b>${q.nationality}</b></span>
                         </div>
                         <div class="q-actions-left">${leftBtnsHTML}</div>
                     </div>
