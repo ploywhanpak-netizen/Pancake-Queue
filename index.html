@@ -349,7 +349,7 @@
             font-size: 1.8rem;
             font-weight: 900;
             color: #78350f;
-            margin: 10px 0 24px 0;
+            margin: 10px 0 20px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -417,7 +417,7 @@
         }
 
         .tv-next-numbers {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #78350f;
             letter-spacing: 0.5px;
@@ -426,11 +426,122 @@
 
         .tv-footer-summary {
             text-align: center;
-            margin-top: 24px;
-            font-size: 0.95rem;
+            margin-top: 14px;
+            font-size: 0.9rem;
             font-weight: 800;
             color: #78350f;
         }
+
+        /* Banner Image Container */
+        .tv-banner-container {
+            width: 100%;
+            height: 220px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1.5px solid #fde68a;
+            margin-top: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .tv-banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tv-banner-placeholder {
+            color: #b45309;
+            font-size: 0.95rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Settings Page Styles */
+        .settings-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1.5px solid #fde68a;
+            padding: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .settings-form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .settings-form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 6px;
+        }
+
+        .settings-form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #fde68a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            background: #fffdf7;
+            color: #1f2937;
+        }
+
+        .settings-form-group input:focus {
+            border-color: var(--orange-btn);
+        }
+
+        .settings-hint {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .btn-save-settings {
+            background: var(--orange-btn);
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-save-settings:active { opacity: 0.9; }
+
+        .file-upload-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-upload-file {
+            background: #475569;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-upload-file:hover { background: #334155; }
     </style>
 </head>
 <body>
@@ -508,7 +619,7 @@
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-A">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-A">---</div>
                     </div>
                 </div>
@@ -519,7 +630,7 @@
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-B">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-B">---</div>
                     </div>
                 </div>
@@ -530,7 +641,7 @@
                     <div class="tv-current-label">คิวปัจจุบัน</div>
                     <div class="tv-current-number" id="tv-calling-C">---</div>
                     <div class="tv-next-box">
-                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-label">คิวถัดไป (สูงสุด 5 คิว)</div>
                         <div class="tv-next-numbers" id="tv-waiting-C">---</div>
                     </div>
                 </div>
@@ -538,6 +649,14 @@
 
             <div class="tv-footer-summary" id="tv-footer-summary">
                 จำนวนคิวรอขณะนี้ — Table A: 0 | Table B: 0 | Table C: 0
+            </div>
+
+            <!-- Banner Image Area -->
+            <div class="tv-banner-container" id="tv-banner-area">
+                <div class="tv-banner-placeholder">
+                    <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
+                    <span>พื้นที่แสดงภาพโฆษณา / โปรโมชัน (ขนาดแนะนำ: 1200 × 350 พิกเซล)</span>
+                </div>
             </div>
         </div>
 
@@ -551,9 +670,22 @@
 
         <!-- Page 4: Settings (#settings) -->
         <div id="settings" class="page-section">
-            <div style="text-align:center; padding: 40px 20px; background:#ffffff; border-radius:12px; border:1px solid #fde68a;">
-                <h3 style="color:#78350f; font-size:18px;"><i class="fa-solid fa-gear"></i> ตั้งค่าระบบ</h3>
-                <p style="font-size:13px; color:#a16207; margin-top:8px;">จัดการชื่อร้าน ภาพโปรโมชันแบนเนอร์ส่วนล่างของจอ TV และตั้งค่าระบบพิมพ์</p>
+            <div class="settings-card">
+                <h3 style="color:#78350f; font-size:18px; margin-bottom: 16px; text-align: center;"><i class="fa-solid fa-gear"></i> ตั้งค่าระบบและจอ TV</h3>
+                
+                <div class="settings-form-group">
+                    <label>ลิงก์รูปภาพแบนเนอร์ด้านล่างจอ TV (Image URL)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="text" id="setting-banner-url" placeholder="https://example.com/image.jpg หรืออัปโหลดภาพ">
+                        <input type="file" id="banner-file-input" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                        <button type="button" class="btn-upload-file" onclick="document.getElementById('banner-file-input').click()">
+                            <i class="fa-solid fa-upload"></i> เลือกไฟล์ภาพ
+                        </button>
+                    </div>
+                    <div class="settings-hint">ขนาดภาพที่เหมาะสม: กว้าง 1200 × สูง 350 พิกเซล (อัตราส่วน 24:7)</div>
+                </div>
+
+                <button class="btn-save-settings" onclick="saveSettings()">บันทึกการตั้งค่า</button>
             </div>
         </div>
 
@@ -601,7 +733,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, enableIndexedDbPersistence 
+            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, where, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -626,6 +758,7 @@
         let activeTab = 'A';
         let lastActionState = null;
         let toastTimeout = null;
+        let appSettings = { bannerUrl: "" };
 
         const routes = {
             '#queue': 'queue-system',
@@ -687,6 +820,69 @@
             window.speechSynthesis.speak(utterance);
         }
 
+        // Fetch Settings on load
+        async function loadSettings() {
+            try {
+                const docSnap = await getDoc(doc(db, "system", "settings"));
+                if (docSnap.exists()) {
+                    appSettings = docSnap.data();
+                    if (appSettings.bannerUrl) {
+                        document.getElementById('setting-banner-url').value = appSettings.bannerUrl;
+                        updateBannerDisplay(appSettings.bannerUrl);
+                    }
+                }
+            } catch (e) {
+                console.error("Error loading settings", e);
+            }
+        }
+        loadSettings();
+
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 1024 * 1024 * 2) {
+                alert("ขนาดไฟล์ใหญ่เกินไป (แนะนำไม่เกิน 2MB เพื่อความเสถียรของฐานข้อมูล)");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(uploadEvent) {
+                const base64String = uploadEvent.target.result;
+                document.getElementById('setting-banner-url').value = base64String;
+                updateBannerDisplay(base64String);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveSettings = async function() {
+            const url = document.getElementById('setting-banner-url').value.trim();
+            appSettings.bannerUrl = url;
+            try {
+                await setDoc(doc(db, "system", "settings"), { bannerUrl: url }, { merge: true });
+                updateBannerDisplay(url);
+                alert("บันทึกการตั้งค่าเรียบร้อยแล้ว");
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการบันทึก: " + e.message);
+            }
+        };
+
+        function updateBannerDisplay(url) {
+            const bannerArea = document.getElementById('tv-banner-area');
+            if (!bannerArea) return;
+
+            if (url) {
+                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'tv-banner-placeholder\'><i class=\'fa-solid fa-triangle-exclamation\' style=\'font-size: 1.5rem;\'><span>ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้</span></div>';">`;
+            } else {
+                bannerArea.innerHTML = `
+                    <div class="tv-banner-placeholder">
+                        <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
+                        <span>พื้นที่แสดงภาพโฆษณา / โปรโมชัน (ขนาดแนะนำ: 1200 × 350 พิกเซล)</span>
+                    </div>
+                `;
+            }
+        }
+
         // Real-time Queue Listener
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
@@ -717,7 +913,6 @@
                 const callingQueue = typeQueues.filter(q => q.status === 'Calling').pop();
                 currentCalling[type] = callingQueue || null;
 
-                // ตรวจสอบว่ามีการเรียกคิวใหม่เกิดขึ้นหรือไม่ เพื่อส่งเสียงประกาศ
                 if (callingQueue && (!previousCalling[type] || previousCalling[type].id !== callingQueue.id)) {
                     const tableName = type === 'A' ? 'โต๊ะเอ' : type === 'B' ? 'โต๊ะบี' : 'โต๊ะซี';
                     speakQueue(callingQueue.number, tableName);
@@ -892,14 +1087,16 @@
                     callingEl.innerText = (calling && calling.status === 'Calling') ? calling.number : '---';
                 }
 
-                // Update TV Display Page - คิวถัดไป (NEXT) สูงสุด 5 คิว
+                // Update TV Display Page - คิวถัดไป (NEXT) เรียงจากน้อยไปมาก สูงสุด 5 คิว
                 const waitingContainer = document.getElementById(`tv-waiting-${type}`);
                 if (waitingContainer) {
-                    const waitingList = queues.filter(q => q.type === type && q.status === 'Waiting');
+                    const waitingList = queues
+                        .filter(q => q.type === type && q.status === 'Waiting')
+                        .sort((a, b) => a.id - b.id);
+
                     if (waitingList.length === 0) {
                         waitingContainer.innerText = '---';
                     } else {
-                        // ดึงเฉพาะ 5 คิวแรก นำมาคั่นด้วยเครื่องหมายจุลภาค
                         const nextFiveQueues = waitingList.slice(0, 5).map(q => q.number).join(', ');
                         waitingContainer.innerText = nextFiveQueues;
                     }
@@ -922,14 +1119,9 @@
 
             const listContainer = document.getElementById('mobile-queue-list');
             listContainer.innerHTML = '';
-
-            const statusOrder = { 'Calling': 1, 'Waiting': 2, 'Cancelled': 3, 'Served': 4 };
             
             const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => {
-                const orderA = statusOrder[a.status] || 99;
-                const orderB = statusOrder[b.status] || 99;
-                if (orderA !== orderB) return orderA - orderB;
-                return a.id - b.id;
+                return b.id - a.id;
             });
 
             if (colQueues.length === 0) {
