@@ -54,8 +54,7 @@
         .bg-waiting { background-color: var(--warning); }
         .bg-calling { background-color: var(--primary); }
         .bg-served { background-color: #64748b; }
-        .bg-skipped { background-color: #94a3b8; }
-        .bg-cancelled { background-color: var(--danger); }
+        .bg-cancelled { background-color: #dc2626; }
 
         .btn-action { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
 
@@ -248,7 +247,24 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA22_Pap9C9qhnhU33Ch2Floe5D1aLdbCY",
+            authDomain: "pancake-queue.firebaseapp.com",
+            projectId: "pancake-queue",
+            storageBucket: "pancake-queue.firebasestorage.app",
+            messagingSenderId: "348148291921",
+            appId: "1:348148291921:web:69af29138cd7e556e79b70"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         let queues = [];
         let queueCounters = { A: 1, B: 1, C: 1 };
         let currentCalling = { A: null, B: null, C: null };
@@ -256,42 +272,84 @@
         let currentFilterType = 'today';
         let lastActionState = null;
         let toastTimeout = null;
+        let lastBlinkState = { A: 0, B: 0, C: 0 };
         const nationalities = ['Arabic', 'Indian', 'Japanese', 'Thai', 'Other'];
 
-        function switchTab(tabId, element) {
+        // 1. ซิงค์สถานะการกระพริบจอ TV และการขานเสียงข้ามอุปกรณ์
+        onSnapshot(doc(db, "system", "display_state"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                ['A', 'B', 'C'].forEach(type => {
+                    if (data[type] && data[type].blinkTimestamp > (lastBlinkState[type] || 0)) {
+                        lastBlinkState[type] = data[type].blinkTimestamp;
+                        triggerTVBlinkLocally(type);
+                        if (data[type].speakNum) {
+                            speakQueueLocally(data[type].speakNum);
+                        }
+                    }
+                });
+            }
+        });
+
+        // 2. ฟังการอัปเดตข้อมูลคิวและสถิติแบบ Realtime จาก Firestore
+        const qQuery = query(collection(db, "queues"), orderBy("timestamp", "asc"));
+        onSnapshot(qQuery, (snapshot) => {
+            queues = snapshot.docs.map(docSnap => ({
+                docId: docSnap.id,
+                ...docSnap.data()
+            }));
+
+            // คำนวณรันเลขคิวถัดไปอัตโนมัติซิงค์กันทุกเครื่อง
+            ['A', 'B', 'C'].forEach(type => {
+                const typeQueues = queues.filter(q => q.type === type);
+                if (typeQueues.length > 0) {
+                    const maxNum = Math.max(...typeQueues.map(q => parseInt(q.number.substring(1)) || 0));
+                    queueCounters[type] = maxNum + 1;
+                } else {
+                    queueCounters[type] = 1;
+                }
+
+                // หาคิวที่กำลังเรียกอยู่ล่าสุด
+                const callingQueue = typeQueues.filter(q => q.status === 'Calling').pop();
+                currentCalling[type] = callingQueue || null;
+            });
+
+            // อัปเดต UI หน้าคิว จอ TV และ สถิติ พร้อมกันทุกอุปกรณ์
+            renderUI();
+            renderDatabase();
+        });
+
+        window.switchTab = function(tabId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
         }
 
-        function selectNationality(nat, btnElement) {
+        window.selectNationality = function(nat, btnElement) {
             selectedNationality = nat;
             document.querySelectorAll('.nat-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
         }
 
-        function resetDailyQueue() {
+        window.resetDailyQueue = function() {
             if (confirm("คุณต้องการรีเซ็ตคิวประจำวันใช่หรือไม่?\n(เลขคิว A, B, C จะกลับมาเริ่มที่ 001 ใหม่)")) {
                 queueCounters = { A: 1, B: 1, C: 1 };
                 currentCalling = { A: null, B: null, C: null };
-                queues = [];
                 renderUI();
-                alert("รีเซ็ตระบบคิวประจำวันเรียบร้อยแล้ว!");
+                alert("รีเซ็ตตัวนับคิวฝั่งเครื่องเรียบร้อยแล้ว!");
             }
         }
 
-        function createQueue(type, desc) {
+        window.createQueue = async function(type, desc) {
             const numStr = queueCounters[type].toString().padStart(3, '0');
             const queueNumber = `${type}${numStr}`;
-            queueCounters[type]++;
-
             const waitingCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
             const now = new Date();
             const timeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }) + ' ' + 
                             now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
-            const newQueue = {
+            const newQueueData = {
                 id: Date.now(),
                 number: queueNumber,
                 type: type,
@@ -300,12 +358,17 @@
                 nationality: selectedNationality,
                 status: 'Waiting',
                 time: timeStr,
-                timestamp: now.getTime()
+                timestamp: now.getTime(),
+                createdAt: serverTimestamp()
             };
 
-            queues.push(newQueue);
-            renderUI();
-            printQueueTicket(newQueue, waitingCount);
+            try {
+                await addDoc(collection(db, "queues"), newQueueData);
+                printQueueTicket(newQueueData, waitingCount);
+            } catch (error) {
+                console.error("Error adding doc: ", error);
+                alert("เกิดข้อผิดพลาดในการบันทึกคิวลง Firestore: " + error.message);
+            }
         }
 
         function getDefaultCount(type) {
@@ -315,31 +378,34 @@
             return '-';
         }
 
-        function recallSpecificQueue(id) {
+        window.recallSpecificQueue = async function(id) {
             const q = queues.find(item => item.id === id);
             if (q) {
                 if (currentCalling[q.type]) {
                     const prev = queues.find(item => item.id === currentCalling[q.type].id);
-                    if (prev && prev.status === 'Calling') prev.status = 'Skipped';
+                    if (prev && prev.status === 'Calling' && prev.docId) {
+                        await updateDoc(doc(db, "queues", prev.docId), { status: 'Waiting' });
+                    }
                 }
-                q.status = 'Calling';
-                currentCalling[q.type] = q;
-                renderUI();
-                triggerTVBlink(q.type);
-                speakQueue(q.number);
+                if (q.docId) {
+                    await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
+                }
+
+                // ส่งคำสั่งกะพริบจอและพูดไปยัง Firestore เพื่อให้ทุกจอกระพริบและพูดพร้อมกัน
+                await setDoc(doc(db, "system", "display_state"), {
+                    [q.type]: {
+                        blinkTimestamp: Date.now(),
+                        speakNum: q.number
+                    }
+                }, { merge: true });
             }
         }
 
-        function changeStatus(id, newStatus) {
+        window.changeStatus = async function(id, newStatus) {
             const q = queues.find(item => item.id === id);
-            if (q) {
-                lastActionState = { id: q.id, prevStatus: q.status, number: q.number, type: q.type };
-
-                q.status = newStatus;
-                if (currentCalling[q.type] && currentCalling[q.type].id === id && newStatus !== 'Calling') {
-                    currentCalling[q.type] = null;
-                }
-                renderUI();
+            if (q && q.docId) {
+                lastActionState = { id: q.id, docId: q.docId, prevStatus: q.status, number: q.number, type: q.type };
+                await updateDoc(doc(db, "queues", q.docId), { status: newStatus });
 
                 if (newStatus === 'Served') {
                     showUndoToast(`คิว ${q.number} เข้าโต๊ะแล้ว`);
@@ -356,22 +422,15 @@
             toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
         }
 
-        function undoLastAction() {
-            if (lastActionState) {
-                const q = queues.find(item => item.id === lastActionState.id);
-                if (q) {
-                    q.status = lastActionState.prevStatus;
-                    if(lastActionState.prevStatus === 'Calling') {
-                        currentCalling[q.type] = q;
-                    }
-                    renderUI();
-                }
+        window.undoLastAction = async function() {
+            if (lastActionState && lastActionState.docId) {
+                await updateDoc(doc(db, "queues", lastActionState.docId), { status: lastActionState.prevStatus });
                 document.getElementById('undo-toast').style.display = 'none';
                 lastActionState = null;
             }
         }
 
-        function triggerTVBlink(type) {
+        function triggerTVBlinkLocally(type) {
             const el = document.getElementById(`tv-${type}`);
             if(el) {
                 el.classList.add('blink');
@@ -379,7 +438,7 @@
             }
         }
 
-        function speakQueue(number) {
+        function speakQueueLocally(number) {
             if ('speechSynthesis' in window) {
                 const text = `Queue number ${number.split('').join(' ')}`;
                 const msg = new SpeechSynthesisUtterance(text);
@@ -405,7 +464,7 @@
             }
         }
 
-        function setQuickFilter(type, btnElement) {
+        window.setQuickFilter = function(type, btnElement) {
             currentFilterType = type;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
@@ -422,7 +481,7 @@
             });
         }
 
-        function exportCSV() {
+        window.exportCSV = function() {
             const data = getFilteredQueues();
             if (data.length === 0) { alert('ไม่มีข้อมูลคิวสำหรับส่งออก'); return; }
 
@@ -463,7 +522,6 @@
                 let statusTxt = 'รอเรียก';
                 if(q.status === 'Calling') statusTxt = 'กำลังเรียก';
                 if(q.status === 'Served') statusTxt = 'เข้าโต๊ะ';
-                if(q.status === 'Skipped') statusTxt = 'ข้ามคิว';
                 if(q.status === 'Cancelled') statusTxt = 'ยกเลิก';
 
                 dbTableBody.innerHTML += `
@@ -492,8 +550,7 @@
                 const listContainer = document.getElementById(`list-${type}`);
                 listContainer.innerHTML = '';
 
-                // การเรียงลำดับคิว: แสดงคิวที่รอ/กำลังเรียกอยู่บนสุด, ตามด้วยข้าม/ยกเลิก, และคิวที่เข้าโต๊ะแล้วไว้ล่างสุด
-                const statusOrder = { 'Calling': 1, 'Waiting': 2, 'Skipped': 3, 'Cancelled': 4, 'Served': 5 };
+                const statusOrder = { 'Calling': 1, 'Waiting': 2, 'Cancelled': 3, 'Served': 4 };
                 
                 const colQueues = queues.filter(q => q.type === type).sort((a, b) => {
                     const orderA = statusOrder[a.status] || 99;
@@ -501,7 +558,7 @@
                     if (orderA !== orderB) {
                         return orderA - orderB;
                     }
-                    return a.id - b.id; // เรียงตามลำดับคิวก่อน-หลัง
+                    return a.id - b.id;
                 });
 
                 colQueues.forEach(q => {
@@ -513,7 +570,6 @@
                     let bgClass = 'bg-waiting';
                     if(q.status === 'Calling') { statusTxt = 'กำลังเรียก'; bgClass = 'bg-calling'; }
                     if(q.status === 'Served') { statusTxt = 'เข้าโต๊ะ'; bgClass = 'bg-served'; }
-                    if(q.status === 'Skipped') { statusTxt = 'ข้ามคิว'; bgClass = 'bg-skipped'; }
                     if(q.status === 'Cancelled') { statusTxt = 'ยกเลิก'; bgClass = 'bg-cancelled'; }
 
                     let leftBtnsHTML = '';
@@ -524,7 +580,6 @@
                     } else {
                         leftBtnsHTML = `
                             <button class="btn-action" style="background:#2563eb;" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
-                            <button class="btn-action" style="background:#ca8a04;" onclick="changeStatus(${q.id}, 'Skipped')">ข้าม</button>
                             <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
                         `;
 
@@ -558,11 +613,7 @@
                     C: <b>${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
                 `;
             }
-
-            renderDatabase();
         }
-
-        renderDatabase();
     </script>
 </body>
 </html>
