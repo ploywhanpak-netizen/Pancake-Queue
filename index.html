@@ -3,95 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Queue System - Sunmi V2 Edition</title>
+    <title>Queue System - Pancake Café Edition</title>
     <style>
         :root {
-            --primary: #2563eb;
+            --primary: #d97706; /* สีน้ำตาลส้มแพนเค้ก */
+            --primary-hover: #b45309;
+            --bg-main: #fefae0; /* สีครีมอุ่น */
+            --card-bg: #ffffff;
+            --text-dark: #4a3b32; /* สีน้ำตาลเข้ม */
+            --text-muted: #78350f;
+            --accent-border: #fde68a;
             --success: #16a34a;
-            --warning: #ca8a04;
             --danger: #dc2626;
-            --bg: #f1f5f9;
         }
 
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background-color: var(--bg); color: #0f172a; display: flex; flex-direction: column; min-height: 100vh; webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
 
+        /* Header Bar - Warm Cafe Style */
         .header-bar {
-            background: #0f172a; color: #fff; padding: 10px 14px; display: flex;
+            background: #78350f; color: #fff; padding: 12px 16px; display: flex;
             justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .brand-title { font-size: 16px; font-weight: bold; color: #38bdf8; }
-        .nav-buttons { display: flex; gap: 4px; }
-        .nav-btn { background: #1e293b; color: #94a3b8; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; }
-        .nav-btn.active { background: var(--primary); color: #fff; }
+        .brand-title { font-size: 18px; font-weight: 800; color: #fef3c7; display: flex; align-items: center; gap: 6px; }
+        .nav-buttons { display: flex; gap: 6px; }
+        .nav-btn { background: #92400e; color: #fef3c7; border: none; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+        .nav-btn.active { background: #fefae0; color: #78350f; font-weight: 800; }
 
-        .container { padding: 10px; flex-grow: 1; overflow-y: auto; }
+        .container { padding: 12px; flex-grow: 1; overflow-y: auto; }
         .page-section { display: none; }
         .page-section.active { display: block; }
 
-        .card { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; }
-        .section-title { font-size: 14px; font-weight: bold; color: #334155; margin-bottom: 8px; }
+        .card { background: var(--card-bg); border-radius: 14px; padding: 14px; box-shadow: 0 2px 6px rgba(120,53,15,0.06); border: 1px solid var(--accent-border); margin-bottom: 12px; }
+        .section-title { font-size: 14px; font-weight: bold; color: var(--text-muted); margin-bottom: 10px; }
 
+        /* Queue Issue Buttons */
         .issue-btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .btn-issue { border: none; padding: 16px 4px; border-radius: 8px; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; }
-        .btn-a { background-color: #2563eb; } .btn-b { background-color: #059669; } .btn-c { background-color: #7c3aed; }
+        .btn-issue { border: none; padding: 16px 4px; border-radius: 10px; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-a { background-color: #d97706; } .btn-b { background-color: #059669; } .btn-c { background-color: #7c3aed; }
 
         .board-container { display: flex; flex-direction: column; gap: 12px; }
-        .column-card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px; }
+        .column-card { background: var(--card-bg); border-radius: 12px; border: 1.5px solid var(--accent-border); padding: 12px; }
         .col-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .calling-box { background: #eff6ff; border: 1.5px dashed #3b82f6; border-radius: 6px; padding: 4px 10px; display: flex; align-items: center; gap: 6px; }
-        .calling-num { font-size: 18px; font-weight: bold; color: var(--primary); }
+        .calling-box { background: #fffbeb; border: 1.5px dashed #fcd34d; border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; gap: 6px; }
+        .calling-num { font-size: 18px; font-weight: 900; color: var(--primary); }
 
         .queue-list-container { max-height: 400px; overflow-y: auto; }
-        .queue-item { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
-        .queue-item.served-item { background: #f1f5f9; border-color: #e2e8f0; opacity: 0.7; }
+        .queue-item { background: #fffdf7; border: 1px solid #fde68a; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .queue-item.served-item { background: #f8fafc; border-color: #cbd5e1; opacity: 0.65; }
 
         .status-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; color: #fff; font-weight: bold; }
-        .bg-waiting { background-color: var(--warning); }
+        .bg-waiting { background-color: #ca8a04; }
         .bg-calling { background-color: var(--primary); }
         .bg-served { background-color: #64748b; }
         .bg-cancelled { background-color: #dc2626; }
 
         .btn-action { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; color: #fff; }
 
-        /* Modal สำหรับเลือกสัญชาติ */
+        /* Modal ป๊อปอัปเลือกสัญชาติ */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px);
+            background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
             display: none; justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-content {
-            background: #fff; width: 90%; max-width: 360px; border-radius: 12px; padding: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out;
+            background: #fffdf7; width: 90%; max-width: 360px; border-radius: 16px; padding: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--accent-border); animation: popIn 0.2s ease-out;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
         .nat-modal-btn {
-            border: 1.5px solid #cbd5e1; background: #f8fafc; padding: 12px 8px;
-            border-radius: 8px; font-size: 14px; font-weight: bold; color: #334155;
-            cursor: pointer; text-align: center;
+            border: 1.5px solid #fde68a; background: #ffffff; padding: 12px 8px;
+            border-radius: 10px; font-size: 14px; font-weight: bold; color: var(--text-dark);
+            cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .nat-modal-btn:active { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
+        .nat-modal-btn:active { background: #fef3c7; border-color: var(--primary); color: var(--primary); }
 
+        /* TV Display Warm Theme */
+        #queue-display {
+            background-color: var(--bg-main); color: var(--text-dark); padding: 16px; border-radius: 16px;
+        }
+        .tv-header-title {
+            font-size: 22px; font-weight: 800; color: #78350f; text-align: center; margin-bottom: 16px; letter-spacing: 0.5px;
+        }
+        .tv-table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .tv-card {
+            background: #ffffff; border: 2px solid #fde68a; border-radius: 16px; padding: 16px; text-align: center;
+            box-shadow: 0 4px 12px rgba(120, 53, 15, 0.05);
+        }
+        .tv-table-name {
+            font-size: 15px; font-weight: 800; color: #92400e; background: #fef3c7; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 8px;
+        }
+        .tv-current-label { font-size: 11px; color: #b45309; font-weight: 700; text-transform: uppercase; }
+        .tv-current-num { font-size: 52px; font-weight: 900; color: #d97706; line-height: 1.1; margin: 4px 0 12px 0; }
+        .tv-current-num.blink { animation: pancakeBlink 0.8s ease-in-out infinite alternate; }
+        @keyframes pancakeBlink { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(1.05); color: #b45309; } }
+
+        .tv-next-box { background: #fffbeb; border-radius: 10px; padding: 8px 10px; border: 1.5px dashed #fcd34d; }
+        .tv-next-label { font-size: 11px; font-weight: 700; color: #a16207; margin-bottom: 4px; }
+        .tv-next-list { font-size: 14px; font-weight: 800; color: #78350f; word-spacing: 4px; }
+
+        /* Stats & Toast */
         #undo-toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 30px;
+            background: #4a3b32; color: #fff; padding: 10px 16px; border-radius: 30px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: none; align-items: center; gap: 12px; z-index: 1000; font-size: 13px;
         }
         .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 4px 10px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        .display-container { background: #0f172a; color: #fff; padding: 15px; border-radius: 12px; text-align: center; }
-        .display-box { background: #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 10px; border: 1px solid #334155; }
-        .display-number { font-size: 48px; font-weight: bold; color: #facc15; margin: 5px 0; }
-        .display-number.blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.2; } }
-
         .db-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .db-card { background: #fff; padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary); }
-        .filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #fff; padding: 8px; border-radius: 6px; }
+        .db-card { background: #fff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--primary); }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #fff; padding: 8px; border-radius: 8px; }
         .filter-btn { border: 1px solid #cbd5e1; background: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .filter-btn.active { background: var(--primary); color: #fff; }
+        .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         th, td { padding: 6px; text-align: left; border-bottom: 1px solid #e2e8f0; }
@@ -107,7 +133,7 @@
 <body>
 
     <div class="header-bar">
-        <div class="brand-title">☕ Pancafe</div>
+        <div class="brand-title">🥞 Pancake Café</div>
         <div class="nav-buttons">
             <button class="nav-btn active" onclick="switchTab('queue-system', this)">คิว</button>
             <button class="nav-btn" onclick="switchTab('queue-display', this)">จอ TV</button>
@@ -117,8 +143,8 @@
 
     <div class="container">
 
+        <!-- หน้าออกคิว / จัดการคิว -->
         <div id="queue-system" class="page-section active">
-            
             <div class="card">
                 <div class="section-title">กดออกบัตรคิว</div>
                 <div class="issue-btn-grid">
@@ -131,9 +157,9 @@
             <div class="board-container">
                 <div class="column-card">
                     <div class="col-header-top">
-                        <h3 style="color:#2563eb; font-size:15px;">โต๊ะ A (1-2 คน)</h3>
+                        <h3 style="color:#d97706; font-size:15px;">โต๊ะ A (1-2 คน)</h3>
                         <div class="calling-box">
-                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
                             <span class="calling-num" id="calling-A">---</span>
                         </div>
                     </div>
@@ -145,7 +171,7 @@
                     <div class="col-header-top">
                         <h3 style="color:#059669; font-size:15px;">โต๊ะ B (3-4 คน)</h3>
                         <div class="calling-box">
-                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
                             <span class="calling-num" id="calling-B">---</span>
                         </div>
                     </div>
@@ -157,7 +183,7 @@
                     <div class="col-header-top">
                         <h3 style="color:#7c3aed; font-size:15px;">โต๊ะ C (5-6 คน)</h3>
                         <div class="calling-box">
-                            <span style="font-size:10px; color:#64748b;">เรียกอยู่:</span>
+                            <span style="font-size:10px; color:#78350f;">เรียกอยู่:</span>
                             <span class="calling-num" id="calling-C">---</span>
                         </div>
                     </div>
@@ -171,25 +197,47 @@
             </div>
         </div>
 
+        <!-- หน้าจอ TV แสดงผลคิวหลัก + คิวถัดไป -->
         <div id="queue-display" class="page-section">
-            <div class="display-container">
-                <div style="font-size: 18px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">ขอเชิญคิวหมายเลข</div>
-                <div class="display-box">
-                    <div style="font-size:14px; color:#94a3b8;">TABLE A</div>
-                    <div class="display-number" id="tv-A">---</div>
+            <div class="tv-header-title">🥞 NOW SERVING / ขอเชิญเข้าโต๊ะ</div>
+            <div class="tv-table-grid">
+                <!-- Table A -->
+                <div class="tv-card">
+                    <div class="tv-table-name">TABLE A (1-2 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
+                    <div class="tv-current-num" id="tv-A">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-list" id="tv-next-A">-</div>
+                    </div>
                 </div>
-                <div class="display-box">
-                    <div style="font-size:14px; color:#94a3b8;">TABLE B</div>
-                    <div class="display-number" id="tv-B">---</div>
+
+                <!-- Table B -->
+                <div class="tv-card">
+                    <div class="tv-table-name">TABLE B (3-4 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
+                    <div class="tv-current-num" id="tv-B">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-list" id="tv-next-B">-</div>
+                    </div>
                 </div>
-                <div class="display-box">
-                    <div style="font-size:14px; color:#94a3b8;">TABLE C</div>
-                    <div class="display-number" id="tv-C">---</div>
+
+                <!-- Table C -->
+                <div class="tv-card">
+                    <div class="tv-table-name">TABLE C (5-6 ท่าน)</div>
+                    <div class="tv-current-label">คิวปัจจุบัน</div>
+                    <div class="tv-current-num" id="tv-C">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">คิวถัดไป (NEXT)</div>
+                        <div class="tv-next-list" id="tv-next-C">-</div>
+                    </div>
                 </div>
-                <div id="tv-waiting-summary" style="font-size: 12px; margin-top: 10px; color: #cbd5e1;"></div>
             </div>
+            <div id="tv-waiting-summary" style="font-size: 13px; text-align: center; margin-top: 16px; color: #78350f; font-weight: bold;"></div>
         </div>
 
+        <!-- หน้าสถิติและประวัติ -->
         <div id="database" class="page-section">
             <div class="filter-bar">
                 <button class="filter-btn active" onclick="setQuickFilter('today', this)">วันนี้</button>
@@ -199,12 +247,12 @@
             </div>
 
             <div class="db-stats-grid">
-                <div class="db-card" style="border-left-color: #2563eb;">
-                    <div style="font-size:10px; color:#64748b;">คิวทั้งหมด</div>
+                <div class="db-card" style="border-left-color: #d97706;">
+                    <div style="font-size:10px; color:#78350f;">คิวทั้งหมด</div>
                     <div style="font-size:18px; font-weight:bold;" id="db-total">0</div>
                 </div>
                 <div class="db-card" style="border-left-color: #059669;">
-                    <div style="font-size:10px; color:#64748b;">เข้าโต๊ะแล้ว</div>
+                    <div style="font-size:10px; color:#78350f;">เข้าโต๊ะแล้ว</div>
                     <div style="font-size:18px; font-weight:bold; color:#059669;" id="db-served">0</div>
                 </div>
             </div>
@@ -234,14 +282,14 @@
 
     </div>
 
-    <!-- Modal ป๊อปอัปเลือกสัญชาติ -->
+    <!-- Modal เลือกสัญชาติ -->
     <div id="nat-modal" class="modal-overlay">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <h3 style="font-size: 16px; color: #0f172a;" id="modal-title">เลือกสัญชาติ</h3>
+                <h3 style="font-size: 16px; color: #78350f;" id="modal-title">เลือกสัญชาติ</h3>
                 <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 18px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
             </div>
-            <p style="font-size: 12px; color: #64748b;">ระบุสัญชาติลูกค้าเพื่อออกบัตรคิว</p>
+            <p style="font-size: 12px; color: #78350f;">ระบุสัญชาติลูกค้าเพื่อออกบัตรคิว</p>
             <div class="nat-modal-grid">
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Arabic')">🇦🇪 Arabic</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian')">🇮🇳 Indian</button>
@@ -257,9 +305,10 @@
         <button class="btn-undo" onclick="undoLastAction()">ย้อนกลับ (Undo)</button>
     </div>
 
+    <!-- ตั๋วสำหรับพิมพ์ -->
     <div id="ticket-print-area" style="display: none;">
         <div style="text-align: center; width: 100%;">
-            <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancafe Cafe</h2>
+            <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancake Café</h2>
             <p style="font-size: 10px;">--------------------------------</p>
             <p style="font-size: 10px; margin-top: 2px;">Queue Number</p>
             <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
@@ -290,7 +339,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // รองรับระบบทำงานต่อเนื่องเมื่อสัญญาณเน็ตหลุดชั่วคราว
         enableIndexedDbPersistence(db).catch(() => {});
 
         let queues = [];
@@ -336,7 +384,6 @@
                 ...docSnap.data()
             }));
 
-            // คำนวณรันเลขคิวถัดไปอัตโนมัติซิงค์กันทุกเครื่อง
             ['A', 'B', 'C'].forEach(type => {
                 const typeQueues = queues.filter(q => q.type === type);
                 if (typeQueues.length > 0) {
@@ -406,7 +453,7 @@
                 printQueueTicket(newQueueData, waitingCount);
             } catch (error) {
                 console.error("Error adding doc: ", error);
-                alert("เกิดข้อผิดพลาดในการบันทึกคิวลง Firestore: " + error.message);
+                alert("เกิดข้อผิดพลาดในการบันทึกคิว: " + error.message);
             }
         }
 
@@ -415,7 +462,7 @@
                 queueCounters = { A: 1, B: 1, C: 1 };
                 currentCalling = { A: null, B: null, C: null };
                 renderUI();
-                alert("รีเซ็ตตัวนับคิวฝั่งเครื่องเรียบร้อยแล้ว!");
+                alert("รีเซ็ตตัวนับคิวเรียบร้อยแล้ว!");
             }
         }
 
@@ -556,9 +603,9 @@
             nationalities.forEach(nat => {
                 const count = filteredData.filter(q => q.nationality === nat).length;
                 dbNatGrid.innerHTML += `
-                    <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:6px; border-radius:4px; text-align:center;">
-                        <div style="font-size:10px; color:#475569;">${nat}</div>
-                        <div style="font-size:14px; font-weight:bold; color:#2563eb;">${count}</div>
+                    <div style="background:#fffdf7; border:1px solid #fde68a; padding:6px; border-radius:6px; text-align:center;">
+                        <div style="font-size:10px; color:#78350f;">${nat}</div>
+                        <div style="font-size:14px; font-weight:bold; color:#d97706;">${count}</div>
                     </div>
                 `;
             });
@@ -588,10 +635,25 @@
                 const activeNum = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
                 
                 document.getElementById(`calling-${type}`).innerText = activeNum;
+                
+                // อัปเดตคิวหลักบน TV
                 const tvEl = document.getElementById(`tv-${type}`);
                 if(tvEl) tvEl.innerText = activeNum;
 
-                const waitingList = queues.filter(q => q.type === type && q.status === 'Waiting');
+                // อัปเดตคิวถัดไปบน TV (ดึงรอคิว 2 คิวแรก)
+                const waitingList = queues
+                    .filter(q => q.type === type && q.status === 'Waiting')
+                    .sort((a, b) => a.id - b.id);
+
+                const nextEl = document.getElementById(`tv-next-${type}`);
+                if(nextEl) {
+                    if (waitingList.length > 0) {
+                        nextEl.innerText = waitingList.slice(0, 2).map(q => q.number).join(', ');
+                    } else {
+                        nextEl.innerText = '-';
+                    }
+                }
+
                 document.getElementById(`waiting-count-${type}`).innerText = `รอคิว: ${waitingList.length}`;
 
                 const listContainer = document.getElementById(`list-${type}`);
@@ -602,9 +664,7 @@
                 const colQueues = queues.filter(q => q.type === type).sort((a, b) => {
                     const orderA = statusOrder[a.status] || 99;
                     const orderB = statusOrder[b.status] || 99;
-                    if (orderA !== orderB) {
-                        return orderA - orderB;
-                    }
+                    if (orderA !== orderB) return orderA - orderB;
                     return a.id - b.id;
                 });
 
@@ -626,7 +686,7 @@
                         leftBtnsHTML = `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">แก้ไข / ดึงกลับ</button>`;
                     } else {
                         leftBtnsHTML = `
-                            <button class="btn-action" style="background:#2563eb;" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
+                            <button class="btn-action" style="background:#d97706;" onclick="recallSpecificQueue(${q.id})">เรียกซ้ำ</button>
                             <button class="btn-action" style="background:#dc2626;" onclick="changeStatus(${q.id}, 'Cancelled')">ยกเลิก</button>
                         `;
 
@@ -635,15 +695,15 @@
 
                     item.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:16px; font-weight:bold;">${q.number}</span>
+                            <span style="font-size:16px; font-weight:bold; color:#78350f;">${q.number}</span>
                             <span class="status-badge ${bgClass}">${statusTxt}</span>
                         </div>
-                        <div style="font-size:11px; color:#64748b; display:flex; justify-content:space-between; margin-top:4px; margin-bottom:8px;">
+                        <div style="font-size:11px; color:#78350f; display:flex; justify-content:space-between; margin-top:4px; margin-bottom:8px;">
                             <span>ลูกค้า: ${q.count}</span>
                             <span><b>${q.nationality}</b></span>
                             <span>${q.time.split(' ')[1] || q.time}</span>
                         </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #fde68a; padding-top:8px;">
                             <div style="display:flex; gap:4px;">${leftBtnsHTML}</div>
                             <div>${rightBtnHTML}</div>
                         </div>
@@ -655,9 +715,9 @@
             const tvSummary = document.getElementById('tv-waiting-summary');
             if(tvSummary) {
                 tvSummary.innerHTML = `
-                    A: <b>${queues.filter(q => q.type === 'A' && q.status === 'Waiting').length}</b> | 
-                    B: <b>${queues.filter(q => q.type === 'B' && q.status === 'Waiting').length}</b> | 
-                    C: <b>${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
+                    จำนวนคิวรอขณะนี้ — Table A: <b>${queues.filter(q => q.type === 'A' && q.status === 'Waiting').length}</b> | 
+                    Table B: <b>${queues.filter(q => q.type === 'B' && q.status === 'Waiting').length}</b> | 
+                    Table C: <b>${queues.filter(q => q.type === 'C' && q.status === 'Waiting').length}</b>
                 `;
             }
         }
