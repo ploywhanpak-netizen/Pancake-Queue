@@ -294,7 +294,6 @@
             opacity: 0.65;
         }
 
-        /* Cancelled style: Greyed out completely */
         .queue-card.cancelled-item {
             background: #f1f5f9;
             border-color: #cbd5e1;
@@ -751,7 +750,7 @@
                     <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
                         <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
                     </button>
-                    <button class="btn-control-main btn-control-clear" onclick="clearAllQueuesForTab()">
+                    <button class="btn-control-main btn-control-clear" onclick="promptClearAllQueues()">
                         <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
                     </button>
                 </div>
@@ -1180,19 +1179,25 @@
             speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
         };
 
-        // Fixed Clear / Delete all queues using Firestore writeBatch (handles chunks of up to 500 operations safely)
-        window.clearAllQueuesForTab = async function() {
+        window.promptClearAllQueues = async function() {
             const tabQueues = queues.filter(q => q.type === activeTab);
             if (tabQueues.length === 0) {
                 alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
                 return;
             }
-            if (!confirm(`คุณต้องการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่? การกระทำนี้จะลบข้อมูลออกจาก Firestore อย่างถาวร`)) {
+
+            const pin = prompt(`กรุณากรอกรหัสผ่าน 6 หลักเพื่อล้างคิวของ ${tabConfigs[activeTab].title}:`);
+            if (pin === null) return; // กดยกเลิก
+            if (pin !== "246810") {
+                alert("รหัสผ่านไม่ถูกต้อง!");
+                return;
+            }
+
+            if (!confirm(`ยืนยันการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่?`)) {
                 return;
             }
 
             try {
-                // Firestore batches have a limit of 500 operations per batch
                 const chunks = [];
                 for (let i = 0; i < tabQueues.length; i += 500) {
                     chunks.push(tabQueues.slice(i, i + 500));
@@ -1469,7 +1474,7 @@
                     labels: labels.length ? labels : ['No Data'],
                     datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
                 },
-                options: { responsive: andMaintainAspectRatio = false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
             });
         }
 
