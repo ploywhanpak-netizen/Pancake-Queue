@@ -364,7 +364,7 @@
             color: #9ca3af;
         }
 
-        /* Modal Nationality Selection & Custom Add */
+        /* Modal Nationality Selection Layout (Updated for Highlight Arabic Only, Thai replaces Japanese) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
@@ -377,7 +377,12 @@
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+        .nat-modal-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 6px; 
+            margin-top: 8px; 
+        }
         .nat-modal-btn {
             border: 1px solid #fde68a; background: #ffffff; padding: 8px 6px;
             border-radius: 6px; font-size: 12px; font-weight: bold; color: var(--text-dark);
@@ -385,6 +390,62 @@
             display: flex; align-items: center; justify-content: center; gap: 4px;
         }
         .nat-modal-btn:active, .nat-modal-btn:hover { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
+
+        /* Highlight Button (Arabic Only - Span 2 Columns) */
+        .nat-btn-large {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1.5px solid #f59e0b;
+            padding: 12px 10px;
+            font-size: 15px;
+            font-weight: 800;
+            color: #78350f;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .nat-btn-large:hover, .nat-btn-large:active {
+            background: #fde68a;
+            border-color: #d97706;
+            color: #451a03;
+        }
+
+        /* PIN Pad Modal Styles */
+        .pin-display {
+            background: #fff;
+            border: 2px solid #fde68a;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            text-align: center;
+            padding: 10px;
+            margin: 12px 0;
+            color: #78350f;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pin-pad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .pin-btn {
+            background: #ffffff;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #78350f;
+            padding: 12px 0;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: background 0.1s;
+        }
+        .pin-btn:active { background: #fef3c7; }
+        .pin-btn.action-pin { background: #f3e8c8; font-size: 0.9rem; }
 
         /* Undo Toast Notification */
         #undo-toast {
@@ -750,7 +811,7 @@
                     <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
                         <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
                     </button>
-                    <button class="btn-control-main btn-control-clear" onclick="promptClearAllQueues()">
+                    <button class="btn-control-main btn-control-clear" onclick="openPinModal()">
                         <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
                     </button>
                 </div>
@@ -887,13 +948,23 @@
                         </button>
                     </div>
                 </div>
+                <hr style="border: 0; border-top: 1px solid #fde68a; margin: 14px 0;">
+                <h4 style="color:#78350f; font-size:13px; margin-bottom: 8px;"><i class="fa-solid fa-lock"></i> Change PIN Code (รหัสผ่านล้างคิว)</h4>
+                <div class="settings-form-group">
+                    <label>Current PIN (รหัสเดิม 6 หลัก)</label>
+                    <input type="password" id="setting-old-pin" placeholder="••••••" maxlength="6">
+                </div>
+                <div class="settings-form-group">
+                    <label>New PIN (รหัสใหม่ 6 หลัก)</label>
+                    <input type="password" id="setting-new-pin" placeholder="••••••" maxlength="6">
+                </div>
                 <button class="btn-save-settings" onclick="saveSettings()">Save Settings</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Nationality Selection Modal -->
+    <!-- Nationality Selection Modal (Updated: Arabic Large/Highlighted Only, Thai replaces Japanese, Indian, Chinese, Other Smaller) -->
     <div id="nat-modal" class="modal-overlay">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -902,16 +973,43 @@
             </div>
             <p style="font-size: 10px; color: #78350f; margin-bottom: 3px;">Select customer nationality for queue ticket printing</p>
             <div class="nat-modal-grid">
+                <!-- Highlighted Large Button (Arabic Only) -->
+                <button class="nat-modal-btn nat-btn-large" onclick="submitQueueWithNat('Arabic 🇸🇦')">🇸🇦 อาหรับ (Arabic)</button>
+                
+                <!-- Smaller Regular Buttons (Thai replaced Japanese) -->
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai 🇹🇭')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Indian 🇮🇳')">🇮🇳 Indian</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Chinese 🇨🇳')">🇨🇳 Chinese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese 🇯🇵')">🇯🇵 Japanese</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Korean 🇰🇷')">🇰🇷 Korean</button>
-                <button class="nat-modal-btn" onclick="submitQueueWithNat('Western 🌍')">🌍 Western</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Other 🌐')">🌐 Other</button>
             </div>
             <div style="margin-top: 6px; display: flex; gap: 4px;">
                 <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 5px 7px; border: 1px solid #fde68a; border-radius: 5px; font-size: 10.5px; outline: none; background: #fff;">
                 <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; font-size: 10.5px; cursor: pointer;">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIN Pad Modal for Clearing Queues -->
+    <div id="pin-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 280px; text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <h3 style="font-size: 13px; color: #78350f;">Enter PIN (รหัส 6 หลัก)</h3>
+                <button onclick="closePinModal()" style="border: none; background: transparent; font-size: 16px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
+            </div>
+            <div class="pin-display" id="pin-display-box">------</div>
+            <div class="pin-pad-grid">
+                <button class="pin-btn" onclick="pressPin('1')">1</button>
+                <button class="pin-btn" onclick="pressPin('2')">2</button>
+                <button class="pin-btn" onclick="pressPin('3')">3</button>
+                <button class="pin-btn" onclick="pressPin('4')">4</button>
+                <button class="pin-btn" onclick="pressPin('5')">5</button>
+                <button class="pin-btn" onclick="pressPin('6')">6</button>
+                <button class="pin-btn" onclick="pressPin('7')">7</button>
+                <button class="pin-btn" onclick="pressPin('8')">8</button>
+                <button class="pin-btn" onclick="pressPin('9')">9</button>
+                <button class="pin-btn action-pin" onclick="clearPinInput()">Clear</button>
+                <button class="pin-btn" onclick="pressPin('0')">0</button>
+                <button class="pin-btn action-pin" style="background: var(--orange-btn); color: #fff;" onclick="submitPin()">OK</button>
             </div>
         </div>
     </div>
@@ -966,7 +1064,8 @@
         let activeTab = 'A';
         let lastActionState = null;
         let toastTimeout = null;
-        let appSettings = { bannerUrl: "" };
+        let appSettings = { bannerUrl: "", pinCode: "246810" };
+        let currentPinInput = "";
 
         let chartNatInstance = null;
         let chartSizeInstance = null;
@@ -1044,7 +1143,7 @@
             try {
                 const docSnap = await getDoc(doc(db, "system", "settings"));
                 if (docSnap.exists()) {
-                    appSettings = docSnap.data();
+                    appSettings = { bannerUrl: "", pinCode: "246810", ...docSnap.data() };
                     if (appSettings.bannerUrl) {
                         document.getElementById('setting-banner-url').value = appSettings.bannerUrl;
                         updateBannerDisplay(appSettings.bannerUrl);
@@ -1067,10 +1166,32 @@
 
         window.saveSettings = async function() {
             const url = document.getElementById('setting-banner-url').value.trim();
+            const oldPinInput = document.getElementById('setting-old-pin').value.trim();
+            const newPinInput = document.getElementById('setting-new-pin').value.trim();
+
+            let targetPin = appSettings.pinCode || "246810";
+
+            if (newPinInput !== "") {
+                if (oldPinInput !== targetPin) {
+                    alert("รหัสผ่านเดิมไม่ถูกต้อง ไม่สามารถเปลี่ยนรหัสใหม่ได้");
+                    return;
+                }
+                if (newPinInput.length !== 6 || isNaN(newPinInput)) {
+                    alert("กรุณากรอกรหัสผ่านใหม่เป็นตัวเลข 6 หลัก");
+                    return;
+                }
+                appSettings.pinCode = newPinInput;
+            }
+
             appSettings.bannerUrl = url;
             try {
-                await setDoc(doc(db, "system", "settings"), { bannerUrl: url }, { merge: true });
+                await setDoc(doc(db, "system", "settings"), { 
+                    bannerUrl: appSettings.bannerUrl, 
+                    pinCode: appSettings.pinCode 
+                }, { merge: true });
                 updateBannerDisplay(url);
+                document.getElementById('setting-old-pin').value = "";
+                document.getElementById('setting-new-pin').value = "";
                 alert("Settings saved successfully.");
             } catch (e) { alert("Error saving settings"); }
         };
@@ -1179,19 +1300,54 @@
             speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
         };
 
-        window.promptClearAllQueues = async function() {
+        window.openPinModal = function() {
             const tabQueues = queues.filter(q => q.type === activeTab);
             if (tabQueues.length === 0) {
                 alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
                 return;
             }
+            currentPinInput = "";
+            updatePinDisplay();
+            document.getElementById('pin-modal').style.display = 'flex';
+        };
 
-            const pin = prompt(`กรุณากรอกรหัสผ่าน 6 หลักเพื่อล้างคิวของ ${tabConfigs[activeTab].title}:`);
-            if (pin === null) return; // กดยกเลิก
-            if (pin !== "246810") {
+        window.closePinModal = function() {
+            document.getElementById('pin-modal').style.display = 'none';
+            currentPinInput = "";
+        };
+
+        window.pressPin = function(digit) {
+            if (currentPinInput.length < 6) {
+                currentPinInput += digit;
+                updatePinDisplay();
+            }
+        };
+
+        window.clearPinInput = function() {
+            currentPinInput = "";
+            updatePinDisplay();
+        };
+
+        function updatePinDisplay() {
+            const box = document.getElementById('pin-display-box');
+            if (currentPinInput.length === 0) {
+                box.innerText = "------";
+            } else {
+                box.innerText = "•".repeat(currentPinInput.length) + "-".repeat(6 - currentPinInput.length);
+            }
+        }
+
+        window.submitPin = async function() {
+            const correctPin = appSettings.pinCode || "246810";
+            if (currentPinInput !== correctPin) {
                 alert("รหัสผ่านไม่ถูกต้อง!");
+                currentPinInput = "";
+                updatePinDisplay();
                 return;
             }
+
+            closePinModal();
+            const tabQueues = queues.filter(q => q.type === activeTab);
 
             if (!confirm(`ยืนยันการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่?`)) {
                 return;
