@@ -227,18 +227,10 @@
             font-size: 0.95rem;
         }
 
-<<<<<<< HEAD
-        /* Next Control Bar & Clear All Button */
-        .queue-control-bar {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 6px;
-=======
         /* Next Control Bar */
         .queue-control-bar {
             display: grid;
             grid-template-columns: 1fr;
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
             margin-bottom: 8px;
         }
 
@@ -262,17 +254,6 @@
         .btn-control-next { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
         .btn-control-next:hover { filter: brightness(1.05); }
 
-<<<<<<< HEAD
-        .btn-control-clear {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            padding: 7px 12px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-        .btn-control-clear:hover { filter: brightness(1.05); }
-
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         .queue-list-container {
             max-height: 52vh;
             overflow-y: auto;
@@ -417,11 +398,7 @@
             }
         }
 
-<<<<<<< HEAD
-        /* TV DISPLAY STYLES - LARGE ORIGINAL SIZE */
-=======
         /* TV DISPLAY STYLES - RESTORED TO LARGE ORIGINAL SIZE */
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         .tv-header-title {
             text-align: center;
             font-size: 2.2rem;
@@ -760,32 +737,18 @@
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <!-- Next Control Bar & Clear All Button -->
-=======
                 <!-- Next Control Bar -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
                 <div class="queue-control-bar">
                     <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
                         <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
                     </button>
-<<<<<<< HEAD
-                    <button class="btn-control-main btn-control-clear" onclick="clearAllQueuesForTab()">
-                        <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
-                    </button>
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
                 </div>
 
                 <div class="queue-list-container" id="mobile-queue-list"></div>
             </div>
         </div>
 
-<<<<<<< HEAD
-        <!-- Page 2: TV Display (#tv) -->
-=======
         <!-- Page 2: TV Display (#tv) - Large Original Size Restored -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">
                 <i class="fa-solid fa-pancake" style="color: #d97706;"></i> NOW SERVING
@@ -967,11 +930,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-<<<<<<< HEAD
-            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence, writeBatch 
-=======
             getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1209,45 +1168,6 @@
             speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
         };
 
-<<<<<<< HEAD
-        // Fixed Clear / Delete all queues using Firestore writeBatch (handles chunks of up to 500 operations safely)
-        window.clearAllQueuesForTab = async function() {
-            const tabQueues = queues.filter(q => q.type === activeTab);
-            if (tabQueues.length === 0) {
-                alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
-                return;
-            }
-            if (!confirm(`คุณต้องการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่? การกระทำนี้จะลบข้อมูลออกจาก Firestore อย่างถาวร`)) {
-                return;
-            }
-
-            try {
-                // Firestore batches have a limit of 500 operations per batch
-                const chunks = [];
-                for (let i = 0; i < tabQueues.length; i += 500) {
-                    chunks.push(tabQueues.slice(i, i + 500));
-                }
-
-                for (const chunk of chunks) {
-                    const batch = writeBatch(db);
-                    chunk.forEach(q => {
-                        if (q.docId) {
-                            const ref = doc(db, "queues", q.docId);
-                            batch.delete(ref);
-                        }
-                    });
-                    await batch.commit();
-                }
-
-                alert("ล้างคิวทั้งหมดเรียบร้อยแล้ว");
-            } catch (error) {
-                console.error("Error clearing queues:", error);
-                alert("เกิดข้อผิดพลาดในการล้างคิว กรุณาลองใหม่อีกครั้ง");
-            }
-        };
-
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         window.recallSpecificQueue = async function(id) {
             const q = queues.find(item => item.id === id);
             if (q && q.docId) {
@@ -1344,10 +1264,7 @@
                     if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
                     if(isCancelled) { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
 
-<<<<<<< HEAD
-=======
                     // Unlimited Recall enabled for all tickets regardless of status (Waiting, Calling, Served, Cancelled)
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
                     let leftBtnsHTML = `
                         <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
                         ${!isServed && !isCancelled ? `<button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>` : ''}
@@ -1505,11 +1422,7 @@
                     labels: labels.length ? labels : ['No Data'],
                     datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
                 },
-<<<<<<< HEAD
-                options: { responsive: andMaintainAspectRatio = false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
-=======
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
             });
         }
 

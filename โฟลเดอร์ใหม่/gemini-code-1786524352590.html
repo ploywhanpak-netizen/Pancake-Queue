@@ -227,18 +227,10 @@
             font-size: 0.95rem;
         }
 
-<<<<<<< HEAD
-        /* Next Control Bar & Clear All Button */
-        .queue-control-bar {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 6px;
-=======
-        /* Next Control Bar */
+        /* Next Control Bar (Skip removed) */
         .queue-control-bar {
             display: grid;
             grid-template-columns: 1fr;
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
             margin-bottom: 8px;
         }
 
@@ -262,17 +254,6 @@
         .btn-control-next { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
         .btn-control-next:hover { filter: brightness(1.05); }
 
-<<<<<<< HEAD
-        .btn-control-clear {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            padding: 7px 12px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-        .btn-control-clear:hover { filter: brightness(1.05); }
-
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         .queue-list-container {
             max-height: 52vh;
             overflow-y: auto;
@@ -302,14 +283,6 @@
             background: #f8fafc;
             border-color: #cbd5e1;
             opacity: 0.65;
-        }
-
-        /* Cancelled style: Greyed out completely */
-        .queue-card.cancelled-item {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            opacity: 0.55;
-            filter: grayscale(100%);
         }
 
         .q-info-left {
@@ -368,7 +341,7 @@
         .bg-waiting { background: #fef3c7; color: #b45309; }
         .bg-calling { background: var(--orange-btn); color: #fff; }
         .bg-served { background: #64748b; color: #fff; }
-        .bg-cancelled { background: #94a3b8; color: #fff; }
+        .bg-cancelled { background: var(--red-btn); color: #fff; }
 
         .time-text {
             font-size: 0.62rem;
@@ -417,36 +390,32 @@
             }
         }
 
-<<<<<<< HEAD
-        /* TV DISPLAY STYLES - LARGE ORIGINAL SIZE */
-=======
-        /* TV DISPLAY STYLES - RESTORED TO LARGE ORIGINAL SIZE */
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
+        /* TV DISPLAY CUSTOM STYLES */
         .tv-header-title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 1.3rem;
             font-weight: 900;
             color: #78350f;
-            margin: 15px 0 25px 0;
+            margin: 6px 0 12px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .tv-columns-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 12px;
         }
 
         .tv-card {
             background: #ffffff;
-            border-radius: 16px;
-            border: 2px solid #fde68a;
-            padding: 24px 20px;
+            border-radius: 10px;
+            border: 1px solid #fde68a;
+            padding: 14px 12px;
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -456,73 +425,72 @@
             background: #fef3c7;
             color: #78350f;
             font-weight: 800;
-            font-size: 1.1rem;
-            padding: 8px 20px;
-            border-radius: 20px;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+            border-radius: 12px;
             display: inline-block;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
 
         .tv-current-label {
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: #b45309;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            margin-bottom: 2px;
         }
 
         .tv-current-number {
-            font-size: 5rem;
+            font-size: 3rem;
             font-weight: 900;
             color: #d97706;
             line-height: 1;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .tv-next-box {
             width: 100%;
-            border: 2px dashed #fcd34d;
+            border: 1px dashed #fcd34d;
             background: #fffefb;
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 8px;
+            padding: 8px;
             text-align: center;
         }
 
         .tv-next-label {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: #78350f;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
 
         .tv-next-numbers {
-            font-size: 1.3rem;
+            font-size: 0.9rem;
             font-weight: 800;
             color: #78350f;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             word-break: break-word;
         }
 
         .tv-footer-summary {
             text-align: center;
-            margin-top: 20px;
-            font-size: 1.1rem;
+            margin-top: 10px;
+            font-size: 0.78rem;
             font-weight: 800;
             color: #78350f;
         }
 
         .tv-banner-container {
             width: 100%;
-            height: 200px;
+            height: 150px;
             background: #ffffff;
-            border-radius: 14px;
-            border: 2px solid #fde68a;
-            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #fde68a;
+            margin-top: 10px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
         .tv-banner-container img {
@@ -533,12 +501,12 @@
 
         .tv-banner-placeholder {
             color: #b45309;
-            font-size: 1rem;
+            font-size: 0.8rem;
             font-weight: bold;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
 
         /* Settings Page Styles */
@@ -760,32 +728,18 @@
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <!-- Next Control Bar & Clear All Button -->
-=======
-                <!-- Next Control Bar -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
+                <!-- Next Control Bar (Skip removed completely) -->
                 <div class="queue-control-bar">
                     <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
                         <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
                     </button>
-<<<<<<< HEAD
-                    <button class="btn-control-main btn-control-clear" onclick="clearAllQueuesForTab()">
-                        <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
-                    </button>
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
                 </div>
 
                 <div class="queue-list-container" id="mobile-queue-list"></div>
             </div>
         </div>
 
-<<<<<<< HEAD
         <!-- Page 2: TV Display (#tv) -->
-=======
-        <!-- Page 2: TV Display (#tv) - Large Original Size Restored -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">
                 <i class="fa-solid fa-pancake" style="color: #d97706;"></i> NOW SERVING
@@ -827,7 +781,7 @@
 
             <div class="tv-banner-container" id="tv-banner-area">
                 <div class="tv-banner-placeholder">
-                    <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
+                    <i class="fa-regular fa-image" style="font-size: 1.5rem;"></i>
                     <span>Promotion Banner Area (Recommended Size: 1200 × 350 px)</span>
                 </div>
             </div>
@@ -967,11 +921,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-<<<<<<< HEAD
-            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence, writeBatch 
-=======
             getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1111,7 +1061,7 @@
             if (url) {
                 bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion">`;
             } else {
-                bannerArea.innerHTML = `<div class="tv-banner-placeholder"><i class="fa-regular fa-image" style="font-size: 2rem;"></i><span>Promotion Banner Area</span></div>`;
+                bannerArea.innerHTML = `<div class="tv-banner-placeholder"><i class="fa-regular fa-image" style="font-size: 1.5rem;"></i><span>Promotion Banner Area</span></div>`;
             }
         }
 
@@ -1209,45 +1159,6 @@
             speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
         };
 
-<<<<<<< HEAD
-        // Fixed Clear / Delete all queues using Firestore writeBatch (handles chunks of up to 500 operations safely)
-        window.clearAllQueuesForTab = async function() {
-            const tabQueues = queues.filter(q => q.type === activeTab);
-            if (tabQueues.length === 0) {
-                alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
-                return;
-            }
-            if (!confirm(`คุณต้องการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่? การกระทำนี้จะลบข้อมูลออกจาก Firestore อย่างถาวร`)) {
-                return;
-            }
-
-            try {
-                // Firestore batches have a limit of 500 operations per batch
-                const chunks = [];
-                for (let i = 0; i < tabQueues.length; i += 500) {
-                    chunks.push(tabQueues.slice(i, i + 500));
-                }
-
-                for (const chunk of chunks) {
-                    const batch = writeBatch(db);
-                    chunk.forEach(q => {
-                        if (q.docId) {
-                            const ref = doc(db, "queues", q.docId);
-                            batch.delete(ref);
-                        }
-                    });
-                    await batch.commit();
-                }
-
-                alert("ล้างคิวทั้งหมดเรียบร้อยแล้ว");
-            } catch (error) {
-                console.error("Error clearing queues:", error);
-                alert("เกิดข้อผิดพลาดในการล้างคิว กรุณาลองใหม่อีกครั้ง");
-            }
-        };
-
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         window.recallSpecificQueue = async function(id) {
             const q = queues.find(item => item.id === id);
             if (q && q.docId) {
@@ -1336,25 +1247,18 @@
                     const item = document.createElement('div');
                     const isServed = q.status === 'Served';
                     const isCalling = q.status === 'Calling';
-                    const isCancelled = q.status === 'Cancelled';
-                    item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''} ${isCancelled ? 'cancelled-item' : ''}`;
+                    item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''}`;
 
                     let statusTxt = 'Waiting', bgClass = 'bg-waiting';
                     if(isCalling) { statusTxt = 'Calling'; bgClass = 'bg-calling'; }
                     if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
-                    if(isCancelled) { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
+                    if(q.status === 'Cancelled') { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
 
-<<<<<<< HEAD
-=======
-                    // Unlimited Recall enabled for all tickets regardless of status (Waiting, Calling, Served, Cancelled)
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
-                    let leftBtnsHTML = `
-                        <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
-                        ${!isServed && !isCancelled ? `<button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>` : ''}
-                        ${isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` : ''}
-                    `;
+                    let leftBtnsHTML = isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` :
+                        `<button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
+                         <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>`;
 
-                    let rightBtnHTML = !isServed && !isCancelled ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
+                    let rightBtnHTML = !isServed ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
 
                     item.innerHTML = `
                         <div class="q-info-left">
@@ -1505,11 +1409,7 @@
                     labels: labels.length ? labels : ['No Data'],
                     datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
                 },
-<<<<<<< HEAD
-                options: { responsive: andMaintainAspectRatio = false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
-=======
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
             });
         }
 

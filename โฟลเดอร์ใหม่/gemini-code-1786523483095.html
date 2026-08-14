@@ -39,7 +39,7 @@
         header {
             background-color: var(--header-bg);
             color: #fff;
-            padding: 6px 14px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -50,20 +50,20 @@
         }
 
         .brand-title {
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #fef08a;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             background: rgba(0, 0, 0, 0.25);
-            padding: 2px;
-            border-radius: 14px;
+            padding: 3px;
+            border-radius: 20px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -72,10 +72,10 @@
             background: transparent;
             color: #fef3c7;
             border: none;
-            padding: 3px 8px;
-            border-radius: 10px;
+            padding: 6px 12px;
+            border-radius: 16px;
             font-weight: bold;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -90,19 +90,19 @@
             background: #d97706;
             color: #fff;
             border: none;
-            padding: 3px 6px;
-            border-radius: 10px;
+            padding: 6px 10px;
+            border-radius: 16px;
             font-weight: bold;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
         .btn-sound-test:hover { background: #b45309; }
 
         .container {
-            padding: 8px 12px;
+            padding: 16px 24px;
             flex-grow: 1;
             max-width: 1400px;
             margin: 0 auto;
@@ -113,34 +113,34 @@
         .page-section.active { display: block; }
 
         .section-title {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #4b5563;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
-        /* Top Issue Queue Action Cards - Made Thinner & Smaller */
+        /* Top Issue Queue Action Cards */
         .action-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 8px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .btn-issue {
             border: none;
-            border-radius: 6px;
-            padding: 6px 8px;
+            border-radius: 12px;
+            padding: 16px;
             color: white;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             transition: transform 0.1s;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1px;
+            gap: 2px;
         }
 
         .btn-issue:active { transform: scale(0.98); }
@@ -148,35 +148,35 @@
         .btn-issue.table-b { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .btn-issue.table-c { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
 
-        .btn-issue .title { font-size: 0.8rem; font-weight: bold; }
-        .btn-issue .sub { font-size: 0.6rem; opacity: 0.9; margin: 0; }
+        .btn-issue .title { font-size: 1.1rem; font-weight: bold; }
+        .btn-issue .sub { font-size: 0.75rem; opacity: 0.9; margin: 2px 0; }
         .btn-issue .status {
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             background: rgba(0,0,0,0.2);
             display: inline-block;
-            padding: 1px 4px;
-            border-radius: 6px;
-            margin-top: 1px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 4px;
         }
 
-        /* Filter Tabs - Made Thinner */
+        /* Filter Tabs */
         .filter-tabs {
             display: flex;
             background: #f3e8c8;
-            border-radius: 5px;
-            padding: 2px;
-            margin-bottom: 8px;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 16px;
         }
 
         .tab-item {
             flex: 1;
             text-align: center;
-            padding: 4px;
-            font-size: 0.72rem;
+            padding: 8px;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #78350f;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
             border: none;
             background: transparent;
             transition: all 0.2s;
@@ -185,116 +185,99 @@
         .tab-item.active {
             background: #fff;
             color: var(--header-bg);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* Column Status Card */
         .column-card {
             background: #fff;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1.5px solid var(--card-border);
+            padding: 16px;
         }
 
         .col-header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 12px;
         }
 
         .queue-title {
             color: var(--orange-btn);
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 1rem;
         }
 
         .calling-box {
             background: #fff;
             border: 1px dashed #f59e0b;
-            padding: 2px 8px;
-            border-radius: 5px;
-            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
             color: #78350f;
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 6px;
         }
 
         .calling-box span.num {
             color: var(--orange-btn);
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 1.2rem;
         }
 
-<<<<<<< HEAD
-        /* Next Control Bar & Clear All Button */
+        /* Next / Skip Action Bar */
         .queue-control-bar {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 6px;
-=======
-        /* Next Control Bar */
-        .queue-control-bar {
-            display: grid;
-            grid-template-columns: 1fr;
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
-            margin-bottom: 8px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .btn-control-main {
             border: none;
-            border-radius: 6px;
-            padding: 7px 10px;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1.1rem;
             font-weight: 800;
             color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: transform 0.1s, filter 0.2s;
         }
 
         .btn-control-main:active { transform: scale(0.98); }
         .btn-control-next { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
         .btn-control-next:hover { filter: brightness(1.05); }
+        .btn-control-skip { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
+        .btn-control-skip:hover { filter: brightness(1.05); }
 
-<<<<<<< HEAD
-        .btn-control-clear {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            padding: 7px 12px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-        .btn-control-clear:hover { filter: brightness(1.05); }
-
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         .queue-list-container {
-            max-height: 52vh;
+            max-height: 50vh;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 12px;
         }
 
-        /* Thinner & Smaller Queue Cards */
         .queue-card {
             background: #fffdf7;
-            border: 1px solid var(--card-border);
-            border-radius: 6px;
-            padding: 6px 10px;
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .queue-card.calling-active {
-            border: 1.5px solid var(--orange-btn);
+            border: 2px solid var(--orange-btn);
             background: #fffbeb;
         }
 
@@ -304,44 +287,36 @@
             opacity: 0.65;
         }
 
-        /* Cancelled style: Greyed out completely */
-        .queue-card.cancelled-item {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            opacity: 0.55;
-            filter: grayscale(100%);
-        }
-
         .q-info-left {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 4px;
         }
 
         .q-number {
-            font-size: 0.85rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: var(--text-dark);
         }
 
         .q-details {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             color: #4b5563;
             display: flex;
-            gap: 10px;
+            gap: 20px;
         }
 
         .q-actions-left {
             display: flex;
-            gap: 4px;
-            margin-top: 3px;
+            gap: 8px;
+            margin-top: 6px;
         }
 
         .btn-action {
             border: none;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.62rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
@@ -349,29 +324,29 @@
 
         .btn-recall { background-color: var(--orange-btn); }
         .btn-cancel { background-color: var(--red-btn); }
-        .btn-enter { background-color: var(--green-btn); padding: 4px 8px; font-size: 0.68rem; }
+        .btn-enter { background-color: var(--green-btn); padding: 8px 16px; font-size: 0.85rem; }
 
         .q-info-right {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 3px;
+            gap: 6px;
         }
 
         .badge-status {
-            font-size: 0.6rem;
-            padding: 1px 5px;
-            border-radius: 3px;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
             font-weight: bold;
         }
 
         .bg-waiting { background: #fef3c7; color: #b45309; }
         .bg-calling { background: var(--orange-btn); color: #fff; }
         .bg-served { background: #64748b; color: #fff; }
-        .bg-cancelled { background: #94a3b8; color: #fff; }
+        .bg-cancelled { background: var(--red-btn); color: #fff; }
 
         .time-text {
-            font-size: 0.62rem;
+            font-size: 0.75rem;
             color: #9ca3af;
         }
 
@@ -383,27 +358,27 @@
         }
 
         .modal-content {
-            background: #fffdf7; width: 90%; max-width: 340px; border-radius: 10px; padding: 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 1.5px solid var(--card-border); animation: popIn 0.2s ease-out;
+            background: #fffdf7; width: 90%; max-width: 380px; border-radius: 16px; padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--card-border); animation: popIn 0.2s ease-out;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
         .nat-modal-btn {
-            border: 1px solid #fde68a; background: #ffffff; padding: 8px 6px;
-            border-radius: 6px; font-size: 12px; font-weight: bold; color: var(--text-dark);
-            cursor: pointer; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            display: flex; align-items: center; justify-content: center; gap: 4px;
+            border: 1.5px solid #fde68a; background: #ffffff; padding: 12px 8px;
+            border-radius: 10px; font-size: 14px; font-weight: bold; color: var(--text-dark);
+            cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
         .nat-modal-btn:active, .nat-modal-btn:hover { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
 
         /* Undo Toast Notification */
         #undo-toast {
-            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
-            background: #4a3b32; color: #fff; padding: 6px 12px; border-radius: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2); display: none; align-items: center; gap: 8px; z-index: 1000; font-size: 10.5px; width: 90%; max-width: 320px; justify-content: space-between;
+            position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: #4a3b32; color: #fff; padding: 10px 16px; border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: none; align-items: center; gap: 10px; z-index: 1000; font-size: 12px; width: 90%; max-width: 360px; justify-content: space-between;
         }
-        .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 3px 8px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 5px 12px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
         /* Thermal Print Format */
         @page { size: 58mm auto; margin: 0; }
@@ -417,17 +392,13 @@
             }
         }
 
-<<<<<<< HEAD
-        /* TV DISPLAY STYLES - LARGE ORIGINAL SIZE */
-=======
-        /* TV DISPLAY STYLES - RESTORED TO LARGE ORIGINAL SIZE */
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
+        /* TV DISPLAY CUSTOM STYLES */
         .tv-header-title {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: #78350f;
-            margin: 15px 0 25px 0;
+            margin: 10px 0 20px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -442,11 +413,11 @@
 
         .tv-card {
             background: #ffffff;
-            border-radius: 16px;
-            border: 2px solid #fde68a;
+            border-radius: 20px;
+            border: 1.5px solid #fde68a;
             padding: 24px 20px;
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -457,72 +428,71 @@
             color: #78350f;
             font-weight: 800;
             font-size: 1.1rem;
-            padding: 8px 20px;
+            padding: 6px 24px;
             border-radius: 20px;
             display: inline-block;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .tv-current-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: #b45309;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .tv-current-number {
-            font-size: 5rem;
+            font-size: 4.5rem;
             font-weight: 900;
             color: #d97706;
             line-height: 1;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .tv-next-box {
             width: 100%;
-            border: 2px dashed #fcd34d;
+            border: 1.5px dashed #fcd34d;
             background: #fffefb;
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px;
             text-align: center;
         }
 
         .tv-next-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 800;
             color: #78350f;
             margin-bottom: 6px;
         }
 
         .tv-next-numbers {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: #78350f;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             word-break: break-word;
         }
 
         .tv-footer-summary {
             text-align: center;
-            margin-top: 20px;
-            font-size: 1.1rem;
+            margin-top: 14px;
+            font-size: 0.9rem;
             font-weight: 800;
             color: #78350f;
         }
 
         .tv-banner-container {
             width: 100%;
-            height: 200px;
+            height: 220px;
             background: #ffffff;
-            border-radius: 14px;
-            border: 2px solid #fde68a;
-            margin-top: 20px;
+            border-radius: 16px;
+            border: 1.5px solid #fde68a;
+            margin-top: 16px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .tv-banner-container img {
@@ -533,44 +503,44 @@
 
         .tv-banner-placeholder {
             color: #b45309;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* Settings Page Styles */
         .settings-card {
             background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #fde68a;
-            padding: 16px;
-            max-width: 500px;
+            border-radius: 12px;
+            border: 1.5px solid #fde68a;
+            padding: 24px;
+            max-width: 600px;
             margin: 0 auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
         .settings-form-group {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             text-align: left;
         }
 
         .settings-form-group label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #78350f;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .settings-form-group input {
             width: 100%;
-            padding: 7px 10px;
-            border: 1px solid #fde68a;
-            border-radius: 5px;
-            font-size: 0.82rem;
+            padding: 10px 14px;
+            border: 1.5px solid #fde68a;
+            border-radius: 8px;
+            font-size: 0.9rem;
             outline: none;
             background: #fffdf7;
             color: #1f2937;
@@ -580,19 +550,19 @@
             background: var(--orange-btn);
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 10px 24px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             cursor: pointer;
             width: 100%;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
-        .file-upload-wrapper { display: flex; gap: 5px; align-items: center; }
+        .file-upload-wrapper { display: flex; gap: 8px; align-items: center; }
         .btn-upload-file {
-            background: #475569; color: #fff; border: none; padding: 7px 12px;
-            border-radius: 5px; font-weight: bold; font-size: 0.75rem; cursor: pointer; white-space: nowrap;
+            background: #475569; color: #fff; border: none; padding: 10px 16px;
+            border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
         }
 
         /* Report & Filter Bar Styles */
@@ -601,33 +571,33 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
             background: #fff;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            margin-bottom: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1.5px solid var(--card-border);
+            margin-bottom: 16px;
         }
 
         .filter-group {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .filter-group label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #78350f;
         }
 
         .filter-select, .filter-date-input {
-            padding: 5px 8px;
-            border: 1px solid #fde68a;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border: 1.5px solid #fde68a;
+            border-radius: 8px;
             background: #fffdf7;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #1f2937;
             outline: none;
@@ -637,50 +607,51 @@
             background: var(--green-btn);
             color: #fff;
             border: none;
-            padding: 5px 12px;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
         .btn-export:hover { background: #047857; }
 
         .report-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 10px;
-            margin-bottom: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .report-card {
             background: #fff;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            padding: 12px 14px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+            border-radius: 12px;
+            border: 1.5px solid var(--card-border);
+            padding: 18px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
         .report-card h4 {
             color: #78350f;
-            font-size: 0.85rem;
-            margin-bottom: 8px;
+            font-size: 1rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
 
+        /* Tables inside Report */
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
-            margin-top: 4px;
+            font-size: 0.85rem;
+            margin-top: 8px;
         }
 
         .report-table th, .report-table td {
-            padding: 5px 6px;
+            padding: 8px 10px;
             text-align: left;
             border-bottom: 1px solid #fef3c7;
         }
@@ -694,8 +665,8 @@
         .chart-container {
             position: relative;
             width: 100%;
-            height: 160px;
-            margin-top: 6px;
+            height: 220px;
+            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -752,7 +723,7 @@
                 <div class="col-header-top">
                     <div>
                         <span class="queue-title" id="current-tab-title">Table A (1-2 Persons)</span>
-                        <span style="font-size: 0.7rem; color: #6b7280; margin-left: 5px;" id="waiting-count-display">Total Waiting: 0</span>
+                        <span style="font-size: 0.8rem; color: #6b7280; margin-left: 8px;" id="waiting-count-display">Total Waiting: 0</span>
                     </div>
                     <div class="calling-box">
                         <span>Calling:</span>
@@ -760,32 +731,21 @@
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <!-- Next Control Bar & Clear All Button -->
-=======
-                <!-- Next Control Bar -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
+                <!-- Big Next / Skip Control Bar -->
                 <div class="queue-control-bar">
                     <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
                         <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
                     </button>
-<<<<<<< HEAD
-                    <button class="btn-control-main btn-control-clear" onclick="clearAllQueuesForTab()">
-                        <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
+                    <button class="btn-control-main btn-control-skip" onclick="skipCurrentQueue()">
+                        <i class="fa-solid fa-forward"></i> Skip (ข้ามคิวนี้)
                     </button>
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
                 </div>
 
                 <div class="queue-list-container" id="mobile-queue-list"></div>
             </div>
         </div>
 
-<<<<<<< HEAD
         <!-- Page 2: TV Display (#tv) -->
-=======
-        <!-- Page 2: TV Display (#tv) - Large Original Size Restored -->
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         <div id="queue-display" class="page-section">
             <div class="tv-header-title">
                 <i class="fa-solid fa-pancake" style="color: #d97706;"></i> NOW SERVING
@@ -835,6 +795,7 @@
 
         <!-- Page 3: Report & Analytics (#report) -->
         <div id="report" class="page-section">
+            <!-- Custom Filter Bar (Dropdowns, Date customizer & Export CSV) -->
             <div class="report-header-bar">
                 <div class="section-title" style="margin: 0;"><i class="fa-solid fa-chart-pie"></i> Queue Analytics & Reports</div>
                 <div class="filter-group">
@@ -845,7 +806,7 @@
                         <option value="this_year">This Year</option>
                         <option value="custom">Custom Date</option>
                     </select>
-                    <div id="custom-date-wrapper" style="display: none; display: flex; gap: 4px; align-items: center;">
+                    <div id="custom-date-wrapper" style="display: none; display: flex; gap: 6px; align-items: center;">
                         <input type="date" id="report-start-date" class="filter-date-input" onchange="triggerReportRender()">
                         <span>to</span>
                         <input type="date" id="report-end-date" class="filter-date-input" onchange="triggerReportRender()">
@@ -861,7 +822,7 @@
                     <div class="chart-container">
                         <canvas id="chartNationality"></canvas>
                     </div>
-                    <table class="report-table" style="margin-top: 8px;">
+                    <table class="report-table" style="margin-top: 14px;">
                         <thead>
                             <tr><th>Nationality</th><th>Total Queues</th></tr>
                         </thead>
@@ -877,7 +838,7 @@
                     <div class="chart-container">
                         <canvas id="chartPartySize"></canvas>
                     </div>
-                    <table class="report-table" style="margin-top: 8px;">
+                    <table class="report-table" style="margin-top: 14px;">
                         <thead>
                             <tr><th>Party Size</th><th>Total Queues</th></tr>
                         </thead>
@@ -890,10 +851,10 @@
                 <!-- Card 3: Waiting Time Summary -->
                 <div class="report-card">
                     <h4><i class="fa-solid fa-clock"></i> Average Waiting Time</h4>
-                    <div style="background: #fffdf7; border: 1px dashed #fde68a; border-radius: 8px; padding: 14px; text-align: center; margin-top: 6px;">
-                        <div style="font-size: 0.75rem; color: #b45309; font-weight: bold;">Average Wait Duration</div>
-                        <div id="report-avg-time" style="font-size: 2rem; font-weight: 900; color: #d97706; margin: 4px 0;">0 mins</div>
-                        <div id="report-seated-count" style="font-size: 0.7rem; color: #6b7280;">Based on 0 seated customers</div>
+                    <div style="background: #fffdf7; border: 1.5px dashed #fde68a; border-radius: 12px; padding: 24px; text-align: center; margin-top: 10px;">
+                        <div style="font-size: 0.85rem; color: #b45309; font-weight: bold;">Average Wait Duration</div>
+                        <div id="report-avg-time" style="font-size: 2.8rem; font-weight: 900; color: #d97706; margin: 8px 0;">0 mins</div>
+                        <div id="report-seated-count" style="font-size: 0.8rem; color: #6b7280;">Based on 0 seated customers</div>
                     </div>
                 </div>
             </div>
@@ -902,7 +863,7 @@
         <!-- Page 4: Settings (#settings) -->
         <div id="settings" class="page-section">
             <div class="settings-card">
-                <h3 style="color:#78350f; font-size:14px; margin-bottom: 12px; text-align: center;"><i class="fa-solid fa-gear"></i> System & TV Settings</h3>
+                <h3 style="color:#78350f; font-size:18px; margin-bottom: 16px; text-align: center;"><i class="fa-solid fa-gear"></i> System & TV Settings</h3>
                 <div class="settings-form-group">
                     <label>TV Banner Image URL</label>
                     <div class="file-upload-wrapper">
@@ -922,11 +883,11 @@
     <!-- Nationality Selection Modal -->
     <div id="nat-modal" class="modal-overlay">
         <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <h3 style="font-size: 13px; color: #78350f;" id="modal-title">Select Nationality</h3>
-                <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 16px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h3 style="font-size: 15px; color: #78350f;" id="modal-title">Select Nationality</h3>
+                <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 20px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
             </div>
-            <p style="font-size: 10px; color: #78350f; margin-bottom: 3px;">Select customer nationality for queue ticket printing</p>
+            <p style="font-size: 11px; color: #78350f; margin-bottom: 4px;">Select customer nationality for queue ticket printing</p>
             <div class="nat-modal-grid">
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai 🇹🇭')">🇹🇭 Thai</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Chinese 🇨🇳')">🇨🇳 Chinese</button>
@@ -935,9 +896,9 @@
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Western 🌍')">🌍 Western</button>
                 <button class="nat-modal-btn" onclick="submitQueueWithNat('Other 🌐')">🌐 Other</button>
             </div>
-            <div style="margin-top: 6px; display: flex; gap: 4px;">
-                <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 5px 7px; border: 1px solid #fde68a; border-radius: 5px; font-size: 10.5px; outline: none; background: #fff;">
-                <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; font-size: 10.5px; cursor: pointer;">Add</button>
+            <div style="margin-top: 10px; display: flex; gap: 6px;">
+                <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 8px; border: 1.5px solid #fde68a; border-radius: 8px; font-size: 12px; outline: none; background: #fff;">
+                <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer;">Add</button>
             </div>
         </div>
     </div>
@@ -950,28 +911,24 @@
 
     <!-- Thermal Print Area (Fallback) -->
     <div id="ticket-print-area" style="display: none;">
-        <h2 style="font-size: 14px; margin-bottom: 2px; font-weight: bold;">Pancake Café</h2>
-        <p style="font-size: 8px;">--------------------------------</p>
-        <p style="font-size: 8px; margin-top: 1px;">Your Queue Number</p>
-        <h1 id="p-number" style="font-size: 28px; margin: 2px 0; font-weight: bold;">A001</h1>
-        <p id="p-desc" style="font-size: 9px; font-weight: bold;">Table A (1-2 Seats)</p>
-        <p id="p-count" style="font-size: 8px;">Persons: 1-2 Persons</p>
-        <p id="p-nationality" style="font-size: 8px;">Nationality: Thai</p>
-        <p style="font-size: 8px;">--------------------------------</p>
-        <p id="p-waiting" style="font-size: 8px;">Queues Ahead: 0</p>
-        <p id="p-time" style="font-size: 8px;">Time: --:--</p>
-        <p style="font-size: 8px; margin-top: 4px; font-weight: bold;">Thank you for visiting</p>
+        <h2 style="font-size: 16px; margin-bottom: 4px; font-weight: bold;">Pancake Café</h2>
+        <p style="font-size: 10px;">--------------------------------</p>
+        <p style="font-size: 10px; margin-top: 2px;">Your Queue Number</p>
+        <h1 id="p-number" style="font-size: 36px; margin: 2px 0; font-weight: bold;">A001</h1>
+        <p id="p-desc" style="font-size: 11px; font-weight: bold;">Table A (1-2 Seats)</p>
+        <p id="p-count" style="font-size: 10px;">Persons: 1-2 Persons</p>
+        <p id="p-nationality" style="font-size: 10px;">Nationality: Thai</p>
+        <p style="font-size: 10px;">--------------------------------</p>
+        <p id="p-waiting" style="font-size: 10px;">Queues Ahead: 0</p>
+        <p id="p-time" style="font-size: 10px;">Time: --:--</p>
+        <p style="font-size: 10px; margin-top: 6px; font-weight: bold;">Thank you for visiting</p>
     </div>
 
     <!-- Firebase Script Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-<<<<<<< HEAD
-            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence, writeBatch 
-=======
             getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence 
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1198,7 +1155,9 @@
             } catch (error) { alert("Error saving queue"); }
         };
 
+        // --- NEW NEXT & SKIP FUNCTIONS ---
         window.callNextQueue = async function() {
+            // Find the first Waiting queue in the active tab
             const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting').sort((a, b) => a.id - b.id);
             if (waitingList.length === 0) {
                 alert("No waiting queues in this category.");
@@ -1209,45 +1168,24 @@
             speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
         };
 
-<<<<<<< HEAD
-        // Fixed Clear / Delete all queues using Firestore writeBatch (handles chunks of up to 500 operations safely)
-        window.clearAllQueuesForTab = async function() {
-            const tabQueues = queues.filter(q => q.type === activeTab);
-            if (tabQueues.length === 0) {
-                alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
+        window.skipCurrentQueue = async function() {
+            const currentQ = currentCalling[activeTab];
+            if (!currentQ || currentQ.status !== 'Calling') {
+                alert("No active calling queue to skip.");
                 return;
             }
-            if (!confirm(`คุณต้องการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่? การกระทำนี้จะลบข้อมูลออกจาก Firestore อย่างถาวร`)) {
-                return;
-            }
-
-            try {
-                // Firestore batches have a limit of 500 operations per batch
-                const chunks = [];
-                for (let i = 0; i < tabQueues.length; i += 500) {
-                    chunks.push(tabQueues.slice(i, i + 500));
-                }
-
-                for (const chunk of chunks) {
-                    const batch = writeBatch(db);
-                    chunk.forEach(q => {
-                        if (q.docId) {
-                            const ref = doc(db, "queues", q.docId);
-                            batch.delete(ref);
-                        }
-                    });
-                    await batch.commit();
-                }
-
-                alert("ล้างคิวทั้งหมดเรียบร้อยแล้ว");
-            } catch (error) {
-                console.error("Error clearing queues:", error);
-                alert("เกิดข้อผิดพลาดในการล้างคิว กรุณาลองใหม่อีกครั้ง");
+            // Mark current calling queue as Cancelled (skipped)
+            await updateDoc(doc(db, "queues", currentQ.docId), { status: 'Cancelled' });
+            
+            // Automatically call the next queue in line
+            const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting').sort((a, b) => a.id - b.id);
+            if (waitingList.length > 0) {
+                const nextQ = waitingList[0];
+                await updateDoc(doc(db, "queues", nextQ.docId), { status: 'Calling' });
+                speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
             }
         };
 
-=======
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
         window.recallSpecificQueue = async function(id) {
             const q = queues.find(item => item.id === id);
             if (q && q.docId) {
@@ -1330,31 +1268,24 @@
             const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => b.id - a.id);
 
             if (colQueues.length === 0) {
-                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:12px; font-size:11px;">No queues available</div>`;
+                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:20px; font-size:13px;">No queues available</div>`;
             } else {
                 colQueues.forEach(q => {
                     const item = document.createElement('div');
                     const isServed = q.status === 'Served';
                     const isCalling = q.status === 'Calling';
-                    const isCancelled = q.status === 'Cancelled';
-                    item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''} ${isCancelled ? 'cancelled-item' : ''}`;
+                    item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''}`;
 
                     let statusTxt = 'Waiting', bgClass = 'bg-waiting';
                     if(isCalling) { statusTxt = 'Calling'; bgClass = 'bg-calling'; }
                     if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
-                    if(isCancelled) { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
+                    if(q.status === 'Cancelled') { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
 
-<<<<<<< HEAD
-=======
-                    // Unlimited Recall enabled for all tickets regardless of status (Waiting, Calling, Served, Cancelled)
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
-                    let leftBtnsHTML = `
-                        <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
-                        ${!isServed && !isCancelled ? `<button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>` : ''}
-                        ${isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` : ''}
-                    `;
+                    let leftBtnsHTML = isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` :
+                        `<button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
+                         <button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>`;
 
-                    let rightBtnHTML = !isServed && !isCancelled ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
+                    let rightBtnHTML = !isServed ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
 
                     item.innerHTML = `
                         <div class="q-info-left">
@@ -1375,6 +1306,7 @@
             renderReport();
         }
 
+        // --- REPORT & DATE RANGE FILTER LOGIC ---
         window.onDateRangeChange = function() {
             const val = document.getElementById('report-range-select').value;
             const customWrapper = document.getElementById('custom-date-wrapper');
@@ -1505,11 +1437,7 @@
                     labels: labels.length ? labels : ['No Data'],
                     datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
                 },
-<<<<<<< HEAD
-                options: { responsive: andMaintainAspectRatio = false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
-=======
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
->>>>>>> 96ddae039f9449b7b3508cc7c2b6394fd9f5e061
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
             });
         }
 
@@ -1523,7 +1451,7 @@
                 type: 'bar',
                 data: {
                     labels: labels.length ? labels : ['No Data'],
-                    datasets: [{ label: 'Queues', data: data.length ? data : [0], backgroundColor: '#d97706', borderRadius: 4 }]
+                    datasets: [{ label: 'Queues', data: data.length ? data : [0], backgroundColor: '#d97706', borderRadius: 6 }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
             });
