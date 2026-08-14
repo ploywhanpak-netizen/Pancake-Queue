@@ -1,216 +1,1493 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pancake Cafe Queue System</title>
-  <style>
-    * { box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
-    body { padding: 15px; background-color: #f4f6f8; margin: 0; }
-    h2 { text-align: center; color: #333; margin-top: 5px; }
-    
-    .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
-    .card-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: #444; }
-    
-    .grid-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; color: white; transition: 0.2s; }
-    
-    .btn-green { background-color: #2e7d32; }
-    .btn-blue { background-color: #0288d1; }
-    .btn-orange { background-color: #ed6c02; }
-    .btn-red { background-color: #d32f2f; }
-    
-    .calling-display { text-align: center; padding: 15px; background: #e8f5e9; border-radius: 8px; font-size: 2rem; font-weight: bold; color: #2e7d32; margin-bottom: 10px; }
-    .action-group { display: flex; gap: 8px; margin-top: 10px; }
-    .action-group button { flex: 1; font-size: 0.9rem; }
-    
-    .queue-list { list-style: none; padding: 0; margin: 0; }
-    .queue-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #eee; }
-    .queue-item:last-child { border-bottom: none; }
-    .btn-sm { padding: 6px 10px; font-size: 0.8rem; border-radius: 4px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pancake Café - Advanced Queue Analytics & Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Chart.js for Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-bg: #fdf8e2;
+            --header-bg: #3d1200;
+            --orange-btn: #d97706;
+            --green-btn: #059669;
+            --purple-btn: #7c3aed;
+            --red-btn: #dc2626;
+            --card-border: #fde68a;
+            --text-dark: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sukhumvit Set', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Navbar Header */
+        header {
+            background-color: var(--header-bg);
+            color: #fff;
+            padding: 6px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .brand-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #fef08a;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 2px;
+            border-radius: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: #fef3c7;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: #ffffff;
+            color: var(--header-bg);
+            font-weight: 800;
+        }
+
+        .btn-sound-test {
+            background: #d97706;
+            color: #fff;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.65rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .btn-sound-test:hover { background: #b45309; }
+
+        .container {
+            padding: 8px 12px;
+            flex-grow: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        /* Top Issue Queue Action Cards - Made Thinner & Smaller */
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .btn-issue {
+            border: none;
+            border-radius: 6px;
+            padding: 6px 8px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+        }
+
+        .btn-issue:active { transform: scale(0.98); }
+        .btn-issue.table-a { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .btn-issue.table-b { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .btn-issue.table-c { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+
+        .btn-issue .title { font-size: 0.8rem; font-weight: bold; }
+        .btn-issue .sub { font-size: 0.6rem; opacity: 0.9; margin: 0; }
+        .btn-issue .status {
+            font-size: 0.6rem;
+            background: rgba(0,0,0,0.2);
+            display: inline-block;
+            padding: 1px 4px;
+            border-radius: 6px;
+            margin-top: 1px;
+        }
+
+        /* Filter Tabs - Made Thinner */
+        .filter-tabs {
+            display: flex;
+            background: #f3e8c8;
+            border-radius: 5px;
+            padding: 2px;
+            margin-bottom: 8px;
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 4px;
+            font-size: 0.72rem;
+            font-weight: bold;
+            color: #78350f;
+            cursor: pointer;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-item.active {
+            background: #fff;
+            color: var(--header-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        /* Column Status Card */
+        .column-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            padding: 8px 10px;
+        }
+
+        .col-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .queue-title {
+            color: var(--orange-btn);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .calling-box {
+            background: #fff;
+            border: 1px dashed #f59e0b;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            color: #78350f;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .calling-box span.num {
+            color: var(--orange-btn);
+            font-weight: 900;
+            font-size: 0.95rem;
+        }
+
+        /* Next Control Bar & Clear All Button */
+        .queue-control-bar {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .btn-control-main {
+            border: none;
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            transition: transform 0.1s, filter 0.2s;
+        }
+
+        .btn-control-main:active { transform: scale(0.98); }
+        .btn-control-next { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+        .btn-control-next:hover { filter: brightness(1.05); }
+
+        .btn-control-clear {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 7px 12px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        .btn-control-clear:hover { filter: brightness(1.05); }
+
+        .queue-list-container {
+            max-height: 52vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Thinner & Smaller Queue Cards */
+        .queue-card {
+            background: #fffdf7;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .queue-card.calling-active {
+            border: 1.5px solid var(--orange-btn);
+            background: #fffbeb;
+        }
+
+        .queue-card.served-item {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            opacity: 0.65;
+        }
+
+        /* Cancelled style: Greyed out completely */
+        .queue-card.cancelled-item {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            opacity: 0.55;
+            filter: grayscale(100%);
+        }
+
+        .q-info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .q-details {
+            font-size: 0.65rem;
+            color: #4b5563;
+            display: flex;
+            gap: 10px;
+        }
+
+        .q-actions-left {
+            display: flex;
+            gap: 4px;
+            margin-top: 3px;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.62rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-recall { background-color: var(--orange-btn); }
+        .btn-cancel { background-color: var(--red-btn); }
+        .btn-enter { background-color: var(--green-btn); padding: 4px 8px; font-size: 0.68rem; }
+
+        .q-info-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 3px;
+        }
+
+        .badge-status {
+            font-size: 0.6rem;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .bg-waiting { background: #fef3c7; color: #b45309; }
+        .bg-calling { background: var(--orange-btn); color: #fff; }
+        .bg-served { background: #64748b; color: #fff; }
+        .bg-cancelled { background: #94a3b8; color: #fff; }
+
+        .time-text {
+            font-size: 0.62rem;
+            color: #9ca3af;
+        }
+
+        /* Modal Nationality Selection & Custom Add */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(74, 59, 50, 0.6); backdrop-filter: blur(3px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fffdf7; width: 90%; max-width: 340px; border-radius: 10px; padding: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 1.5px solid var(--card-border); animation: popIn 0.2s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .nat-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+        .nat-modal-btn {
+            border: 1px solid #fde68a; background: #ffffff; padding: 8px 6px;
+            border-radius: 6px; font-size: 12px; font-weight: bold; color: var(--text-dark);
+            cursor: pointer; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .nat-modal-btn:active, .nat-modal-btn:hover { background: #fef3c7; border-color: var(--orange-btn); color: var(--orange-btn); }
+
+        /* Undo Toast Notification */
+        #undo-toast {
+            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+            background: #4a3b32; color: #fff; padding: 6px 12px; border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2); display: none; align-items: center; gap: 8px; z-index: 1000; font-size: 10.5px; width: 90%; max-width: 320px; justify-content: space-between;
+        }
+        .btn-undo { background: #facc15; color: #0f172a; border: none; padding: 3px 8px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* Thermal Print Format */
+        @page { size: 58mm auto; margin: 0; }
+        @media print {
+            body * { visibility: hidden; }
+            #ticket-print-area, #ticket-print-area * { visibility: visible; }
+            #ticket-print-area {
+                display: block !important;
+                position: absolute; left: 0; top: 0;
+                width: 58mm; padding: 2mm; background: #fff; color: #000; font-family: monospace; text-align: center;
+            }
+        }
+
+        /* TV DISPLAY STYLES - LARGE ORIGINAL SIZE */
+        .tv-header-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #78350f;
+            margin: 15px 0 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .tv-columns-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .tv-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 2px solid #fde68a;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tv-table-badge {
+            background: #fef3c7;
+            color: #78350f;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .tv-current-label {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #b45309;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .tv-current-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #d97706;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .tv-next-box {
+            width: 100%;
+            border: 2px dashed #fcd34d;
+            background: #fffefb;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .tv-next-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #78350f;
+            margin-bottom: 6px;
+        }
+
+        .tv-next-numbers {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #78350f;
+            letter-spacing: 1px;
+            word-break: break-word;
+        }
+
+        .tv-footer-summary {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #78350f;
+        }
+
+        .tv-banner-container {
+            width: 100%;
+            height: 200px;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 2px solid #fde68a;
+            margin-top: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .tv-banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tv-banner-placeholder {
+            color: #b45309;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Settings Page Styles */
+        .settings-card {
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #fde68a;
+            padding: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .settings-form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .settings-form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #78350f;
+            margin-bottom: 4px;
+        }
+
+        .settings-form-group input {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #fde68a;
+            border-radius: 5px;
+            font-size: 0.82rem;
+            outline: none;
+            background: #fffdf7;
+            color: #1f2937;
+        }
+
+        .btn-save-settings {
+            background: var(--orange-btn);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.82rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .file-upload-wrapper { display: flex; gap: 5px; align-items: center; }
+        .btn-upload-file {
+            background: #475569; color: #fff; border: none; padding: 7px 12px;
+            border-radius: 5px; font-weight: bold; font-size: 0.75rem; cursor: pointer; white-space: nowrap;
+        }
+
+        /* Report & Filter Bar Styles */
+        .report-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #78350f;
+        }
+
+        .filter-select, .filter-date-input {
+            padding: 5px 8px;
+            border: 1px solid #fde68a;
+            border-radius: 5px;
+            background: #fffdf7;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #1f2937;
+            outline: none;
+        }
+
+        .btn-export {
+            background: var(--green-btn);
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-export:hover { background: #047857; }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .report-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            padding: 12px 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+        }
+
+        .report-card h4 {
+            color: #78350f;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .report-table th, .report-table td {
+            padding: 5px 6px;
+            text-align: left;
+            border-bottom: 1px solid #fef3c7;
+        }
+
+        .report-table th {
+            color: #78350f;
+            background: #fffdf7;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
-  <h2>Pancake Cafe Queue 🥞</h2>
+    <!-- Header Navbar -->
+    <header>
+        <div class="brand-title">
+            <i class="fa-solid fa-pancake"></i> Pancake Café
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-sound-test" onclick="testAudioSystem()"><i class="fa-solid fa-volume-high"></i> Test Sound</button>
+            <button class="nav-btn" data-target="queue-system" onclick="navigateTo('queue-system')">Queue</button>
+            <button class="nav-btn" data-target="queue-display" onclick="navigateTo('queue-display')">TV Display</button>
+            <button class="nav-btn" data-target="report" onclick="navigateTo('report')">Report</button>
+            <button class="nav-btn" data-target="settings" onclick="navigateTo('settings')">Settings</button>
+        </div>
+    </header>
 
-  <!-- 1. ส่วนออกคิวใหม่ -->
-  <div class="card">
-    <div class="card-title">1. ออกคิวใหม่ (เลือกจำนวนคน)</div>
-    <div class="grid-btn">
-      <button class="btn-green" onclick="addQueue('A', '1-2 ท่าน')">+ คิว A (1-2 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('B', '3-4 ท่าน')">+ คิว B (3-4 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('C', '5-6 ท่าน')">+ คิว C (5-6 ท่าน)</button>
-      <button class="btn-green" onclick="addQueue('D', '7+ ท่าน')">+ คิว D (7+ ท่าน)</button>
+    <div class="container">
+
+        <!-- Page 1: Managing Queues (#queue) -->
+        <div id="queue-system" class="page-section">
+            <div class="section-title">Issue Queue Ticket</div>
+            <div class="action-cards">
+                <button class="btn-issue table-a" onclick="openNationalityModal('A', 'Table A (1-2 Seats)')">
+                    <span class="title">Table A</span>
+                    <span class="sub">1-2 Persons</span>
+                    <span class="status" id="btn-count-A">Waiting: 0</span>
+                </button>
+                <button class="btn-issue table-b" onclick="openNationalityModal('B', 'Table B (3-4 Seats)')">
+                    <span class="title">Table B</span>
+                    <span class="sub">3-4 Persons</span>
+                    <span class="status" id="btn-count-B">Waiting: 0</span>
+                </button>
+                <button class="btn-issue table-c" onclick="openNationalityModal('C', 'Table C (5-6 Seats)')">
+                    <span class="title">Table C</span>
+                    <span class="sub">5-6 Persons</span>
+                    <span class="status" id="btn-count-C">Waiting: 0</span>
+                </button>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-item active" id="tab-btn-A" onclick="switchMobileTab('A')">Table A</button>
+                <button class="tab-item" id="tab-btn-B" onclick="switchMobileTab('B')">Table B</button>
+                <button class="tab-item" id="tab-btn-C" onclick="switchMobileTab('C')">Table C</button>
+            </div>
+
+            <div class="column-card">
+                <div class="col-header-top">
+                    <div>
+                        <span class="queue-title" id="current-tab-title">Table A (1-2 Persons)</span>
+                        <span style="font-size: 0.7rem; color: #6b7280; margin-left: 5px;" id="waiting-count-display">Total Waiting: 0</span>
+                    </div>
+                    <div class="calling-box">
+                        <span>Calling:</span>
+                        <span class="num" id="calling-display">---</span>
+                    </div>
+                </div>
+
+                <!-- Next Control Bar & Clear All Button -->
+                <div class="queue-control-bar">
+                    <button class="btn-control-main btn-control-next" onclick="callNextQueue()">
+                        <i class="fa-solid fa-bullhorn"></i> Next (เรียกคิวถัดไป)
+                    </button>
+                    <button class="btn-control-main btn-control-clear" onclick="clearAllQueuesForTab()">
+                        <i class="fa-solid fa-trash-can"></i> ล้างคิวทั้งหมด
+                    </button>
+                </div>
+
+                <div class="queue-list-container" id="mobile-queue-list"></div>
+            </div>
+        </div>
+
+        <!-- Page 2: TV Display (#tv) -->
+        <div id="queue-display" class="page-section">
+            <div class="tv-header-title">
+                <i class="fa-solid fa-pancake" style="color: #d97706;"></i> NOW SERVING
+            </div>
+
+            <div class="tv-columns-grid">
+                <div class="tv-card">
+                    <div class="tv-table-badge">TABLE A (1-2 Persons)</div>
+                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-current-number" id="tv-calling-A">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-numbers" id="tv-waiting-A">---</div>
+                    </div>
+                </div>
+                <div class="tv-card">
+                    <div class="tv-table-badge">TABLE B (3-4 Persons)</div>
+                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-current-number" id="tv-calling-B">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-numbers" id="tv-waiting-B">---</div>
+                    </div>
+                </div>
+                <div class="tv-card">
+                    <div class="tv-table-badge">TABLE C (5-6 Persons)</div>
+                    <div class="tv-current-label">CURRENTLY SERVING</div>
+                    <div class="tv-current-number" id="tv-calling-C">---</div>
+                    <div class="tv-next-box">
+                        <div class="tv-next-label">NEXT</div>
+                        <div class="tv-next-numbers" id="tv-waiting-C">---</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tv-footer-summary" id="tv-footer-summary">
+                Total Waiting — Table A: 0 | Table B: 0 | Table C: 0
+            </div>
+
+            <div class="tv-banner-container" id="tv-banner-area">
+                <div class="tv-banner-placeholder">
+                    <i class="fa-regular fa-image" style="font-size: 2rem;"></i>
+                    <span>Promotion Banner Area (Recommended Size: 1200 × 350 px)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Report & Analytics (#report) -->
+        <div id="report" class="page-section">
+            <div class="report-header-bar">
+                <div class="section-title" style="margin: 0;"><i class="fa-solid fa-chart-pie"></i> Queue Analytics & Reports</div>
+                <div class="filter-group">
+                    <label>Range:</label>
+                    <select id="report-range-select" class="filter-select" onchange="onDateRangeChange()">
+                        <option value="today">Today</option>
+                        <option value="this_month" selected>This Month</option>
+                        <option value="this_year">This Year</option>
+                        <option value="custom">Custom Date</option>
+                    </select>
+                    <div id="custom-date-wrapper" style="display: none; display: flex; gap: 4px; align-items: center;">
+                        <input type="date" id="report-start-date" class="filter-date-input" onchange="triggerReportRender()">
+                        <span>to</span>
+                        <input type="date" id="report-end-date" class="filter-date-input" onchange="triggerReportRender()">
+                    </div>
+                    <button class="btn-export" onclick="exportReportCSV()"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
+                </div>
+            </div>
+            
+            <div class="report-grid">
+                <!-- Card 1: Nationality Stats & Chart -->
+                <div class="report-card">
+                    <h4><i class="fa-solid fa-globe"></i> Queues by Nationality</h4>
+                    <div class="chart-container">
+                        <canvas id="chartNationality"></canvas>
+                    </div>
+                    <table class="report-table" style="margin-top: 8px;">
+                        <thead>
+                            <tr><th>Nationality</th><th>Total Queues</th></tr>
+                        </thead>
+                        <tbody id="table-nat-body">
+                            <tr><td colspan="2" style="text-align:center;">No data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Card 2: Party Size Stats & Chart -->
+                <div class="report-card">
+                    <h4><i class="fa-solid fa-users"></i> Queues by Party Size</h4>
+                    <div class="chart-container">
+                        <canvas id="chartPartySize"></canvas>
+                    </div>
+                    <table class="report-table" style="margin-top: 8px;">
+                        <thead>
+                            <tr><th>Party Size</th><th>Total Queues</th></tr>
+                        </thead>
+                        <tbody id="table-size-body">
+                            <tr><td colspan="2" style="text-align:center;">No data</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Card 3: Waiting Time Summary -->
+                <div class="report-card">
+                    <h4><i class="fa-solid fa-clock"></i> Average Waiting Time</h4>
+                    <div style="background: #fffdf7; border: 1px dashed #fde68a; border-radius: 8px; padding: 14px; text-align: center; margin-top: 6px;">
+                        <div style="font-size: 0.75rem; color: #b45309; font-weight: bold;">Average Wait Duration</div>
+                        <div id="report-avg-time" style="font-size: 2rem; font-weight: 900; color: #d97706; margin: 4px 0;">0 mins</div>
+                        <div id="report-seated-count" style="font-size: 0.7rem; color: #6b7280;">Based on 0 seated customers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: Settings (#settings) -->
+        <div id="settings" class="page-section">
+            <div class="settings-card">
+                <h3 style="color:#78350f; font-size:14px; margin-bottom: 12px; text-align: center;"><i class="fa-solid fa-gear"></i> System & TV Settings</h3>
+                <div class="settings-form-group">
+                    <label>TV Banner Image URL</label>
+                    <div class="file-upload-wrapper">
+                        <input type="text" id="setting-banner-url" placeholder="https://example.com/image.jpg or upload file">
+                        <input type="file" id="banner-file-input" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                        <button type="button" class="btn-upload-file" onclick="document.getElementById('banner-file-input').click()">
+                            <i class="fa-solid fa-upload"></i> Browse File
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-save-settings" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+
     </div>
-  </div>
 
-  <!-- 2. ส่วนเรียกคิว -->
-  <div class="card">
-    <div class="card-title">2. คิวกำลังเรียก</div>
-    <div id="currentCallDisplay" class="calling-display">---</div>
-    
-    <button class="btn-blue" style="width: 100%; font-size: 1.1rem;" onclick="callNextQueue()">เรียกคิวถัดไป</button>
-    
-    <div class="action-group">
-      <button class="btn-green" onclick="completeCurrentQueue()">รับบริการแล้ว</button>
-      <button class="btn-orange" onclick="skipCurrentQueue()">ข้ามคิวนี้</button>
-      <button class="btn-red" onclick="cancelCurrentQueue()">ยกเลิกคิว</button>
+    <!-- Nationality Selection Modal -->
+    <div id="nat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <h3 style="font-size: 13px; color: #78350f;" id="modal-title">Select Nationality</h3>
+                <button onclick="closeNationalityModal()" style="border: none; background: transparent; font-size: 16px; font-weight: bold; color: #94a3b8; cursor: pointer;">✕</button>
+            </div>
+            <p style="font-size: 10px; color: #78350f; margin-bottom: 3px;">Select customer nationality for queue ticket printing</p>
+            <div class="nat-modal-grid">
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Thai 🇹🇭')">🇹🇭 Thai</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Chinese 🇨🇳')">🇨🇳 Chinese</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Japanese 🇯🇵')">🇯🇵 Japanese</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Korean 🇰🇷')">🇰🇷 Korean</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Western 🌍')">🌍 Western</button>
+                <button class="nat-modal-btn" onclick="submitQueueWithNat('Other 🌐')">🌐 Other</button>
+            </div>
+            <div style="margin-top: 6px; display: flex; gap: 4px;">
+                <input type="text" id="custom-nat-input" placeholder="Type custom nationality..." style="flex: 1; padding: 5px 7px; border: 1px solid #fde68a; border-radius: 5px; font-size: 10.5px; outline: none; background: #fff;">
+                <button type="button" onclick="submitCustomNationality()" style="background: var(--orange-btn); color: white; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; font-size: 10.5px; cursor: pointer;">Add</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- 3. รายการคิวที่ถูกข้าม -->
-  <div class="card">
-    <div class="card-title">3. รายการคิวที่ถูกข้าม (<span id="skippedCount">0</span>)</div>
-    <ul id="skippedList" class="queue-list"></ul>
-  </div>
+    <!-- Undo Toast Notification -->
+    <div id="undo-toast">
+        <span id="toast-text">Queue seated successfully</span>
+        <button class="btn-undo" onclick="undoLastAction()">Undo</button>
+    </div>
 
-  <!-- 4. รายการคิวมารอ -->
-  <div class="card">
-    <div class="card-title">4. รายการคิวมารอ (<span id="waitingCount">0</span> คิว)</div>
-    <ul id="waitingList" class="queue-list"></ul>
-  </div>
+    <!-- Thermal Print Area (Fallback) -->
+    <div id="ticket-print-area" style="display: none;">
+        <h2 style="font-size: 14px; margin-bottom: 2px; font-weight: bold;">Pancake Café</h2>
+        <p style="font-size: 8px;">--------------------------------</p>
+        <p style="font-size: 8px; margin-top: 1px;">Your Queue Number</p>
+        <h1 id="p-number" style="font-size: 28px; margin: 2px 0; font-weight: bold;">A001</h1>
+        <p id="p-desc" style="font-size: 9px; font-weight: bold;">Table A (1-2 Seats)</p>
+        <p id="p-count" style="font-size: 8px;">Persons: 1-2 Persons</p>
+        <p id="p-nationality" style="font-size: 8px;">Nationality: Thai</p>
+        <p style="font-size: 8px;">--------------------------------</p>
+        <p id="p-waiting" style="font-size: 8px;">Queues Ahead: 0</p>
+        <p id="p-time" style="font-size: 8px;">Time: --:--</p>
+        <p style="font-size: 8px; margin-top: 4px; font-weight: bold;">Thank you for visiting</p>
+    </div>
 
-  <!-- Hidden iframe สำหรับยิงคำสั่งพิมพ์โดยไม่เปลี่ยนหน้าเว็บ -->
-  <iframe id="printFrame" style="display:none;"></iframe>
+    <!-- Firebase Script Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc, enableIndexedDbPersistence, writeBatch 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-<script>
-  let queueData = JSON.parse(localStorage.getItem('cafe_queue_data')) || {
-    counters: { A: 1, B: 1, C: 1, D: 1 },
-    waiting: [],
-    skipped: [],
-    current: null
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSyA22_Pap9C9qhnhU33Ch2Floe5D1aLdbCY",
+            authDomain: "pancake-queue.firebaseapp.com",
+            projectId: "pancake-queue",
+            storageBucket: "pancake-queue.firebasestorage.app",
+            messagingSenderId: "348148291921",
+            appId: "1:348148291921:web:69af29138cd7e556e79b70"
+        };
 
-  function saveData() {
-    localStorage.setItem('cafe_queue_data', JSON.stringify(queueData));
-    updateUI();
-  }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-  // ระบบยิงคำสั่งพิมพ์เข้า Sunmi InnerPrinter โดยตรง
-  function printSunmi(text) {
-    // 1. ตรวจสอบ JavaScript Interface จากแอปเบราว์เซอร์
-    if (window.SunmiPrinter && typeof window.SunmiPrinter.printText === "function") {
-      window.SunmiPrinter.printText(text);
-      window.SunmiPrinter.lineWrap(3);
-      return;
-    } 
-    if (window.Android && typeof window.Android.printText === "function") {
-      window.Android.printText(text);
-      return;
-    }
+        enableIndexedDbPersistence(db).catch(() => {});
 
-    // 2. ยิงผ่าน Sunmi InnerPrinter Intent Protocol (ทำงานได้โดยตรงบน Sunmi OS)
-    try {
-      const intentUrl = "intent://print#Intent;scheme=sunmi;package=com.sunmi.innerprinter;S.text=" + encodeURIComponent(text) + ";end";
-      const iframe = document.getElementById('printFrame');
-      if (iframe) {
-        iframe.src = intentUrl;
-      } else {
-        window.location.href = intentUrl;
-      }
-    } catch (e) {
-      console.log("Print Error:", e);
-    }
-  }
+        let queues = [];
+        let queueCounters = { A: 1, B: 1, C: 1 };
+        let currentCalling = { A: null, B: null, C: null };
+        let pendingQueueType = null;
+        let pendingQueueDesc = null;
+        let activeTab = 'A';
+        let lastActionState = null;
+        let toastTimeout = null;
+        let appSettings = { bannerUrl: "" };
 
-  // 1. ออกคิวใหม่
-  function addQueue(type, desc) {
-    const number = type + String(queueData.counters[type]).padStart(3, '0');
-    queueData.counters[type]++;
-    
-    const newItem = {
-      number: number,
-      typeDesc: desc,
-      time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
-    };
+        let chartNatInstance = null;
+        let chartSizeInstance = null;
 
-    queueData.waiting.push(newItem);
-    saveData();
+        const routes = {
+            '#queue': 'queue-system',
+            '#tv': 'queue-display',
+            '#report': 'report',
+            '#settings': 'settings'
+        };
 
-    // ข้อความที่จะส่งพิมพ์เข้า Sunmi
-    const slipText = 
-      "==============================\n" +
-      "       Pancake Cafe Queue     \n" +
-      "==============================\n" +
-      "หมายเลขคิว : " + newItem.number + "\n" +
-      "ประเภท     : " + newItem.typeDesc + "\n" +
-      "เวลา       : " + newItem.time + "\n" +
-      "==============================\n" +
-      "   กรุณารอเรียกหมายเลขคิว ขอบคุณค่ะ  \n\n\n\n\n";
-    
-    printSunmi(slipText);
-  }
+        window.navigateTo = function(targetId) {
+            const hash = Object.keys(routes).find(key => routes[key] === targetId) || '#queue';
+            window.location.hash = hash;
+        };
 
-  // 2. เรียกคิวถัดไป
-  function callNextQueue() {
-    if (queueData.waiting.length === 0) {
-      alert("ไม่มีคิวรอในระบบ");
-      return;
-    }
-    queueData.current = queueData.waiting.shift();
-    saveData();
-  }
+        function handleHashChange() {
+            const currentHash = window.location.hash || '#queue';
+            const targetId = routes[currentHash] || 'queue-system';
 
-  // 3. ข้ามคิว
-  function skipCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.skipped.push(queueData.current);
-    queueData.current = null;
-    saveData();
-  }
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-  // 4. ดึงคิวที่ข้ามกลับมารับบริการ
-  function recallSkipped(index) {
-    const recalled = queueData.skipped.splice(index, 1)[0];
-    queueData.waiting.unshift(recalled);
-    saveData();
-  }
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) targetSection.classList.add('active');
 
-  // 5. รับบริการเรียบร้อย
-  function completeCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.current = null;
-    saveData();
-  }
+            const activeBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
 
-  // 6. ยกเลิกคิว
-  function cancelCurrentQueue() {
-    if (!queueData.current) return;
-    queueData.current = null;
-    saveData();
-  }
+            if (targetId === 'report') {
+                setTimeout(() => renderReport(), 100);
+            }
+        }
 
-  // อัปเดตหน้าจอ UI
-  function updateUI() {
-    const display = document.getElementById('currentCallDisplay');
-    if (queueData.current) {
-      display.innerText = queueData.current.number + " (" + queueData.current.typeDesc + ")";
-    } else {
-      display.innerText = "---";
-    }
+        window.addEventListener('hashchange', handleHashChange);
+        window.addEventListener('DOMContentLoaded', handleHashChange);
 
-    document.getElementById('waitingCount').innerText = queueData.waiting.length;
-    const waitingList = document.getElementById('waitingList');
-    waitingList.innerHTML = '';
-    queueData.waiting.forEach(item => {
-      waitingList.innerHTML += `<li class="queue-item"><span><b>${item.number}</b> (${item.typeDesc})</span><small>${item.time}</small></li>`;
-    });
+        const tabConfigs = {
+            'A': { title: 'Table A (1-2 Persons)', color: '#d97706' },
+            'B': { title: 'Table B (3-4 Persons)', color: '#059669' },
+            'C': { title: 'Table C (5-6 Persons)', color: '#7c3aed' }
+        };
 
-    document.getElementById('skippedCount').innerText = queueData.skipped.length;
-    const skippedList = document.getElementById('skippedList');
-    skippedList.innerHTML = '';
-    queueData.skipped.forEach((item, index) => {
-      skippedList.innerHTML += `
-        <li class="queue-item">
-          <span><b>${item.number}</b> (${item.typeDesc})</span>
-          <button class="btn-blue btn-sm" onclick="recallSkipped(${index})">เรียกซ้ำ</button>
-        </li>`;
-    });
-  }
+        window.switchMobileTab = function(type) {
+            activeTab = type;
+            document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-btn-${type}`).classList.add('active');
 
-  updateUI();
-</script>
+            const config = tabConfigs[type];
+            const titleEl = document.getElementById('current-tab-title');
+            titleEl.innerText = config.title;
+            titleEl.style.color = config.color;
 
+            renderUI();
+        };
+
+        window.testAudioSystem = function() {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance("Audio system activated successfully.");
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        };
+
+        function speakQueue(queueNumber, tableName) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance(`Number ${queueNumber}, please go to ${tableName}.`);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        async function loadSettings() {
+            try {
+                const docSnap = await getDoc(doc(db, "system", "settings"));
+                if (docSnap.exists()) {
+                    appSettings = docSnap.data();
+                    if (appSettings.bannerUrl) {
+                        document.getElementById('setting-banner-url').value = appSettings.bannerUrl;
+                        updateBannerDisplay(appSettings.bannerUrl);
+                    }
+                }
+            } catch (e) {}
+        }
+        loadSettings();
+
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(uploadEvent) {
+                document.getElementById('setting-banner-url').value = uploadEvent.target.result;
+                updateBannerDisplay(uploadEvent.target.result);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveSettings = async function() {
+            const url = document.getElementById('setting-banner-url').value.trim();
+            appSettings.bannerUrl = url;
+            try {
+                await setDoc(doc(db, "system", "settings"), { bannerUrl: url }, { merge: true });
+                updateBannerDisplay(url);
+                alert("Settings saved successfully.");
+            } catch (e) { alert("Error saving settings"); }
+        };
+
+        function updateBannerDisplay(url) {
+            const bannerArea = document.getElementById('tv-banner-area');
+            if (!bannerArea) return;
+            if (url) {
+                bannerArea.innerHTML = `<img src="${url}" alt="Banner Promotion">`;
+            } else {
+                bannerArea.innerHTML = `<div class="tv-banner-placeholder"><i class="fa-regular fa-image" style="font-size: 2rem;"></i><span>Promotion Banner Area</span></div>`;
+            }
+        }
+
+        const qQuery = query(collection(db, "queues"), orderBy("timestamp", "asc"));
+
+        onSnapshot(qQuery, (snapshot) => {
+            let previousCalling = { ...currentCalling };
+            queues = snapshot.docs.map(docSnap => ({
+                docId: docSnap.id,
+                ...docSnap.data()
+            }));
+
+            ['A', 'B', 'C'].forEach(type => {
+                const typeQueues = queues.filter(q => q.type === type);
+                if (typeQueues.length > 0) {
+                    const maxNum = Math.max(...typeQueues.map(q => parseInt(q.number.substring(1)) || 0));
+                    queueCounters[type] = maxNum + 1;
+                } else {
+                    queueCounters[type] = 1;
+                }
+
+                const callingQueue = typeQueues.filter(q => q.status === 'Calling').pop();
+                currentCalling[type] = callingQueue || null;
+
+                if (callingQueue && (!previousCalling[type] || previousCalling[type].id !== callingQueue.id)) {
+                    speakQueue(callingQueue.number, type === 'A' ? 'Table A' : type === 'B' ? 'Table B' : 'Table C');
+                }
+            });
+
+            renderUI();
+        });
+
+        window.openNationalityModal = function(type, desc) {
+            pendingQueueType = type;
+            pendingQueueDesc = desc;
+            document.getElementById('modal-title').innerText = `Select Nationality (${desc})`;
+            document.getElementById('custom-nat-input').value = '';
+            document.getElementById('nat-modal').style.display = 'flex';
+        };
+
+        window.closeNationalityModal = function() {
+            document.getElementById('nat-modal').style.display = 'none';
+            pendingQueueType = null;
+            pendingQueueDesc = null;
+        };
+
+        window.submitCustomNationality = function() {
+            const customVal = document.getElementById('custom-nat-input').value.trim();
+            if (customVal) {
+                submitQueueWithNat(customVal);
+            }
+        };
+
+        window.submitQueueWithNat = async function(nat) {
+            if (!pendingQueueType) return;
+            const type = pendingQueueType;
+            const desc = pendingQueueDesc;
+            closeNationalityModal();
+
+            const numStr = queueCounters[type].toString().padStart(3, '0');
+            const queueNumber = `${type}${numStr}`;
+            const waitingCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
+            const now = new Date();
+            const timeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }) + ' ' + 
+                            now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+            const newQueueData = {
+                id: Date.now(),
+                number: queueNumber,
+                type: type,
+                desc: desc,
+                count: type === 'A' ? '1-2 Persons' : type === 'B' ? '3-4 Persons' : '5-6 Persons',
+                nationality: nat,
+                status: 'Waiting',
+                time: timeStr,
+                timestamp: now.getTime(),
+                seatedTimestamp: null,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "queues"), newQueueData);
+                await printQueueTicket(newQueueData, waitingCount);
+            } catch (error) { alert("Error saving queue"); }
+        };
+
+        window.callNextQueue = async function() {
+            const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting').sort((a, b) => a.id - b.id);
+            if (waitingList.length === 0) {
+                alert("No waiting queues in this category.");
+                return;
+            }
+            const nextQ = waitingList[0];
+            await updateDoc(doc(db, "queues", nextQ.docId), { status: 'Calling' });
+            speakQueue(nextQ.number, activeTab === 'A' ? 'Table A' : activeTab === 'B' ? 'Table B' : 'Table C');
+        };
+
+        // Fixed Clear / Delete all queues using Firestore writeBatch (handles chunks of up to 500 operations safely)
+        window.clearAllQueuesForTab = async function() {
+            const tabQueues = queues.filter(q => q.type === activeTab);
+            if (tabQueues.length === 0) {
+                alert("ไม่มีคิวในหมวดหมู่นี้ให้ล้างครับ");
+                return;
+            }
+            if (!confirm(`คุณต้องการล้างคิวทั้งหมดของ ${tabConfigs[activeTab].title} ใช่หรือไม่? การกระทำนี้จะลบข้อมูลออกจาก Firestore อย่างถาวร`)) {
+                return;
+            }
+
+            try {
+                // Firestore batches have a limit of 500 operations per batch
+                const chunks = [];
+                for (let i = 0; i < tabQueues.length; i += 500) {
+                    chunks.push(tabQueues.slice(i, i + 500));
+                }
+
+                for (const chunk of chunks) {
+                    const batch = writeBatch(db);
+                    chunk.forEach(q => {
+                        if (q.docId) {
+                            const ref = doc(db, "queues", q.docId);
+                            batch.delete(ref);
+                        }
+                    });
+                    await batch.commit();
+                }
+
+                alert("ล้างคิวทั้งหมดเรียบร้อยแล้ว");
+            } catch (error) {
+                console.error("Error clearing queues:", error);
+                alert("เกิดข้อผิดพลาดในการล้างคิว กรุณาลองใหม่อีกครั้ง");
+            }
+        };
+
+        window.recallSpecificQueue = async function(id) {
+            const q = queues.find(item => item.id === id);
+            if (q && q.docId) {
+                await updateDoc(doc(db, "queues", q.docId), { status: 'Calling' });
+                speakQueue(q.number, q.type === 'A' ? 'Table A' : q.type === 'B' ? 'Table B' : 'Table C');
+            }
+        };
+
+        window.changeStatus = async function(id, newStatus) {
+            const q = queues.find(item => item.id === id);
+            if (q && q.docId) {
+                lastActionState = { id: q.id, docId: q.docId, prevStatus: q.status, number: q.number };
+                let payload = { status: newStatus };
+                if (newStatus === 'Served') payload.seatedTimestamp = Date.now();
+                await updateDoc(doc(db, "queues", q.docId), payload);
+                if (newStatus === 'Served') showUndoToast(`Queue ${q.number} seated successfully`);
+            }
+        };
+
+        function showUndoToast(msg) {
+            const toast = document.getElementById('undo-toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.display = 'flex';
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+        }
+
+        window.undoLastAction = async function() {
+            if (lastActionState && lastActionState.docId) {
+                await updateDoc(doc(db, "queues", lastActionState.docId), { status: lastActionState.prevStatus, seatedTimestamp: null });
+                document.getElementById('undo-toast').style.display = 'none';
+            }
+        };
+
+        async function printQueueTicket(queue, waitingCount) {
+            document.getElementById('p-number').innerText = queue.number;
+            document.getElementById('p-desc').innerText = queue.desc;
+            document.getElementById('p-count').innerText = `Persons: ${queue.count}`;
+            document.getElementById('p-nationality').innerText = `Nationality: ${queue.nationality}`;
+            document.getElementById('p-waiting').innerText = `Queues Ahead: ${waitingCount}`;
+            document.getElementById('p-time').innerText = `Time: ${queue.time}`;
+
+            const printArea = document.getElementById('ticket-print-area');
+            printArea.style.display = 'block';
+            window.print();
+            printArea.style.display = 'none';
+        }
+
+        function renderUI() {
+            let waitA = 0, waitB = 0, waitC = 0;
+
+            ['A', 'B', 'C'].forEach(type => {
+                const waitCount = queues.filter(q => q.type === type && q.status === 'Waiting').length;
+                document.getElementById(`btn-count-${type}`).innerText = `Waiting: ${waitCount}`;
+                if(type === 'A') waitA = waitCount;
+                if(type === 'B') waitB = waitCount;
+                if(type === 'C') waitC = waitCount;
+
+                const calling = currentCalling[type];
+                const callingEl = document.getElementById(`tv-calling-${type}`);
+                if (callingEl) callingEl.innerText = (calling && calling.status === 'Calling') ? calling.number : '---';
+
+                const waitingContainer = document.getElementById(`tv-waiting-${type}`);
+                if (waitingContainer) {
+                    const waitingList = queues.filter(q => q.type === type && q.status === 'Waiting').sort((a, b) => a.id - b.id);
+                    waitingContainer.innerText = waitingList.length === 0 ? '---' : waitingList.slice(0, 5).map(q => q.number).join(', ');
+                }
+            });
+
+            document.getElementById('tv-footer-summary').innerText = `Total Waiting — Table A: ${waitA} | Table B: ${waitB} | Table C: ${waitC}`;
+
+            const activeCall = currentCalling[activeTab];
+            document.getElementById('calling-display').innerText = (activeCall && activeCall.status === 'Calling') ? activeCall.number : '---';
+
+            const waitingList = queues.filter(q => q.type === activeTab && q.status === 'Waiting');
+            document.getElementById('waiting-count-display').innerText = `Total Waiting: ${waitingList.length}`;
+
+            const listContainer = document.getElementById('mobile-queue-list');
+            listContainer.innerHTML = '';
+            const colQueues = queues.filter(q => q.type === activeTab).sort((a, b) => b.id - a.id);
+
+            if (colQueues.length === 0) {
+                listContainer.innerHTML = `<div style="text-align:center; color:#a16207; padding:12px; font-size:11px;">No queues available</div>`;
+            } else {
+                colQueues.forEach(q => {
+                    const item = document.createElement('div');
+                    const isServed = q.status === 'Served';
+                    const isCalling = q.status === 'Calling';
+                    const isCancelled = q.status === 'Cancelled';
+                    item.className = `queue-card ${isCalling ? 'calling-active' : ''} ${isServed ? 'served-item' : ''} ${isCancelled ? 'cancelled-item' : ''}`;
+
+                    let statusTxt = 'Waiting', bgClass = 'bg-waiting';
+                    if(isCalling) { statusTxt = 'Calling'; bgClass = 'bg-calling'; }
+                    if(isServed) { statusTxt = 'Seated'; bgClass = 'bg-served'; }
+                    if(isCancelled) { statusTxt = 'Cancelled'; bgClass = 'bg-cancelled'; }
+
+                    let leftBtnsHTML = `
+                        <button class="btn-action btn-recall" onclick="recallSpecificQueue(${q.id})">Recall</button>
+                        ${!isServed && !isCancelled ? `<button class="btn-action btn-cancel" onclick="changeStatus(${q.id}, 'Cancelled')">Cancel</button>` : ''}
+                        ${isServed ? `<button class="btn-action" style="background:#64748b;" onclick="recallSpecificQueue(${q.id})">Revert</button>` : ''}
+                    `;
+
+                    let rightBtnHTML = !isServed && !isCancelled ? `<button class="btn-action btn-enter" onclick="changeStatus(${q.id}, 'Served')">Seated</button>` : '';
+
+                    item.innerHTML = `
+                        <div class="q-info-left">
+                            <div class="q-number">${q.number}</div>
+                            <div class="q-details"><span>Persons: <b>${q.count}</b></span><span>Nationality: <b>${q.nationality}</b></span></div>
+                            <div class="q-actions-left">${leftBtnsHTML}</div>
+                        </div>
+                        <div class="q-info-right">
+                            <span class="badge-status ${bgClass}">${statusTxt}</span>
+                            <span class="time-text">${q.time.split(' ')[1] || q.time}</span>
+                            <div>${rightBtnHTML}</div>
+                        </div>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            }
+
+            renderReport();
+        }
+
+        window.onDateRangeChange = function() {
+            const val = document.getElementById('report-range-select').value;
+            const customWrapper = document.getElementById('custom-date-wrapper');
+            if (val === 'custom') {
+                customWrapper.style.display = 'flex';
+            } else {
+                customWrapper.style.display = 'none';
+                renderReport();
+            }
+        };
+
+        window.triggerReportRender = function() {
+            renderReport();
+        };
+
+        function getFilteredQueues() {
+            const range = document.getElementById('report-range-select').value;
+            const now = new Date();
+            let startTimestamp = 0;
+            let endTimestamp = now.getTime();
+
+            if (range === 'today') {
+                const d = new Date();
+                d.setHours(0,0,0,0);
+                startTimestamp = d.getTime();
+            } else if (range === 'this_month') {
+                const d = new Date(now.getFullYear(), now.getMonth(), 1);
+                startTimestamp = d.getTime();
+            } else if (range === 'this_year') {
+                const d = new Date(now.getFullYear(), 0, 1);
+                startTimestamp = d.getTime();
+            } else if (range === 'custom') {
+                const sVal = document.getElementById('report-start-date').value;
+                const eVal = document.getElementById('report-end-date').value;
+                startTimestamp = sVal ? new Date(sVal).setHours(0,0,0,0) : 0;
+                endTimestamp = eVal ? new Date(eVal).setHours(23,59,59,999) : now.getTime();
+            }
+
+            return queues.filter(q => {
+                const t = q.timestamp || 0;
+                return t >= startTimestamp && t <= endTimestamp;
+            });
+        }
+
+        function renderReport() {
+            const filtered = getFilteredQueues();
+            const natCounts = {};
+            const sizeCounts = {};
+            let totalWaitMins = 0;
+            let seatedCount = 0;
+
+            filtered.forEach(q => {
+                const nat = q.nationality || 'Other';
+                natCounts[nat] = (natCounts[nat] || 0) + 1;
+
+                const size = q.count || '-';
+                sizeCounts[size] = (sizeCounts[size] || 0) + 1;
+
+                if (q.status === 'Served' && q.timestamp && q.seatedTimestamp) {
+                    const diff = Math.round((q.seatedTimestamp - q.timestamp) / 60000);
+                    if (diff >= 0) {
+                        totalWaitMins += diff;
+                        seatedCount++;
+                    }
+                }
+            });
+
+            const natTbody = document.getElementById('table-nat-body');
+            natTbody.innerHTML = '';
+            const natKeys = Object.keys(natCounts);
+            if (natKeys.length === 0) {
+                natTbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No data</td></tr>`;
+            } else {
+                natKeys.forEach(k => {
+                    natTbody.innerHTML += `<tr><td>${k}</td><td><b>${natCounts[k]}</b></td></tr>`;
+                });
+            }
+            updateChartNationality(natCounts);
+
+            const sizeTbody = document.getElementById('table-size-body');
+            sizeTbody.innerHTML = '';
+            const sizeKeys = Object.keys(sizeCounts);
+            if (sizeKeys.length === 0) {
+                sizeTbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No data</td></tr>`;
+            } else {
+                sizeKeys.forEach(k => {
+                    sizeTbody.innerHTML += `<tr><td>${k}</td><td><b>${sizeCounts[k]}</b></td></tr>`;
+                });
+            }
+            updateChartPartySize(sizeCounts);
+
+            const avg = seatedCount > 0 ? Math.round(totalWaitMins / seatedCount) : 0;
+            document.getElementById('report-avg-time').innerText = `${avg} mins`;
+            document.getElementById('report-seated-count').innerText = `Based on ${seatedCount} seated customers`;
+        }
+
+        window.exportReportCSV = function() {
+            const filtered = getFilteredQueues();
+            if (filtered.length === 0) {
+                alert("No data available to export for the selected range.");
+                return;
+            }
+
+            let csvContent = "\uFEFFQueue Number,Table Type,Party Size,Nationality,Status,Time\n";
+            filtered.forEach(q => {
+                csvContent += `"${q.number}","${q.desc}","${q.count}","${q.nationality}","${q.status}","${q.time}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `queue_report_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        function updateChartNationality(dataObj) {
+            const ctx = document.getElementById('chartNationality').getContext('2d');
+            const labels = Object.keys(dataObj);
+            const data = Object.values(dataObj);
+
+            if (chartNatInstance) chartNatInstance.destroy();
+            chartNatInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels.length ? labels : ['No Data'],
+                    datasets: [{ data: data.length ? data : [1], backgroundColor: ['#d97706', '#059669', '#7c3aed', '#3b82f6', '#f43f5e', '#94a3b8'] }]
+                },
+                options: { responsive: andMaintainAspectRatio = false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+            });
+        }
+
+        function updateChartPartySize(dataObj) {
+            const ctx = document.getElementById('chartPartySize').getContext('2d');
+            const labels = Object.keys(dataObj);
+            const data = Object.values(dataObj);
+
+            if (chartSizeInstance) chartSizeInstance.destroy();
+            chartSizeInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels.length ? labels : ['No Data'],
+                    datasets: [{ label: 'Queues', data: data.length ? data : [0], backgroundColor: '#d97706', borderRadius: 4 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+            });
+        }
+    </script>
 </body>
 </html>
